@@ -69,6 +69,14 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("destacadas", (items) => (items || []).filter((i) => i.data.destacada));
   eleventyConfig.addFilter("limite", (arr, n) => (arr || []).slice(0, n));
   eleventyConfig.addFilter("isoDia", isoDia);
+  // Acepta una URL o el código <iframe> completo que entrega Google Maps
+  eleventyConfig.addFilter("urlMapa", (v) => {
+    const s = String(v || "").trim();
+    if (!s) return "";
+    const m = s.match(/src=["']([^"']+)["']/i);
+    const url = m ? m[1] : s;
+    return /^https:\/\//i.test(url) ? url : "";
+  });
   eleventyConfig.addFilter("faqSchema", (items) =>
     JSON.stringify({
       "@context": "https://schema.org",

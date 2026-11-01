@@ -19,7 +19,7 @@ export default function () {
       addressRegion: c.region,
       addressCountry: c.pais,
     },
-    openingHoursSpecification: (c.horarios || []).map((h) => ({
+    openingHoursSpecification: (c.horarios || []).filter((h) => (h.schema_dias || []).length && /^\d{2}:\d{2}$/.test(h.abre || "") && /^\d{2}:\d{2}$/.test(h.cierra || "")).map((h) => ({
       "@type": "OpeningHoursSpecification",
       dayOfWeek: h.schema_dias,
       opens: h.abre,

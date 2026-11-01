@@ -66,12 +66,12 @@ collections:
             fields:
               - { label: "Días", name: "dias", widget: "string" }
               - { label: "Horas (texto)", name: "horas", widget: "string" }
-              - { label: "Días (Google)", name: "schema_dias", widget: "select", multiple: true, options: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"] }
+              - { label: "Días (Google)", name: "schema_dias", widget: "select", multiple: true, required: false, hint: "Deje vacío para feriados u horarios especiales", options: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"] }
               - { label: "Abre (HH:MM)", name: "abre", widget: "string" }
               - { label: "Cierra (HH:MM)", name: "cierra", widget: "string" }
           - { label: "Búsqueda en Google Maps", name: "mapa_busqueda", widget: "string" }
-          - { label: "URL del mapa incrustado (opcional)", name: "mapa_embed_url", widget: "string", required: false, hint: "Google Maps > Compartir > Insertar un mapa > copie solo la URL del atributo src" }
-          - { label: "Enlace a Google Maps (opcional)", name: "mapa_enlace", widget: "string", required: false, hint: "Google Maps > Compartir > Copiar vínculo" }
+          - { label: "URL del mapa incrustado (opcional)", name: "mapa_embed_url", widget: "string", required: false, hint: "Google Maps > Compartir > Insertar un mapa > Copiar HTML. Puede pegar el código completo." }
+          - { label: "Enlace a Google Maps (opcional)", name: "mapa_enlace", widget: "string", required: false, hint: "Google Maps > Compartir > Copiar vínculo (empieza con https://maps.app.goo.gl/...). No pegue aquí el código iframe." }
           - { label: "Latitud (opcional)", name: "latitud", widget: "string", required: false }
           - { label: "Longitud (opcional)", name: "longitud", widget: "string", required: false }
           - label: "Sistema de reservas"

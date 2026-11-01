@@ -5,8 +5,8 @@ permalink: /contacto/
 descripcion_seo: "Contacta a Centro Médico Los Andes: Centro Comercial Los Andes, local B15, frente a Doit Center, Panamá. Teléfonos 237-9094 y 237-6615, WhatsApp +507 6056-8129."
 ---
 {% import "partials/macros.njk" as m with context %}
-{%- set mapaEmbed = clinica.mapa_embed_url or ("https://www.google.com/maps?q=" + (clinica.mapa_busqueda | enc) + "&output=embed") -%}
-{%- set mapaLink = clinica.mapa_enlace or ("https://www.google.com/maps/search/?api=1&query=" + (clinica.mapa_busqueda | enc)) -%}
+{%- set mapaEmbed = (clinica.mapa_embed_url | urlMapa) or ("https://www.google.com/maps?q=" + (clinica.mapa_busqueda | enc) + "&output=embed") -%}
+{%- set mapaLink = ((clinica.mapa_enlace | urlMapa) if "<iframe" not in clinica.mapa_enlace else "") or ("https://www.google.com/maps/search/?api=1&query=" + (clinica.mapa_busqueda | enc)) -%}
 {{ m.pageHero("Contacto y ubicación", "Estamos en el Centro Comercial Los Andes, local B15, frente a Doit Center.", "Visítanos", "ubicacion") }}
 
 <section class="section">
