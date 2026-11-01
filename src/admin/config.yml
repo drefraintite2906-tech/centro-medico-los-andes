@@ -8,7 +8,7 @@ locale: "es"
 # Opción A (recomendada): GitHub + OAuth de Netlify. Solo usuarios con permiso en el repositorio.
 backend:
   name: github
-  repo: USUARIO-GITHUB/centro-medico-los-andes   # <-- cambie por su repositorio
+  repo: drefraintite2906-tech/centro-medico-los-andes
   branch: main
   commit_messages:
     create: "Crear {{collection}} “{{slug}}”"
