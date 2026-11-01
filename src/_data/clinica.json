@@ -8,7 +8,7 @@
   "descripcion_seo": "Clínica privada en Panamá: medicina general, especialidades, odontología, laboratorio clínico, ultrasonidos, procedimientos y salud ocupacional para empresas. Centro Comercial Los Andes, local B15.",
   "aviso_procedimientos": "La realización de cualquier procedimiento está sujeta a valoración médica previa y a la disponibilidad de la clínica.",
   "prefijo_pais": "+507",
-  "mapa_embed_url": "",
+  "mapa_embed_url": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.125147701426!2d-79.51326620321043!3d9.0523477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fab57c02fd25de7%3A0x11b4436bed116ae3!2sCentro%20M%C3%A9dico%2C%20Laboratorio%2C%20odontolog%C3%ADa%20y%20Ultrasonidos.!5e0!3m2!1ses-419!2spa!4v1793571207815!5m2!1ses-419!2spa\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"strict-origin-when-cross-origin\"></iframe>",
   "direccion": "Centro Comercial Los Andes, local B15, frente a Doit Center",
   "horarios": [
     {
@@ -33,6 +33,21 @@
       ],
       "abre": "09:00",
       "cierra": "17:00"
+    },
+    {
+      "dias": "Feriados",
+      "horas": "9 am a 5 pm",
+      "abre": "9 am",
+      "cierra": "5 pm",
+      "schema_dias": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ]
     }
   ],
   "whatsapp": "50760568129",
@@ -43,7 +58,7 @@
   "ciudad": "Panamá",
   "mapa_busqueda": "Centro Comercial Los Andes, Doit Center, Panamá",
   "latitud": "",
-  "mapa_enlace": "",
+  "mapa_enlace": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.125147701426!2d-79.51326620321043!3d9.0523477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fab57c02fd25de7%3A0x11b4436bed116ae3!2sCentro%20M%C3%A9dico%2C%20Laboratorio%2C%20odontolog%C3%ADa%20y%20Ultrasonidos.!5e0!3m2!1ses-419!2spa!4v1793571207815!5m2!1ses-419!2spa\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"strict-origin-when-cross-origin\"></iframe>",
   "reservas": {
     "proveedor": "whatsapp",
     "url_externa": ""
