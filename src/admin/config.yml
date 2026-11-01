@@ -30,8 +30,8 @@ local_backend: true
 media_folder: "src/assets/img/uploads"
 public_folder: "/assets/img/uploads"
 
-site_url: https://www.centromedicolosandes.com
-display_url: https://www.centromedicolosandes.com
+site_url: https://centromedicolosandes.netlify.app
+display_url: https://centromedicolosandes.netlify.app
 logo_url: /favicon.svg
 
 collections:
