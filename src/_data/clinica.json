@@ -1,32 +1,56 @@
 {
-  "nombre": "Centro Médico Los Andes",
-  "nombre_corto": "Los Andes",
-  "logo": "",
-  "url_sitio": "https://centromedicolosandes.netlify.app",
-  "descripcion_seo": "Clínica privada en Panamá: medicina general, especialidades, odontología, laboratorio clínico, ultrasonidos, procedimientos y salud ocupacional para empresas. Centro Comercial Los Andes, local B15.",
-  "direccion": "Centro Comercial Los Andes, local B15, frente a Doit Center",
-  "ciudad": "Panamá",
-  "region": "Panamá",
-  "pais": "PA",
-  "telefonos": ["237-9094", "237-6615"],
-  "prefijo_pais": "+507",
-  "whatsapp": "50760568129",
-  "whatsapp_visible": "+507 6056-8129",
-  "instagram": "centromedico.losandes",
-  "correo_administrativo": "",
+  "correo_administrativo": "cmlosande2003@gmail.com",
   "formulario_endpoint": "",
-  "horarios": [
-    { "dias": "Lunes a sábado", "horas": "8:00 a. m. a 8:00 p. m.", "schema_dias": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], "abre": "08:00", "cierra": "20:00" },
-    { "dias": "Domingos", "horas": "9:00 a. m. a 5:00 p. m.", "schema_dias": ["Sunday"], "abre": "09:00", "cierra": "17:00" }
-  ],
-  "mapa_busqueda": "Centro Comercial Los Andes, Doit Center, Panamá",
+  "whatsapp_visible": "+507 6056-8129",
+  "nombre": "Centro Médico Los Andes",
+  "logo": "/assets/img/uploads/logo-cma.jpg",
+  "nombre_corto": "CMLA",
+  "descripcion_seo": "Clínica privada en Panamá: medicina general, especialidades, odontología, laboratorio clínico, ultrasonidos, procedimientos y salud ocupacional para empresas. Centro Comercial Los Andes, local B15.",
+  "aviso_procedimientos": "La realización de cualquier procedimiento está sujeta a valoración médica previa y a la disponibilidad de la clínica.",
+  "prefijo_pais": "+507",
   "mapa_embed_url": "",
-  "mapa_enlace": "",
-  "latitud": "",
+  "direccion": "Centro Comercial Los Andes, local B15, frente a Doit Center",
+  "horarios": [
+    {
+      "dias": "Lunes a sábado",
+      "horas": "8:00 a. m. a 8:00 p. m.",
+      "schema_dias": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "abre": "08:00",
+      "cierra": "20:00"
+    },
+    {
+      "dias": "Domingos",
+      "horas": "9:00 a. m. a 5:00 p. m.",
+      "schema_dias": [
+        "Sunday"
+      ],
+      "abre": "09:00",
+      "cierra": "17:00"
+    }
+  ],
+  "whatsapp": "50760568129",
+  "instagram": "centromedico.losandes",
+  "region": "Panamá",
+  "url_sitio": "https://centromedicolosandes.netlify.app",
   "longitud": "",
+  "ciudad": "Panamá",
+  "mapa_busqueda": "Centro Comercial Los Andes, Doit Center, Panamá",
+  "latitud": "",
+  "mapa_enlace": "",
   "reservas": {
     "proveedor": "whatsapp",
     "url_externa": ""
   },
-  "aviso_procedimientos": "La realización de cualquier procedimiento está sujeta a valoración médica previa y a la disponibilidad de la clínica."
+  "pais": "PA ",
+  "telefonos": [
+    "237-9094",
+    "237-6615"
+  ]
 }
