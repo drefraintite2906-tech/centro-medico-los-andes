@@ -69,6 +69,17 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("destacadas", (items) => (items || []).filter((i) => i.data.destacada));
   eleventyConfig.addFilter("limite", (arr, n) => (arr || []).slice(0, n));
   eleventyConfig.addFilter("isoDia", isoDia);
+  eleventyConfig.addFilter("faqSchema", (items) =>
+    JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: (items || []).map((f) => ({
+        "@type": "Question",
+        name: f.pregunta,
+        acceptedAnswer: { "@type": "Answer", text: f.respuesta },
+      })),
+    }).replace(/</g, "\\u003c")
+  );
   eleventyConfig.addFilter("fechaLarga", (v) => {
     const d = aFecha(v);
     return d

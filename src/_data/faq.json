@@ -1,0 +1,17 @@
+{
+  "pacientes": [
+    { "pregunta": "¿Cómo agendo una cita?", "respuesta": "Complete el formulario de la sección Agendar cita y envíelo por WhatsApp, o llámenos al 237-9094 o al 237-6615. Nuestro equipo le confirmará la fecha y la hora disponibles." },
+    { "pregunta": "¿La solicitud enviada por WhatsApp ya es una cita confirmada?", "respuesta": "No. La solicitud nos permite revisar la disponibilidad. Su cita queda agendada cuando la clínica le confirma la fecha y la hora." },
+    { "pregunta": "¿Atienden los fines de semana?", "respuesta": "Sí. Atendemos de lunes a sábado de 8:00 a. m. a 8:00 p. m. y los domingos de 9:00 a. m. a 5:00 p. m." },
+    { "pregunta": "¿Necesito ayuno para mis exámenes de laboratorio?", "respuesta": "Depende del examen. Pruebas como la glucosa y el perfil lipídico suelen requerir ayuno de 8 a 12 horas, solo con agua. Escríbanos antes de su visita y le indicaremos la preparación correcta." },
+    { "pregunta": "¿Qué debo llevar a mi consulta?", "respuesta": "Su cédula o documento de identidad, órdenes médicas o resultados previos relacionados con su consulta y la lista de medicamentos que toma." },
+    { "pregunta": "¿Dónde están ubicados?", "respuesta": "En el Centro Comercial Los Andes, local B15, frente a Doit Center, en Panamá." }
+  ],
+  "empresas": [
+    { "pregunta": "¿Pueden realizar las evaluaciones en nuestra empresa?", "respuesta": "Sí. Según el número de trabajadores, el tipo de evaluaciones y la disponibilidad, coordinamos visitas para evaluar a los colaboradores en sus instalaciones. Las pruebas que requieren equipos especiales pueden realizarse en la clínica." },
+    { "pregunta": "¿Cómo se define qué exámenes necesita cada puesto?", "respuesta": "A partir de los riesgos y exigencias de cada puesto de trabajo (profesiograma). Si su empresa aún no lo tiene, le asesoramos para definir las evaluaciones y su periodicidad." },
+    { "pregunta": "¿Qué información recibe la empresa?", "respuesta": "La empresa recibe el concepto de aptitud laboral de cada trabajador y las recomendaciones preventivas necesarias para el puesto. Los diagnósticos y la información clínica detallada son confidenciales y no se comparten sin autorización del trabajador." },
+    { "pregunta": "¿Atienden empresas pequeñas?", "respuesta": "Sí. Atendemos desde pocos colaboradores hasta grupos grandes y adaptamos la propuesta al tamaño y actividad de cada empresa." },
+    { "pregunta": "¿Cómo solicito una cotización?", "respuesta": "Complete el formulario de cotización empresarial o escríbanos por WhatsApp indicando la actividad de la empresa, el número aproximado de trabajadores y los servicios que necesita." }
+  ]
+}

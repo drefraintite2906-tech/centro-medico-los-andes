@@ -12,7 +12,7 @@ descripcion_seo: "Conoce Centro Médico Los Andes, clínica privada en el Centro
     <div>
       <p class="eyebrow">Centro Médico Los Andes</p>
       <h2>Atención integral en un solo lugar</h2>
-      <p class="lead">{{ nosotros.intro }}</p>
+      <div class="lead">{{ nosotros.intro | md | safe }}</div>
       <div class="btn-row">
         <a class="btn btn--primary" href="/agendar-cita/">{% icon "calendario" %}Agendar cita</a>
         <a class="btn btn--outline" href="/contacto/">Cómo llegar</a>

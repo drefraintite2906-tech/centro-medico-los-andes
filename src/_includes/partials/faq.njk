@@ -1,0 +1,10 @@
+{# Uso: {% set faqItems = faq.pacientes %}{% include "partials/faq.njk" %} #}
+<div class="faq">
+  {%- for f in faqItems %}
+  <details class="faq__item"{% if loop.first %} open{% endif %}>
+    <summary>{{ f.pregunta }}</summary>
+    <div class="faq__answer"><p>{{ f.respuesta }}</p></div>
+  </details>
+  {%- endfor %}
+</div>
+<script type="application/ld+json">{{ faqItems | faqSchema | safe }}</script>

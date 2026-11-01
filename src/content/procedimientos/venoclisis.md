@@ -5,4 +5,4 @@ descripcion: "Administración de soluciones y medicamentos por vía intravenosa 
 orden: 6
 publicado: true
 ---
-
+Se realiza **únicamente con indicación médica** y bajo supervisión del personal de salud.

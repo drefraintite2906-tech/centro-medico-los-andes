@@ -148,6 +148,35 @@ collections:
             widget: "list"
             fields: [{ label: "Título", name: "titulo", widget: "string" }, { label: "Texto", name: "texto", widget: "text" }, { label: "Icono", name: "icono", widget: "select", options: ["estetoscopio", "diente", "cerebro", "conversacion", "hueso", "manzana", "cruz", "matraz", "gota", "tubo", "ultrasonido", "electro", "microscopio", "tijeras", "jeringa", "suero", "vendaje", "certificado", "escolar", "anillos", "mano", "mujer", "maletin", "portapapeles", "escudo", "casco", "oido", "ojo", "pulmon", "movimiento", "usuarios", "edificio", "alerta", "sirena", "capacitacion", "corazon", "diana", "medico", "vehiculo", "ingreso", "retiro", "periodico", "pastilla", "etiqueta", "libro", "mas"], default: "cruz", hint: "Vea el catálogo de iconos en GUIA-ADMINISTRADOR.md" }]
 
+      - name: "salud_ocupacional"
+        label: "Página Salud Ocupacional (ventajas, entregables, sectores)"
+        file: "src/_data/ocupacional.json"
+        fields:
+          - { label: "Título de ventajas", name: "ventajas_titulo", widget: "string" }
+          - label: "Ventajas"
+            name: "ventajas"
+            widget: "list"
+            fields: [{ label: "Título", name: "titulo", widget: "string" }, { label: "Texto", name: "texto", widget: "text" }, { label: "Icono", name: "icono", widget: "select", options: ["estetoscopio", "diente", "cerebro", "conversacion", "hueso", "manzana", "cruz", "matraz", "gota", "tubo", "ultrasonido", "electro", "microscopio", "tijeras", "jeringa", "suero", "vendaje", "certificado", "escolar", "anillos", "mano", "mujer", "maletin", "portapapeles", "escudo", "casco", "oido", "ojo", "pulmon", "movimiento", "usuarios", "edificio", "alerta", "sirena", "capacitacion", "corazon", "diana", "medico", "vehiculo", "ingreso", "retiro", "periodico", "pastilla", "etiqueta", "libro", "mas"], default: "cruz", hint: "Vea el catálogo de iconos en GUIA-ADMINISTRADOR.md" }]
+          - { label: "Título de entregables", name: "entregables_titulo", widget: "string" }
+          - { label: "Qué recibe la empresa", name: "entregables", widget: "list" }
+          - { label: "Título de sectores", name: "sectores_titulo", widget: "string" }
+          - { label: "Sectores", name: "sectores", widget: "list" }
+
+      - name: "faq"
+        label: "Preguntas frecuentes"
+        file: "src/_data/faq.json"
+        fields:
+          - label: "Pacientes (Inicio y Agendar cita)"
+            name: "pacientes"
+            widget: "list"
+            summary: "{{fields.pregunta}}"
+            fields: [{ label: "Pregunta", name: "pregunta", widget: "string" }, { label: "Respuesta", name: "respuesta", widget: "text" }]
+          - label: "Empresas (Salud Ocupacional)"
+            name: "empresas"
+            widget: "list"
+            summary: "{{fields.pregunta}}"
+            fields: [{ label: "Pregunta", name: "pregunta", widget: "string" }, { label: "Respuesta", name: "respuesta", widget: "text" }]
+
   # ---------------------------------------------------------------
   - name: "especialidades"
     label: "🩺 Especialidades médicas"

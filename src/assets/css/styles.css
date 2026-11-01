@@ -505,3 +505,21 @@ a.quickbar__item:hover strong { color: var(--blue); }
 .hero__grid > *, .split > *, .grid > * { min-width: 0; }
 h1, h2 { overflow-wrap: break-word; }
 @media (max-width: 420px) { .hero__chips { grid-template-columns: 1fr; } .hero__panel { padding: 1.25rem; } .hero__hours li { flex-direction: column; gap: .1rem; } }
+
+/* ---------- Preguntas frecuentes ---------- */
+.faq { display: grid; gap: .75rem; max-width: 860px; margin: 0 auto; }
+.faq__item { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); transition: border-color .2s, box-shadow .2s; }
+.faq__item[open] { border-color: #C8D6E6; box-shadow: var(--shadow-sm); }
+.faq__item summary { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.3rem; font: 600 1rem/1.4 var(--font-head); color: var(--navy); }
+.faq__item summary::-webkit-details-marker { display: none; }
+.faq__item summary::after { content: "+"; flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--sky); color: var(--blue); font: 500 1.2rem/1 var(--font-body); }
+.faq__item[open] summary::after { content: "–"; background: var(--navy); color: #fff; }
+.faq__answer { padding: 0 1.3rem 1.2rem; color: var(--muted); }
+.faq__answer p { margin: 0; }
+
+/* ---------- Sectores y entregables ---------- */
+.tags { display: flex; flex-wrap: wrap; gap: .6rem; list-style: none; padding: 0; margin: 0; }
+.tags li { padding: .55rem 1rem; border-radius: 999px; background: #fff; border: 1px solid var(--line); color: var(--navy); font-weight: 500; font-size: .92rem; }
+.deliverables { counter-reset: d; list-style: none; padding: 0; margin: 0; display: grid; gap: .75rem; }
+.deliverables li { display: flex; gap: .9rem; align-items: flex-start; padding: 1rem 1.1rem; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); }
+.deliverables li::before { counter-increment: d; content: counter(d); flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--navy); color: #fff; font: 700 .9rem/1 var(--font-head); }

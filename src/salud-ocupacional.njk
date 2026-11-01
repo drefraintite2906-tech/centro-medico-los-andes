@@ -46,14 +46,29 @@ claseBody: ocupacional
     <a href="#complementarias">Complementarias</a>
     <a href="#prevencion">Prevención</a>
     <a href="#en-empresa">En su empresa</a>
+    <a href="#preguntas">Preguntas</a>
     <a href="#cotizacion" class="subnav__cta">Cotización</a>
   </div>
 </nav>
 
+<section class="section">
+  <div class="container">
+    {{ m.sectionHead(ocupacional.ventajas_titulo, "Un aliado médico para Recursos Humanos y Seguridad y Salud en el Trabajo.", "Nuestro enfoque") }}
+    <div class="grid grid--3">
+      {%- for v in ocupacional.ventajas %}
+      <article class="card card--row reveal">
+        <span class="card__icon">{% icon v.icono %}</span>
+        <div><h3 class="card__title">{{ v.titulo }}</h3><p class="card__text">{{ v.texto }}</p></div>
+      </article>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
 {%- for g in grupos %}
 {%- set items = collections.ocupacional | porGrupo(g.id) %}
 {%- if items.length %}
-<section class="section{% if loop.index == 2 %} section--tint{% endif %}" id="{{ g.id }}">
+<section class="section{% if loop.index != 2 %} section--tint{% endif %}" id="{{ g.id }}">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow">{% icon g.icono %}{{ loop.index }} · Servicios</p>
@@ -93,6 +108,22 @@ claseBody: ocupacional
       <li><strong>Ejecución</strong><span>Realizamos las evaluaciones en la clínica o en tus instalaciones, en la fecha acordada.</span></li>
       <li><strong>Resultados</strong><span>Entregamos conceptos de aptitud y recomendaciones preventivas, cuidando la confidencialidad médica.</span></li>
     </ol>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container split">
+    <div>
+      <p class="eyebrow">{% icon "portapapeles" %}Resultados</p>
+      <h2>{{ ocupacional.entregables_titulo }}</h2>
+      <ol class="deliverables">{% for e in ocupacional.entregables %}<li>{{ e }}</li>{% endfor %}</ol>
+    </div>
+    <div>
+      <p class="eyebrow">{% icon "edificio" %}Sectores</p>
+      <h2>{{ ocupacional.sectores_titulo }}</h2>
+      <p class="lead">Diseñamos el programa de evaluaciones según la actividad y los riesgos de cada empresa.</p>
+      <ul class="tags">{% for t in ocupacional.sectores %}<li>{{ t }}</li>{% endfor %}</ul>
+    </div>
   </div>
 </section>
 
@@ -162,5 +193,12 @@ claseBody: ocupacional
         <button class="btn btn--wa" type="button" data-send-wa>{% icon "whatsapp" %}Enviar por WhatsApp</button>
       </div>
     </form>
+  </div>
+</section>
+
+<section class="section" id="preguntas">
+  <div class="container">
+    {{ m.sectionHead("Preguntas frecuentes de empresas", "", "Preguntas frecuentes") }}
+    {%- set faqItems = faq.empresas %}{% include "partials/faq.njk" %}
   </div>
 </section>

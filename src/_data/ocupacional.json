@@ -1,0 +1,30 @@
+{
+  "ventajas_titulo": "¿Por qué elegirnos para la salud de tu equipo?",
+  "ventajas": [
+    { "titulo": "Enfoque de Medicina del Trabajo", "texto": "Servicios orientados por un médico especialista en Medicina del Trabajo, con criterios clínicos y preventivos aplicados a cada puesto.", "icono": "medico" },
+    { "titulo": "Evaluaciones según el riesgo", "texto": "Definimos las pruebas de acuerdo con los riesgos y exigencias del puesto, evitando exámenes innecesarios.", "icono": "diana" },
+    { "titulo": "Todo en un mismo lugar", "texto": "Consulta, laboratorio, electrocardiograma, ultrasonido y evaluaciones complementarias en una sola visita, según disponibilidad.", "icono": "cruz" },
+    { "titulo": "Confidencialidad médica", "texto": "La empresa recibe el concepto de aptitud y las recomendaciones; la información clínica del trabajador se protege.", "icono": "candado" },
+    { "titulo": "Atención en sus instalaciones", "texto": "Coordinamos jornadas de evaluación en su empresa para reducir traslados y tiempo fuera del puesto.", "icono": "vehiculo" },
+    { "titulo": "Horario extendido", "texto": "De lunes a sábado hasta las 8:00 p. m. y domingos, para facilitar la evaluación de personal por turnos.", "icono": "reloj" }
+  ],
+  "entregables_titulo": "¿Qué recibe tu empresa?",
+  "entregables": [
+    "Concepto de aptitud laboral de cada trabajador evaluado.",
+    "Recomendaciones médico-laborales preventivas, redactadas para el puesto de trabajo.",
+    "Seguimiento de los programas de vigilancia de la salud según los riesgos.",
+    "Informes consolidados con datos agregados para la gestión preventiva, sin revelar información clínica individual.",
+    "Orientación para la toma de decisiones de Recursos Humanos y Seguridad y Salud en el Trabajo."
+  ],
+  "sectores_titulo": "Servicios adaptables a distintos sectores",
+  "sectores": [
+    "Construcción",
+    "Industria y manufactura",
+    "Logística, transporte y conductores",
+    "Comercio y ventas",
+    "Oficinas y servicios",
+    "Seguridad y vigilancia",
+    "Alimentos y restaurantes",
+    "Salud y servicios técnicos"
+  ]
+}

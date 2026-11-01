@@ -1,7 +1,7 @@
 ---
 titulo: "Otras especialidades"
 icono: "mas"
-descripcion: "Consúltanos por otras especialidades disponibles y por los horarios de atención de nuestros profesionales."
+descripcion: "Ampliamos continuamente nuestra cartera de especialistas. Escríbenos para conocer las especialidades, los profesionales y los horarios disponibles."
 orden: 7
 publicado: true
 ---

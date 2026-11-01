@@ -92,3 +92,10 @@ descripcion_seo: "Solicita tu cita en Centro Médico Los Andes, Panamá: medicin
     {%- endif %}
   </div>
 </section>
+
+<section class="section section--tint">
+  <div class="container">
+    {{ m.sectionHead("Preguntas frecuentes", "", "Antes de tu cita") }}
+    {%- set faqItems = faq.pacientes %}{% include "partials/faq.njk" %}
+  </div>
+</section>

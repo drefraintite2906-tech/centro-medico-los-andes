@@ -76,6 +76,17 @@ claseBody: home
 
 <section class="section section--tint">
   <div class="container">
+    {{ m.sectionHead("¿Por qué elegir Centro Médico Los Andes?", "Comodidad, horario extendido y atención integral para ti, tu familia y tu empresa.", "Nuestra diferencia") }}
+    <div class="grid grid--4">
+      {%- for p in nosotros.por_que %}
+      <div class="card card--pad reveal"><span class="card__icon">{% icon p.icono %}</span><h3 class="card__title">{{ p.titulo }}</h3><p class="card__text">{{ p.texto }}</p></div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
     {{ m.sectionHead("Especialidades médicas", "Profesionales de distintas especialidades para atenderte a ti y a tu familia.", "Especialidades") }}
     <div class="chips-grid">
       {%- for e in collections.especialidades %}
@@ -88,7 +99,7 @@ claseBody: home
   </div>
 </section>
 
-<section class="section">
+<section class="section section--tint">
   <div class="container">
     {{ m.sectionHead("Promociones destacadas", "Paquetes de chequeo, promociones de laboratorio, odontología y campañas preventivas.", "Promociones") }}
     {%- if promosDest.length %}
@@ -142,5 +153,12 @@ claseBody: home
   </div>
 </section>
 {%- endif %}
+
+<section class="section section--tint">
+  <div class="container">
+    {{ m.sectionHead("Preguntas frecuentes", "", "Resolvemos tus dudas") }}
+    {%- set faqItems = faq.pacientes %}{% include "partials/faq.njk" %}
+  </div>
+</section>
 
 {{ m.ctaBand("Agenda tu cita hoy", "Envíanos tu solicitud por WhatsApp y te confirmaremos la disponibilidad.") }}
