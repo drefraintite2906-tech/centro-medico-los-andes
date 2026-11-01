@@ -1,0 +1,166 @@
+---
+layout: layouts/base.njk
+titulo: Salud Ocupacional para empresas
+permalink: /salud-ocupacional/
+descripcion_seo: "Salud ocupacional en Panamá: evaluaciones médicas de ingreso, periódicas y de retiro, audiometría, espirometría, evaluación de riesgos, planes de emergencia y capacitaciones. Evaluaciones en su empresa."
+claseBody: ocupacional
+---
+{% import "partials/macros.njk" as m with context %}
+{%- set grupos = [
+  {id: "evaluaciones", titulo: "Evaluaciones ocupacionales", texto: "Valoraciones médicas a lo largo de la vida laboral del colaborador, con criterios de medicina del trabajo.", icono: "portapapeles"},
+  {id: "complementarias", titulo: "Evaluaciones complementarias", texto: "Pruebas específicas según los riesgos y exigencias de cada puesto de trabajo.", icono: "oido"},
+  {id: "prevencion", titulo: "Prevención y gestión de riesgos", texto: "Herramientas para anticiparse a los riesgos y fortalecer la cultura preventiva de su organización.", icono: "escudo"}
+] -%}
+
+<section class="hero hero--business">
+  <div class="hero__bg" aria-hidden="true"></div>
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="eyebrow eyebrow--light">{% icon "maletin" %}Portal empresarial · Salud Ocupacional</p>
+      <h1>Protegemos la salud de tus colaboradores y fortalecemos la seguridad de tu empresa</h1>
+      <p class="hero__lead">Servicios para departamentos de Recursos Humanos y responsables de Seguridad y Salud en el Trabajo: evaluaciones médicas ocupacionales, pruebas complementarias, prevención de riesgos y capacitación.</p>
+      <div class="btn-row">
+        <a class="btn btn--white btn--lg" href="#cotizacion">{% icon "portapapeles" %}SOLICITAR COTIZACIÓN EMPRESARIAL</a>
+        <a class="btn btn--ghost-light btn--lg" href="{{ clinica.whatsapp | wa('Hola, represento a una empresa y quisiera información sobre servicios de salud ocupacional.') }}" target="_blank" rel="noopener">{% icon "whatsapp" %}Hablar con un asesor</a>
+      </div>
+    </div>
+    <div class="hero__visual">
+      <div class="hero__panel">
+        <p class="hero__panel-title">¿Qué podemos hacer por tu empresa?</p>
+        <ul class="checklist">
+          <li>{% icon "check" %}Evaluaciones de ingreso, periódicas y de retiro</li>
+          <li>{% icon "check" %}Certificación de aptitud laboral</li>
+          <li>{% icon "check" %}Audiometría, optometría y espirometría</li>
+          <li>{% icon "check" %}Evaluación de riesgos y planes de emergencia</li>
+          <li>{% icon "check" %}Programas de vigilancia de la salud</li>
+          <li>{% icon "check" %}Capacitaciones en salud y seguridad</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<nav class="subnav" aria-label="Secciones de Salud Ocupacional">
+  <div class="container subnav__inner">
+    <a href="#evaluaciones">Evaluaciones</a>
+    <a href="#complementarias">Complementarias</a>
+    <a href="#prevencion">Prevención</a>
+    <a href="#en-empresa">En su empresa</a>
+    <a href="#cotizacion" class="subnav__cta">Cotización</a>
+  </div>
+</nav>
+
+{%- for g in grupos %}
+{%- set items = collections.ocupacional | porGrupo(g.id) %}
+{%- if items.length %}
+<section class="section{% if loop.index == 2 %} section--tint{% endif %}" id="{{ g.id }}">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">{% icon g.icono %}{{ loop.index }} · Servicios</p>
+      <h2>{{ g.titulo }}</h2>
+      <p>{{ g.texto }}</p>
+    </div>
+    <div class="grid grid--3">
+      {%- for s in items %}
+      <article class="card card--row reveal">
+        <span class="card__icon">{% icon s.data.icono %}</span>
+        <div>
+          <h3 class="card__title">{{ s.data.titulo }}</h3>
+          <p class="card__text">{{ s.data.descripcion }}</p>
+        </div>
+      </article>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+{%- endif %}
+{%- endfor %}
+
+<section class="section section--navy" id="en-empresa">
+  <div class="container split split--center">
+    <div>
+      <p class="eyebrow eyebrow--light">{% icon "vehiculo" %}Servicios en empresas</p>
+      <h2>Llevamos la evaluación a tus instalaciones</h2>
+      <p class="lead-light">Coordinamos visitas a empresas para realizar evaluaciones médicas a los trabajadores directamente en sus instalaciones, reduciendo traslados y tiempo fuera del puesto. Sujeto a coordinación previa y disponibilidad.</p>
+      {%- set enEmpresa = collections.ocupacional | porGrupo("empresa") %}
+      {%- if enEmpresa.length %}
+      <ul class="checklist checklist--light">{% for s in enEmpresa %}<li>{% icon "check" %}<span><strong>{{ s.data.titulo }}.</strong> {{ s.data.descripcion }}</span></li>{% endfor %}</ul>
+      {%- endif %}
+    </div>
+    <ol class="steps">
+      <li><strong>Solicitud</strong><span>Cuéntanos el número de trabajadores, los puestos y los servicios que necesitas.</span></li>
+      <li><strong>Propuesta</strong><span>Preparamos una cotización y un plan de evaluaciones según los riesgos de cada puesto.</span></li>
+      <li><strong>Ejecución</strong><span>Realizamos las evaluaciones en la clínica o en tus instalaciones, en la fecha acordada.</span></li>
+      <li><strong>Resultados</strong><span>Entregamos conceptos de aptitud y recomendaciones preventivas, cuidando la confidencialidad médica.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section section--tint" id="cotizacion">
+  <div class="container split split--form">
+    <div>
+      <p class="eyebrow">{% icon "portapapeles" %}Cotización empresarial</p>
+      <h2>Solicita una cotización para tu empresa</h2>
+      <p class="lead">Completa el formulario y un asesor se comunicará contigo. Puedes enviarlo por correo o directamente por WhatsApp.</p>
+      <ul class="contact-list">
+        <li>{% icon "whatsapp" %}<a href="{{ clinica.whatsapp | wa('Hola, quisiera una cotización de salud ocupacional para mi empresa.') }}" target="_blank" rel="noopener">{{ clinica.whatsapp_visible }}</a></li>
+        <li>{% icon "telefono" %}{% for t in clinica.telefonos %}<a href="{{ (clinica.prefijo_pais + t) | tel }}">{{ t }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</li>
+        {%- if clinica.correo_administrativo %}<li>{% icon "correo" %}<a href="mailto:{{ clinica.correo_administrativo }}">{{ clinica.correo_administrativo }}</a></li>{% endif %}
+      </ul>
+      <p class="small muted">{% icon "candado" %} No solicitamos información clínica de los trabajadores en este formulario.</p>
+    </div>
+
+    <form class="form card card--pad" name="cotizacion-empresarial" method="POST" action="{{ clinica.formulario_endpoint or '/gracias/' }}"
+          {% if not clinica.formulario_endpoint %}data-netlify="true" netlify-honeypot="bot-field"{% endif %} data-form="cotizacion" novalidate>
+      <input type="hidden" name="form-name" value="cotizacion-empresarial">
+      <input type="hidden" name="_subject" value="Nueva solicitud de cotización empresarial – Sitio web">
+      <p class="hp" aria-hidden="true"><label>No llenar: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <div class="form__grid">
+        <div class="field">
+          <label for="q-empresa">Nombre de la empresa *</label>
+          <input id="q-empresa" name="empresa" type="text" required maxlength="120" autocomplete="organization">
+        </div>
+        <div class="field">
+          <label for="q-contacto">Persona de contacto *</label>
+          <input id="q-contacto" name="contacto" type="text" required maxlength="100" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="q-telefono">Número telefónico *</label>
+          <input id="q-telefono" name="telefono" type="tel" required inputmode="tel" pattern="^[+()0-9\s-]{7,20}$" maxlength="20" autocomplete="tel" placeholder="6000-0000">
+        </div>
+        <div class="field">
+          <label for="q-correo">Correo electrónico *</label>
+          <input id="q-correo" name="correo" type="email" required maxlength="120" autocomplete="email">
+        </div>
+        <div class="field field--full">
+          <label for="q-trabajadores">Cantidad aproximada de trabajadores *</label>
+          <select id="q-trabajadores" name="trabajadores" required>
+            <option value="">Seleccione…</option>
+            <option>1 a 10</option><option>11 a 50</option><option>51 a 100</option><option>101 a 250</option><option>Más de 250</option>
+          </select>
+        </div>
+        <fieldset class="field field--full">
+          <legend>Servicios solicitados *</legend>
+          <div class="checks">
+            {%- for g in grupos %}
+            <label class="check"><input type="checkbox" name="servicios" value="{{ g.titulo }}"><span>{{ g.titulo }}</span></label>
+            {%- endfor %}
+            <label class="check"><input type="checkbox" name="servicios" value="Evaluaciones en las instalaciones de la empresa"><span>Evaluaciones en nuestras instalaciones</span></label>
+            <label class="check"><input type="checkbox" name="servicios" value="Capacitaciones"><span>Capacitaciones</span></label>
+            <label class="check"><input type="checkbox" name="servicios" value="Otro"><span>Otro</span></label>
+          </div>
+        </fieldset>
+        <div class="field field--full">
+          <label for="q-mensaje">Mensaje adicional</label>
+          <textarea id="q-mensaje" name="mensaje" rows="4" maxlength="1000" placeholder="Actividad de la empresa, puestos de trabajo, ubicación, fechas deseadas…"></textarea>
+        </div>
+        <label class="check field--full"><input type="checkbox" name="consentimiento" value="Sí" required><span>Acepto la <a href="/privacidad/" target="_blank">política de privacidad</a> y el uso de estos datos para responder a mi solicitud. *</span></label>
+      </div>
+      <p class="form__error" role="alert" data-form-error></p>
+      <div class="btn-row">
+        <button class="btn btn--primary" type="submit">{% icon "correo" %}Enviar solicitud</button>
+        <button class="btn btn--wa" type="button" data-send-wa>{% icon "whatsapp" %}Enviar por WhatsApp</button>
+      </div>
+    </form>
+  </div>
+</section>

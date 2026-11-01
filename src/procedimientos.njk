@@ -1,0 +1,21 @@
+---
+layout: layouts/base.njk
+titulo: Procedimientos médicos
+permalink: /procedimientos/
+descripcion_seo: "Cirugía menor, uñas encarnadas, Papanicolaou, inyectables, venoclisis, curaciones y certificados de salud, escolares y prematrimoniales en Panamá."
+---
+{% import "partials/macros.njk" as m with context %}
+{{ m.pageHero("Procedimientos médicos", "Procedimientos ambulatorios y certificaciones realizados por personal capacitado.", "Procedimientos", "vendaje") }}
+
+<section class="section">
+  <div class="container">
+    <div class="note note--warn">
+      {% icon "alerta" %}
+      <p><strong>Importante:</strong> {{ clinica.aviso_procedimientos }}</p>
+    </div>
+    <div class="grid grid--3">
+      {%- for s in collections.procedimientos %}{{ m.serviceCard(s, "whatsapp", "Solicitar información", "Hola, quisiera información sobre el procedimiento") }}{% endfor %}
+    </div>
+  </div>
+</section>
+{{ m.ctaBand("¿Necesitas un certificado médico?", "Escríbenos para conocer los requisitos y agendar tu evaluación.") }}

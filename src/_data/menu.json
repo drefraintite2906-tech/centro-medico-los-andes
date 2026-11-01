@@ -1,0 +1,24 @@
+{
+  "items": [
+    { "texto": "Inicio", "url": "/" },
+    { "texto": "Nosotros", "url": "/nosotros/" },
+    { "texto": "Especialidades", "url": "/especialidades/" },
+    { "texto": "Laboratorio", "url": "/laboratorio/" },
+    { "texto": "Procedimientos", "url": "/procedimientos/" },
+    {
+      "texto": "Salud Ocupacional",
+      "url": "/salud-ocupacional/",
+      "hijos": [
+        { "texto": "Evaluaciones ocupacionales", "url": "/salud-ocupacional/#evaluaciones" },
+        { "texto": "Evaluaciones complementarias", "url": "/salud-ocupacional/#complementarias" },
+        { "texto": "Prevención y gestión de riesgos", "url": "/salud-ocupacional/#prevencion" },
+        { "texto": "Servicios en su empresa", "url": "/salud-ocupacional/#en-empresa" },
+        { "texto": "Solicitar cotización", "url": "/salud-ocupacional/#cotizacion" }
+      ]
+    },
+    { "texto": "Promociones", "url": "/promociones/" },
+    { "texto": "Blog de salud", "url": "/blog/" },
+    { "texto": "Contacto", "url": "/contacto/" }
+  ],
+  "boton": { "texto": "Agendar cita", "url": "/agendar-cita/" }
+}

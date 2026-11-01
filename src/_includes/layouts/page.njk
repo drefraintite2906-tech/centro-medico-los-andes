@@ -1,0 +1,11 @@
+---
+layout: layouts/base.njk
+---
+{% import "partials/macros.njk" as m with context %}
+{{ m.pageHero(titulo, descripcion) }}
+<section class="section">
+  <div class="container container--narrow prose">
+    {{ content | safe }}
+  </div>
+</section>
+{{ m.ctaBand("¿Necesitas atención médica?", "Escríbenos o llámanos y con gusto te orientamos.") }}

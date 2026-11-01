@@ -1,0 +1,94 @@
+---
+layout: layouts/base.njk
+titulo: Agendar cita
+permalink: /agendar-cita/
+descripcion_seo: "Solicita tu cita en Centro Médico Los Andes, Panamá: medicina general, especialidades, odontología, laboratorio y ultrasonidos. Te confirmamos la disponibilidad por WhatsApp."
+---
+{% import "partials/macros.njk" as m with context %}
+{{ m.pageHero("Agendar cita", "Completa tus datos y envía tu solicitud por WhatsApp. Te confirmaremos la disponibilidad lo antes posible.", "Solicitud de cita", "calendario") }}
+
+<section class="section">
+  <div class="container split split--form">
+    <div>
+      <h2>¿Cómo funciona?</h2>
+      <ol class="steps steps--light">
+        <li><strong>Completa el formulario</strong><span>Elige el servicio, la fecha y el horario que prefieras.</span></li>
+        <li><strong>Envíalo por WhatsApp</strong><span>Se abrirá WhatsApp con tu mensaje listo para enviar.</span></li>
+        <li><strong>Te confirmamos</strong><span>Nuestro equipo revisará la disponibilidad y confirmará tu cita.</span></li>
+      </ol>
+      <div class="note note--info">
+        {% icon "info" %}
+        <p><strong>Tu solicitud no es una cita confirmada.</strong> La cita queda agendada únicamente cuando la clínica te confirme la fecha y la hora.</p>
+      </div>
+      <div class="note note--warn">
+        {% icon "alerta" %}
+        <p>Si presentas una <strong>emergencia</strong> (dolor de pecho, dificultad para respirar, sangrado abundante, pérdida de conciencia), acude de inmediato al servicio de urgencias más cercano.</p>
+      </div>
+    </div>
+
+    {%- if clinica.reservas.proveedor == "externo" and clinica.reservas.url_externa %}
+    <div class="card card--pad booking-external">
+      <h2 class="h3">Reserva en línea</h2>
+      <p>Selecciona el día y la hora disponibles en nuestro calendario.</p>
+      <a class="btn btn--primary" href="{{ clinica.reservas.url_externa }}" target="_blank" rel="noopener">{% icon "calendario" %}Abrir calendario de reservas</a>
+    </div>
+    {%- else %}
+    <form class="form card card--pad" data-form="cita" novalidate>
+      <p class="hp" aria-hidden="true"><label>No llenar: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <div class="form__grid">
+        <div class="field field--full">
+          <label for="c-servicio">Especialidad o servicio *</label>
+          <select id="c-servicio" name="servicio" required>
+            <option value="">Seleccione…</option>
+            <optgroup label="Especialidades médicas">{% for s in collections.especialidades %}<option>{{ s.data.titulo }}</option>{% endfor %}</optgroup>
+            <optgroup label="Laboratorio y diagnóstico">{% for s in collections.laboratorio %}<option>{{ s.data.titulo }}</option>{% endfor %}</optgroup>
+            <optgroup label="Procedimientos y certificados">{% for s in collections.procedimientos %}<option>{{ s.data.titulo }}</option>{% endfor %}</optgroup>
+            <optgroup label="Otros"><option>Evaluación de salud ocupacional</option><option>Otro / no estoy seguro</option></optgroup>
+          </select>
+        </div>
+        {%- if collections.medicos.length %}
+        <div class="field field--full">
+          <label for="c-profesional">Profesional (opcional)</label>
+          <select id="c-profesional" name="profesional">
+            <option value="">Sin preferencia</option>
+            {%- for d in collections.medicos %}<option value="{{ d.data.nombre }}">{{ d.data.nombre }} – {{ d.data.especialidad }}</option>{% endfor %}
+          </select>
+        </div>
+        {%- endif %}
+        <div class="field field--full">
+          <label for="c-nombre">Nombre completo *</label>
+          <input id="c-nombre" name="nombre" type="text" required minlength="3" maxlength="100" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="c-telefono">Número telefónico *</label>
+          <input id="c-telefono" name="telefono" type="tel" required inputmode="tel" pattern="^[+()0-9\s-]{7,20}$" maxlength="20" autocomplete="tel" placeholder="6000-0000">
+        </div>
+        <div class="field">
+          <label for="c-fecha">Fecha preferida *</label>
+          <input id="c-fecha" name="fecha" type="date" required>
+        </div>
+        <div class="field field--full">
+          <label for="c-horario">Horario preferido *</label>
+          <select id="c-horario" name="horario" required>
+            <option value="">Seleccione…</option>
+            <option>Mañana (8:00 a. m. – 12:00 m.)</option>
+            <option>Tarde (12:00 m. – 5:00 p. m.)</option>
+            <option>Noche (5:00 p. m. – 8:00 p. m., lunes a sábado)</option>
+            <option>Cualquier horario</option>
+          </select>
+          <small class="hint" data-hint-domingo hidden>Los domingos atendemos de 9:00 a. m. a 5:00 p. m.</small>
+        </div>
+        <div class="field field--full">
+          <label for="c-comentarios">Comentarios (opcional)</label>
+          <textarea id="c-comentarios" name="comentarios" rows="3" maxlength="500" placeholder="Ej.: es primera vez, necesito certificado, traigo orden médica…"></textarea>
+          <small class="hint">Por tu privacidad, no incluyas diagnósticos ni información clínica detallada. La conversaremos en consulta.</small>
+        </div>
+        <label class="check field--full"><input type="checkbox" name="consentimiento" required><span>Acepto la <a href="/privacidad/" target="_blank">política de privacidad</a>. *</span></label>
+      </div>
+      <p class="form__error" role="alert" data-form-error></p>
+      <button class="btn btn--wa btn--lg btn--block" type="submit">{% icon "whatsapp" %}Enviar solicitud por WhatsApp</button>
+      <p class="small muted center">Se abrirá WhatsApp con tu solicitud para el número {{ clinica.whatsapp_visible }}.</p>
+    </form>
+    {%- endif %}
+  </div>
+</section>

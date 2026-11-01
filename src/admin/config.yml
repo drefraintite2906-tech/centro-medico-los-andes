@@ -1,0 +1,296 @@
+# =====================================================================
+# Panel administrativo – Centro Médico Los Andes (Decap CMS)
+# Acceso: https://SU-DOMINIO/admin/
+# =====================================================================
+locale: "es"
+
+# --- Autenticación (elija UNA opción; ver INSTRUCCIONES-PUBLICACION.md) ---
+# Opción A (recomendada): GitHub + OAuth de Netlify. Solo usuarios con permiso en el repositorio.
+backend:
+  name: github
+  repo: USUARIO-GITHUB/centro-medico-los-andes   # <-- cambie por su repositorio
+  branch: main
+  commit_messages:
+    create: "Crear {{collection}} “{{slug}}”"
+    update: "Actualizar {{collection}} “{{slug}}”"
+    delete: "Eliminar {{collection}} “{{slug}}”"
+    uploadMedia: "Subir imagen “{{path}}”"
+    deleteMedia: "Eliminar imagen “{{path}}”"
+# Opción B: Netlify Identity + Git Gateway (usuarios por invitación con correo y contraseña):
+# backend:
+#   name: git-gateway
+#   branch: main
+
+# Para editar en su computadora sin internet: ejecute "npm run cms" y "npm run dev"
+local_backend: true
+
+# Flujo de revisión opcional:
+# publish_mode: editorial_workflow   # Active para revisar (borrador → revisión → listo) antes de publicar
+
+media_folder: "src/assets/img/uploads"
+public_folder: "/assets/img/uploads"
+
+site_url: https://www.centromedicolosandes.com
+display_url: https://www.centromedicolosandes.com
+logo_url: /favicon.svg
+
+collections:
+  # ---------------------------------------------------------------
+  - name: "configuracion"
+    label: "⚙️ Configuración del sitio"
+    editor: { preview: false }
+    files:
+      - name: "clinica"
+        label: "Datos de la clínica (teléfonos, horarios, logo, correo)"
+        file: "src/_data/clinica.json"
+        fields:
+          - { label: "Nombre", name: "nombre", widget: "string" }
+          - { label: "Nombre corto", name: "nombre_corto", widget: "string" }
+          - { label: "Logotipo oficial", name: "logo", widget: "image", required: false, hint: "Suba el archivo original (PNG transparente o SVG). Se muestra sin alterar proporciones ni colores." }
+          - { label: "URL del sitio (dominio)", name: "url_sitio", widget: "string", hint: "Ej.: https://www.centromedicolosandes.com" }
+          - { label: "Descripción para Google (SEO)", name: "descripcion_seo", widget: "text", hint: "Máximo ~160 caracteres" }
+          - { label: "Dirección", name: "direccion", widget: "string" }
+          - { label: "Ciudad", name: "ciudad", widget: "string" }
+          - { label: "Provincia", name: "region", widget: "string" }
+          - { label: "País (código)", name: "pais", widget: "string", default: "PA" }
+          - { label: "Teléfonos", name: "telefonos", widget: "list", field: { label: "Teléfono", name: "telefono", widget: "string" } }
+          - { label: "Prefijo internacional", name: "prefijo_pais", widget: "string", default: "+507" }
+          - { label: "WhatsApp (solo números con código de país)", name: "whatsapp", widget: "string", pattern: ["^[0-9]{8,15}$", "Solo números, ej.: 50760568129"] }
+          - { label: "WhatsApp (como se muestra)", name: "whatsapp_visible", widget: "string" }
+          - { label: "Usuario de Instagram (sin @)", name: "instagram", widget: "string" }
+          - { label: "Correo administrativo", name: "correo_administrativo", widget: "string", required: false, hint: "Se muestra en el sitio. Las notificaciones de formularios se configuran en Netlify (ver guía)." }
+          - { label: "Endpoint externo de formularios (opcional)", name: "formulario_endpoint", widget: "string", required: false, hint: "Déjelo vacío para usar Netlify Forms. Ej. Formspree: https://formspree.io/f/xxxxxx" }
+          - label: "Horarios"
+            name: "horarios"
+            widget: "list"
+            fields:
+              - { label: "Días", name: "dias", widget: "string" }
+              - { label: "Horas (texto)", name: "horas", widget: "string" }
+              - { label: "Días (Google)", name: "schema_dias", widget: "select", multiple: true, options: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"] }
+              - { label: "Abre (HH:MM)", name: "abre", widget: "string" }
+              - { label: "Cierra (HH:MM)", name: "cierra", widget: "string" }
+          - { label: "Búsqueda en Google Maps", name: "mapa_busqueda", widget: "string" }
+          - { label: "URL del mapa incrustado (opcional)", name: "mapa_embed_url", widget: "string", required: false, hint: "Google Maps > Compartir > Insertar un mapa > copie solo la URL del atributo src" }
+          - { label: "Enlace a Google Maps (opcional)", name: "mapa_enlace", widget: "string", required: false, hint: "Google Maps > Compartir > Copiar vínculo" }
+          - { label: "Latitud (opcional)", name: "latitud", widget: "string", required: false }
+          - { label: "Longitud (opcional)", name: "longitud", widget: "string", required: false }
+          - label: "Sistema de reservas"
+            name: "reservas"
+            widget: "object"
+            fields:
+              - { label: "Proveedor", name: "proveedor", widget: "select", options: [{ label: "WhatsApp (actual)", value: "whatsapp" }, { label: "Calendario externo", value: "externo" }], default: "whatsapp" }
+              - { label: "URL del calendario externo", name: "url_externa", widget: "string", required: false }
+          - { label: "Aviso de procedimientos", name: "aviso_procedimientos", widget: "text" }
+
+      - name: "menu"
+        label: "Menú de navegación (pestañas y subcategorías)"
+        file: "src/_data/menu.json"
+        fields:
+          - label: "Pestañas"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.texto}} → {{fields.url}}"
+            fields:
+              - { label: "Texto", name: "texto", widget: "string" }
+              - { label: "Enlace", name: "url", widget: "string", hint: "Ej.: /especialidades/ o /mi-nueva-pagina/" }
+              - label: "Subcategorías"
+                name: "hijos"
+                widget: "list"
+                required: false
+                fields:
+                  - { label: "Texto", name: "texto", widget: "string" }
+                  - { label: "Enlace", name: "url", widget: "string" }
+          - label: "Botón destacado"
+            name: "boton"
+            widget: "object"
+            fields:
+              - { label: "Texto", name: "texto", widget: "string" }
+              - { label: "Enlace", name: "url", widget: "string" }
+
+      - name: "inicio"
+        label: "Página de inicio"
+        file: "src/_data/inicio.json"
+        fields:
+          - { label: "Etiqueta superior", name: "hero_etiqueta", widget: "string" }
+          - { label: "Título principal", name: "hero_titulo", widget: "string" }
+          - { label: "Subtítulo", name: "hero_subtitulo", widget: "text" }
+          - { label: "Fotografía principal", name: "hero_imagen", widget: "image", required: false, hint: "Recomendado: foto real de la clínica, vertical, mínimo 1200 px" }
+          - { label: "Texto alternativo de la foto", name: "hero_imagen_alt", widget: "string" }
+          - { label: "Título de áreas", name: "areas_titulo", widget: "string" }
+          - { label: "Subtítulo de áreas", name: "areas_subtitulo", widget: "string" }
+          - label: "Áreas de atención (tarjetas)"
+            name: "areas"
+            widget: "list"
+            fields:
+              - { label: "Título", name: "titulo", widget: "string" }
+              - { label: "Texto", name: "texto", widget: "text" }
+              - { label: "Icono", name: "icono", widget: "select", options: ["estetoscopio", "diente", "cerebro", "conversacion", "hueso", "manzana", "cruz", "matraz", "gota", "tubo", "ultrasonido", "electro", "microscopio", "tijeras", "jeringa", "suero", "vendaje", "certificado", "escolar", "anillos", "mano", "mujer", "maletin", "portapapeles", "escudo", "casco", "oido", "ojo", "pulmon", "movimiento", "usuarios", "edificio", "alerta", "sirena", "capacitacion", "corazon", "diana", "medico", "vehiculo", "ingreso", "retiro", "periodico", "pastilla", "etiqueta", "libro", "mas"], default: "cruz", hint: "Vea el catálogo de iconos en GUIA-ADMINISTRADOR.md" }
+              - { label: "Enlace", name: "url", widget: "string" }
+          - { label: "Título bloque empresas", name: "empresa_titulo", widget: "string" }
+          - { label: "Texto bloque empresas", name: "empresa_texto", widget: "text" }
+          - { label: "Puntos bloque empresas", name: "empresa_puntos", widget: "list" }
+
+      - name: "nosotros"
+        label: "Página Nosotros"
+        file: "src/_data/nosotros.json"
+        fields:
+          - { label: "Título", name: "titulo", widget: "string" }
+          - { label: "Introducción", name: "intro", widget: "text" }
+          - { label: "Fotografía de instalaciones", name: "imagen", widget: "image", required: false }
+          - { label: "Misión", name: "mision", widget: "text" }
+          - { label: "Visión", name: "vision", widget: "text" }
+          - label: "Valores"
+            name: "valores"
+            widget: "list"
+            fields: [{ label: "Título", name: "titulo", widget: "string" }, { label: "Texto", name: "texto", widget: "text" }]
+          - label: "¿Por qué elegirnos?"
+            name: "por_que"
+            widget: "list"
+            fields: [{ label: "Título", name: "titulo", widget: "string" }, { label: "Texto", name: "texto", widget: "text" }, { label: "Icono", name: "icono", widget: "select", options: ["estetoscopio", "diente", "cerebro", "conversacion", "hueso", "manzana", "cruz", "matraz", "gota", "tubo", "ultrasonido", "electro", "microscopio", "tijeras", "jeringa", "suero", "vendaje", "certificado", "escolar", "anillos", "mano", "mujer", "maletin", "portapapeles", "escudo", "casco", "oido", "ojo", "pulmon", "movimiento", "usuarios", "edificio", "alerta", "sirena", "capacitacion", "corazon", "diana", "medico", "vehiculo", "ingreso", "retiro", "periodico", "pastilla", "etiqueta", "libro", "mas"], default: "cruz", hint: "Vea el catálogo de iconos en GUIA-ADMINISTRADOR.md" }]
+
+  # ---------------------------------------------------------------
+  - name: "especialidades"
+    label: "🩺 Especialidades médicas"
+    label_singular: "Especialidad"
+    folder: "src/content/especialidades"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{titulo}}"
+    sortable_fields: ["orden", "titulo"]
+    fields:
+      - { label: "Nombre de la especialidad", name: "titulo", widget: "string" }
+      - { label: "Icono", name: "icono", widget: "select", options: ["estetoscopio", "diente", "cerebro", "conversacion", "hueso", "manzana", "cruz", "matraz", "gota", "tubo", "ultrasonido", "electro", "microscopio", "tijeras", "jeringa", "suero", "vendaje", "certificado", "escolar", "anillos", "mano", "mujer", "maletin", "portapapeles", "escudo", "casco", "oido", "ojo", "pulmon", "movimiento", "usuarios", "edificio", "alerta", "sirena", "capacitacion", "corazon", "diana", "medico", "vehiculo", "ingreso", "retiro", "periodico", "pastilla", "etiqueta", "libro", "mas"], default: "cruz", hint: "Vea el catálogo de iconos en GUIA-ADMINISTRADOR.md" }
+      - { label: "Descripción breve", name: "descripcion", widget: "text" }
+      - { label: "Fotografía (opcional)", name: "imagen", widget: "image", required: false }
+      - { label: "Orden", name: "orden", widget: "number", value_type: "int", default: 10, hint: "Número menor = aparece primero" }
+      - { label: "Publicado", name: "publicado", widget: "boolean", default: true, hint: "Desactive para ocultarlo sin borrarlo" }
+      - { label: "Información adicional (opcional)", name: "body", widget: "markdown", required: false }
+
+  - name: "medicos"
+    label: "👩‍⚕️ Médicos y horarios"
+    label_singular: "Profesional"
+    folder: "src/content/medicos"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: "nombre"
+    summary: "{{nombre}} – {{especialidad}}"
+    fields:
+      - { label: "Nombre completo", name: "nombre", widget: "string", hint: "Ej.: Dra. Ana Pérez" }
+      - { label: "Especialidad", name: "especialidad", widget: "relation", collection: "especialidades", value_field: "titulo", search_fields: ["titulo"], display_fields: ["titulo"] }
+      - { label: "Fotografía", name: "foto", widget: "image", required: false }
+      - { label: "Horario de atención", name: "horario", widget: "string", required: false }
+      - { label: "Presentación breve", name: "bio", widget: "text", required: false, hint: "Incluya solo formación y títulos verificables" }
+      - { label: "Orden", name: "orden", widget: "number", value_type: "int", default: 10, hint: "Número menor = aparece primero" }
+      - { label: "Publicado", name: "publicado", widget: "boolean", default: true, hint: "Desactive para ocultarlo sin borrarlo" }
+
+  - name: "laboratorio"
+    label: "🔬 Laboratorio y diagnóstico"
+    label_singular: "Servicio de diagnóstico"
+    folder: "src/content/laboratorio"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{titulo}}"
+    fields:
+      - { label: "Nombre del servicio", name: "titulo", widget: "string" }
+      - { label: "Icono", name: "icono", widget: "select", options: ["estetoscopio", "diente", "cerebro", "conversacion", "hueso", "manzana", "cruz", "matraz", "gota", "tubo", "ultrasonido", "electro", "microscopio", "tijeras", "jeringa", "suero", "vendaje", "certificado", "escolar", "anillos", "mano", "mujer", "maletin", "portapapeles", "escudo", "casco", "oido", "ojo", "pulmon", "movimiento", "usuarios", "edificio", "alerta", "sirena", "capacitacion", "corazon", "diana", "medico", "vehiculo", "ingreso", "retiro", "periodico", "pastilla", "etiqueta", "libro", "mas"], default: "cruz", hint: "Vea el catálogo de iconos en GUIA-ADMINISTRADOR.md" }
+      - { label: "Descripción breve", name: "descripcion", widget: "text" }
+      - { label: "Preparación del paciente", name: "preparacion", widget: "text", required: false }
+      - { label: "Catálogo de pruebas (opcional)", name: "pruebas", widget: "list", required: false, hint: "Una prueba por elemento" }
+      - { label: "Fotografía (opcional)", name: "imagen", widget: "image", required: false }
+      - { label: "Orden", name: "orden", widget: "number", value_type: "int", default: 10, hint: "Número menor = aparece primero" }
+      - { label: "Publicado", name: "publicado", widget: "boolean", default: true, hint: "Desactive para ocultarlo sin borrarlo" }
+
+  - name: "procedimientos"
+    label: "💉 Procedimientos y certificados"
+    label_singular: "Procedimiento"
+    folder: "src/content/procedimientos"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{titulo}}"
+    fields:
+      - { label: "Nombre del procedimiento", name: "titulo", widget: "string" }
+      - { label: "Icono", name: "icono", widget: "select", options: ["estetoscopio", "diente", "cerebro", "conversacion", "hueso", "manzana", "cruz", "matraz", "gota", "tubo", "ultrasonido", "electro", "microscopio", "tijeras", "jeringa", "suero", "vendaje", "certificado", "escolar", "anillos", "mano", "mujer", "maletin", "portapapeles", "escudo", "casco", "oido", "ojo", "pulmon", "movimiento", "usuarios", "edificio", "alerta", "sirena", "capacitacion", "corazon", "diana", "medico", "vehiculo", "ingreso", "retiro", "periodico", "pastilla", "etiqueta", "libro", "mas"], default: "cruz", hint: "Vea el catálogo de iconos en GUIA-ADMINISTRADOR.md" }
+      - { label: "Descripción breve", name: "descripcion", widget: "text" }
+      - { label: "Fotografía (opcional)", name: "imagen", widget: "image", required: false }
+      - { label: "Orden", name: "orden", widget: "number", value_type: "int", default: 10, hint: "Número menor = aparece primero" }
+      - { label: "Publicado", name: "publicado", widget: "boolean", default: true, hint: "Desactive para ocultarlo sin borrarlo" }
+      - { label: "Información adicional (opcional)", name: "body", widget: "markdown", required: false }
+
+  - name: "ocupacional"
+    label: "🦺 Salud Ocupacional"
+    label_singular: "Servicio ocupacional"
+    folder: "src/content/ocupacional"
+    create: true
+    slug: "{{slug}}"
+    summary: "[{{grupo}}] {{titulo}}"
+    view_groups: [{ label: "Grupo", field: "grupo" }]
+    fields:
+      - { label: "Nombre del servicio", name: "titulo", widget: "string" }
+      - label: "Grupo"
+        name: "grupo"
+        widget: "select"
+        options:
+          - { label: "Evaluaciones ocupacionales", value: "evaluaciones" }
+          - { label: "Evaluaciones complementarias", value: "complementarias" }
+          - { label: "Prevención y gestión de riesgos", value: "prevencion" }
+          - { label: "Servicios en empresas", value: "empresa" }
+      - { label: "Icono", name: "icono", widget: "select", options: ["estetoscopio", "diente", "cerebro", "conversacion", "hueso", "manzana", "cruz", "matraz", "gota", "tubo", "ultrasonido", "electro", "microscopio", "tijeras", "jeringa", "suero", "vendaje", "certificado", "escolar", "anillos", "mano", "mujer", "maletin", "portapapeles", "escudo", "casco", "oido", "ojo", "pulmon", "movimiento", "usuarios", "edificio", "alerta", "sirena", "capacitacion", "corazon", "diana", "medico", "vehiculo", "ingreso", "retiro", "periodico", "pastilla", "etiqueta", "libro", "mas"], default: "cruz", hint: "Vea el catálogo de iconos en GUIA-ADMINISTRADOR.md" }
+      - { label: "Descripción breve", name: "descripcion", widget: "text" }
+      - { label: "Orden", name: "orden", widget: "number", value_type: "int", default: 10, hint: "Número menor = aparece primero" }
+      - { label: "Publicado", name: "publicado", widget: "boolean", default: true, hint: "Desactive para ocultarlo sin borrarlo" }
+
+  - name: "promociones"
+    label: "🏷️ Promociones y paquetes"
+    label_singular: "Promoción"
+    folder: "src/content/promociones"
+    create: true
+    slug: "{{year}}-{{slug}}"
+    summary: "{{titulo}} (hasta {{vigencia_hasta}})"
+    sortable_fields: ["vigencia_hasta", "titulo", "orden"]
+    view_filters:
+      - { label: "Publicadas", field: "publicado", pattern: true }
+      - { label: "Destacadas", field: "destacada", pattern: true }
+    fields:
+      - { label: "Título", name: "titulo", widget: "string" }
+      - label: "Categoría"
+        name: "categoria"
+        widget: "select"
+        options: ["Promociones de laboratorio", "Paquetes de chequeo médico", "Campañas preventivas", "Promociones odontológicas", "Jornadas de salud", "Paquetes de salud ocupacional"]
+      - { label: "Imagen", name: "imagen", widget: "image", required: false }
+      - { label: "Descripción breve", name: "descripcion", widget: "text" }
+      - { label: "Precio (opcional)", name: "precio", widget: "string", required: false, hint: "Ej.: B/. 35.00. Déjelo vacío para no mostrar precio." }
+      - { label: "Vigente desde", name: "vigencia_desde", widget: "datetime", format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false, required: false }
+      - { label: "Vigente hasta", name: "vigencia_hasta", widget: "datetime", format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false, required: false, hint: "Al pasar esta fecha la promoción se oculta automáticamente" }
+      - { label: "Destacar en inicio", name: "destacada", widget: "boolean", default: false }
+      - { label: "Orden", name: "orden", widget: "number", value_type: "int", default: 10, hint: "Número menor = aparece primero" }
+      - { label: "Publicado", name: "publicado", widget: "boolean", default: true, hint: "Desactive para ocultarlo sin borrarlo" }
+
+  - name: "blog"
+    label: "📰 Blog de salud"
+    label_singular: "Artículo"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{titulo}} – {{date}}"
+    sortable_fields: ["date", "titulo"]
+    fields:
+      - { label: "Título", name: "titulo", widget: "string" }
+      - { label: "Fecha", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false }
+      - { label: "Resumen", name: "resumen", widget: "text" }
+      - { label: "Imagen de portada", name: "imagen", widget: "image", required: false }
+      - { label: "Autor", name: "autor", widget: "string", default: "Centro Médico Los Andes" }
+      - { label: "Publicado", name: "publicado", widget: "boolean", default: true, hint: "Desactive para ocultarlo sin borrarlo" }
+      - { label: "Contenido", name: "body", widget: "markdown" }
+
+  - name: "paginas"
+    label: "📄 Páginas nuevas (pestañas)"
+    label_singular: "Página"
+    folder: "src/content/paginas"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{titulo}} → /{{slug}}/"
+    fields:
+      - { label: "Título", name: "titulo", widget: "string", hint: "La dirección será /titulo-de-la-pagina/. Agréguela luego en Configuración > Menú." }
+      - { label: "Descripción", name: "descripcion", widget: "text" }
+      - { label: "Publicado", name: "publicado", widget: "boolean", default: true, hint: "Desactive para ocultarlo sin borrarlo" }
+      - { label: "Contenido", name: "body", widget: "markdown" }

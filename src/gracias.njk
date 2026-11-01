@@ -1,0 +1,18 @@
+---
+layout: layouts/base.njk
+titulo: Solicitud enviada
+permalink: /gracias/
+eleventyExcludeFromCollections: true
+noindex: true
+---
+<section class="section section--center">
+  <div class="container container--narrow center">
+    <span class="card__icon card__icon--xl">{% icon "check" %}</span>
+    <h1>¡Gracias! Hemos recibido tu solicitud</h1>
+    <p class="lead">Nuestro equipo se comunicará contigo lo antes posible. Si necesitas atención más rápida, escríbenos por WhatsApp.</p>
+    <div class="btn-row btn-row--center">
+      <a class="btn btn--wa" href="{{ clinica.whatsapp | wa() }}" target="_blank" rel="noopener">{% icon "whatsapp" %}WhatsApp</a>
+      <a class="btn btn--outline" href="/">Volver al inicio</a>
+    </div>
+  </div>
+</section>

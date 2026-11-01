@@ -1,0 +1,72 @@
+---
+layout: layouts/base.njk
+titulo: Contacto y ubicación
+permalink: /contacto/
+descripcion_seo: "Contacta a Centro Médico Los Andes: Centro Comercial Los Andes, local B15, frente a Doit Center, Panamá. Teléfonos 237-9094 y 237-6615, WhatsApp +507 6056-8129."
+---
+{% import "partials/macros.njk" as m with context %}
+{%- set mapaEmbed = clinica.mapa_embed_url or ("https://www.google.com/maps?q=" + (clinica.mapa_busqueda | enc) + "&output=embed") -%}
+{%- set mapaLink = clinica.mapa_enlace or ("https://www.google.com/maps/search/?api=1&query=" + (clinica.mapa_busqueda | enc)) -%}
+{{ m.pageHero("Contacto y ubicación", "Estamos en el Centro Comercial Los Andes, local B15, frente a Doit Center.", "Visítanos", "ubicacion") }}
+
+<section class="section">
+  <div class="container grid grid--4 contact-cards">
+    <a class="card card--pad contact-card reveal" href="{{ (clinica.prefijo_pais + clinica.telefonos[0]) | tel }}">
+      <span class="card__icon card__icon--lg">{% icon "telefono" %}</span><h2 class="h4">Llámanos</h2>
+      <p>{% for t in clinica.telefonos %}{{ t }}{% if not loop.last %}<br>{% endif %}{% endfor %}</p>
+    </a>
+    <a class="card card--pad contact-card reveal" href="{{ clinica.whatsapp | wa('Hola, Centro Médico Los Andes.') }}" target="_blank" rel="noopener">
+      <span class="card__icon card__icon--lg card__icon--wa">{% icon "whatsapp" %}</span><h2 class="h4">WhatsApp</h2><p>{{ clinica.whatsapp_visible }}</p>
+    </a>
+    <a class="card card--pad contact-card reveal" href="https://www.instagram.com/{{ clinica.instagram }}/" target="_blank" rel="noopener">
+      <span class="card__icon card__icon--lg">{% icon "instagram" %}</span><h2 class="h4">Instagram</h2><p>@{{ clinica.instagram }}</p>
+    </a>
+    <a class="card card--pad contact-card reveal" href="{{ mapaLink }}" target="_blank" rel="noopener">
+      <span class="card__icon card__icon--lg">{% icon "ubicacion" %}</span><h2 class="h4">Cómo llegar</h2><p>Abrir en Google Maps</p>
+    </a>
+  </div>
+</section>
+
+<section class="section section--tint" id="mapa">
+  <div class="container split">
+    <div>
+      <h2>Dirección y horarios</h2>
+      <ul class="contact-list contact-list--lg">
+        <li>{% icon "ubicacion" %}<span><strong>{{ clinica.nombre }}</strong><br>{{ clinica.direccion }}<br>{{ clinica.ciudad }}, Panamá</span></li>
+        {%- for h in clinica.horarios %}<li>{% icon "reloj" %}<span><strong>{{ h.dias }}</strong><br>{{ h.horas }}</span></li>{% endfor %}
+        {%- if clinica.correo_administrativo %}<li>{% icon "correo" %}<a href="mailto:{{ clinica.correo_administrativo }}">{{ clinica.correo_administrativo }}</a></li>{% endif %}
+      </ul>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="{{ mapaLink }}" target="_blank" rel="noopener">{% icon "ubicacion" %}Abrir en Google Maps</a>
+        <a class="btn btn--outline" href="/agendar-cita/">{% icon "calendario" %}Agendar cita</a>
+      </div>
+    </div>
+    <div class="map">
+      <iframe title="Mapa de ubicación de {{ clinica.nombre }}" src="{{ mapaEmbed }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container container--narrow">
+    {{ m.sectionHead("Escríbenos", "Para consultas generales. Para agendar, usa la sección Agendar cita.", "Formulario de contacto") }}
+    <form class="form card card--pad" name="contacto" method="POST" action="{{ clinica.formulario_endpoint or '/gracias/' }}" {% if not clinica.formulario_endpoint %}data-netlify="true" netlify-honeypot="bot-field"{% endif %} data-form="contacto" novalidate>
+      <input type="hidden" name="form-name" value="contacto">
+      <input type="hidden" name="_subject" value="Nuevo mensaje de contacto – Sitio web">
+      <p class="hp" aria-hidden="true"><label>No llenar: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <div class="form__grid">
+        <div class="field"><label for="k-nombre">Nombre *</label><input id="k-nombre" name="nombre" required maxlength="100" autocomplete="name"></div>
+        <div class="field"><label for="k-telefono">Teléfono *</label><input id="k-telefono" name="telefono" type="tel" required pattern="^[+()0-9\s-]{7,20}$" maxlength="20" autocomplete="tel"></div>
+        <div class="field field--full"><label for="k-correo">Correo electrónico</label><input id="k-correo" name="correo" type="email" maxlength="120" autocomplete="email"></div>
+        <div class="field field--full"><label for="k-mensaje">Mensaje *</label><textarea id="k-mensaje" name="mensaje" rows="4" required maxlength="1000"></textarea>
+          <small class="hint">No incluyas información clínica sensible en este formulario.</small></div>
+        <label class="check field--full"><input type="checkbox" name="consentimiento" value="Sí" required><span>Acepto la <a href="/privacidad/" target="_blank">política de privacidad</a>. *</span></label>
+      </div>
+      <p class="form__error" role="alert" data-form-error></p>
+      <div class="btn-row">
+        <button class="btn btn--primary" type="submit">{% icon "correo" %}Enviar mensaje</button>
+        <button class="btn btn--wa" type="button" data-send-wa>{% icon "whatsapp" %}Enviar por WhatsApp</button>
+      </div>
+    </form>
+  </div>
+</section>

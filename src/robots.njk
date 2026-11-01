@@ -1,0 +1,10 @@
+---
+permalink: /robots.txt
+eleventyExcludeFromCollections: true
+---
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /gracias/
+
+Sitemap: {{ "/sitemap.xml" | absUrl(clinica.url_sitio) }}

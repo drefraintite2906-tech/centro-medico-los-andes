@@ -1,0 +1,27 @@
+---
+layout: layouts/base.njk
+titulo: Especialidades médicas
+permalink: /especialidades/
+descripcion_seo: "Medicina general, odontología, psiquiatría, psicología, ortopedia y nutrición en Panamá. Solicita tu cita en Centro Médico Los Andes."
+---
+{% import "partials/macros.njk" as m with context %}
+{{ m.pageHero("Especialidades médicas", "Atención profesional para cada etapa de tu vida, con la comodidad de tener todo en un solo lugar.", "Consultas", "estetoscopio") }}
+
+<section class="section">
+  <div class="container">
+    <div class="grid grid--3">
+      {%- for e in collections.especialidades %}{{ m.serviceCard(e, "cita", "Solicitar cita") }}{% endfor %}
+    </div>
+  </div>
+</section>
+
+{%- if collections.medicos.length %}
+<section class="section section--tint" id="equipo">
+  <div class="container">
+    {{ m.sectionHead("Nuestros profesionales", "Conoce a nuestro equipo y sus horarios de atención.", "Equipo médico") }}
+    <div class="grid grid--4">{% for doc in collections.medicos %}{% include "partials/doctor-card.njk" %}{% endfor %}</div>
+  </div>
+</section>
+{%- endif %}
+
+{{ m.ctaBand("¿No encuentras la especialidad que buscas?", "Escríbenos y te orientamos sobre los profesionales y horarios disponibles.") }}

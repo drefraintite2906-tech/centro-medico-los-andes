@@ -1,0 +1,146 @@
+---
+layout: layouts/base.njk
+titulo: Centro Médico Los Andes
+titulo_seo: "Centro Médico Los Andes | Clínica privada en Panamá – Especialidades, laboratorio y salud ocupacional"
+claseBody: home
+---
+{% import "partials/macros.njk" as m with context %}
+{%- set promos = collections.promociones | vigentes -%}
+{%- set promosDest = promos | destacadas -%}
+{%- if not promosDest.length %}{% set promosDest = promos %}{% endif %}
+
+<section class="hero">
+  <div class="hero__bg" aria-hidden="true"></div>
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="eyebrow eyebrow--light">{% icon "cruz" %}{{ inicio.hero_etiqueta }}</p>
+      <h1>{{ inicio.hero_titulo }}</h1>
+      <p class="hero__lead">{{ inicio.hero_subtitulo }}</p>
+      <div class="btn-row">
+        <a class="btn btn--wa btn--lg" href="{{ clinica.whatsapp | wa('Hola, Centro Médico Los Andes. Quisiera agendar una cita.') }}" target="_blank" rel="noopener">{% icon "whatsapp" %}Agendar cita por WhatsApp</a>
+        <a class="btn btn--white btn--lg" href="#servicios">{% icon "estetoscopio" %}Conocer nuestros servicios</a>
+        <a class="btn btn--ghost-light btn--lg" href="/salud-ocupacional/">{% icon "maletin" %}Servicios para empresas</a>
+      </div>
+    </div>
+    <div class="hero__visual">
+      {%- if inicio.hero_imagen %}
+        <img class="hero__img" src="{{ inicio.hero_imagen }}" alt="{{ inicio.hero_imagen_alt }}" width="720" height="820" fetchpriority="high">
+      {%- else %}
+        <div class="hero__panel">
+          <div class="hero__panel-head">
+            <span class="hero__panel-icon">{% icon "reloj" %}</span>
+            <div><strong>Horario de atención</strong><span data-estado-horario>Abierto todos los días</span></div>
+          </div>
+          <ul class="hero__hours">
+            {%- for h in clinica.horarios %}<li><span>{{ h.dias }}</span><strong>{{ h.horas }}</strong></li>{% endfor %}
+          </ul>
+          <ul class="hero__chips">
+            <li>{% icon "estetoscopio" %}Medicina general</li>
+            <li>{% icon "diente" %}Odontología</li>
+            <li>{% icon "microscopio" %}Laboratorio</li>
+            <li>{% icon "ultrasonido" %}Ultrasonidos</li>
+            <li>{% icon "electro" %}Electrocardiogramas</li>
+            <li>{% icon "casco" %}Salud ocupacional</li>
+          </ul>
+          <a class="hero__panel-link" href="/contacto/#mapa">{% icon "ubicacion" %}{{ clinica.direccion }}</a>
+        </div>
+      {%- endif %}
+    </div>
+  </div>
+</section>
+
+<section class="contact-strip" aria-label="Contacto rápido">
+  <div class="container contact-strip__grid">
+    <a href="{{ (clinica.prefijo_pais + clinica.telefonos[0]) | tel }}">{% icon "telefono" %}<span><small>Teléfonos</small>{{ clinica.telefonos | join(" · ") }}</span></a>
+    <a href="{{ clinica.whatsapp | wa() }}" target="_blank" rel="noopener">{% icon "whatsapp" %}<span><small>WhatsApp</small>{{ clinica.whatsapp_visible }}</span></a>
+    <a href="/contacto/#mapa">{% icon "ubicacion" %}<span><small>Ubicación</small>C. C. Los Andes, local B15</span></a>
+    <div>{% icon "reloj" %}<span><small>Horario</small>L–S 8 a. m.–8 p. m. · D 9 a. m.–5 p. m.</span></div>
+  </div>
+</section>
+
+<section class="section" id="servicios">
+  <div class="container">
+    {{ m.sectionHead(inicio.areas_titulo, inicio.areas_subtitulo, "Nuestros servicios") }}
+    <div class="grid grid--4">
+      {%- for a in inicio.areas %}
+      <a class="area-card reveal" href="{{ a.url }}">
+        <span class="card__icon card__icon--lg">{% icon a.icono %}</span>
+        <h3>{{ a.titulo }}</h3>
+        <p>{{ a.texto }}</p>
+        <span class="link-arrow">Ver más {% icon "flecha" %}</span>
+      </a>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--tint">
+  <div class="container">
+    {{ m.sectionHead("Especialidades médicas", "Profesionales de distintas especialidades para atenderte a ti y a tu familia.", "Especialidades") }}
+    <div class="chips-grid">
+      {%- for e in collections.especialidades %}
+      <a class="spec-chip reveal" href="/agendar-cita/?servicio={{ e.data.titulo | enc }}">
+        <span class="card__icon">{% icon e.data.icono %}</span><span>{{ e.data.titulo }}</span>{% icon "flecha", "spec-chip__arrow" %}
+      </a>
+      {%- endfor %}
+    </div>
+    <p class="center mt-lg"><a class="btn btn--outline" href="/especialidades/">Ver todas las especialidades {% icon "flecha" %}</a></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    {{ m.sectionHead("Promociones destacadas", "Paquetes de chequeo, promociones de laboratorio, odontología y campañas preventivas.", "Promociones") }}
+    {%- if promosDest.length %}
+    <div class="grid grid--3" data-promos>
+      {%- for p in promosDest | limite(3) %}{{ m.promoCard(p) }}{% endfor %}
+    </div>
+    <p class="center mt-lg"><a class="btn btn--outline" href="/promociones/">Ver todas las promociones {% icon "flecha" %}</a></p>
+    {%- endif %}
+    <div class="empty-state{% if promosDest.length %} is-hidden{% endif %}" data-promos-empty>
+      <span class="card__icon card__icon--lg">{% icon "etiqueta" %}</span>
+      <h3>Pregunta por nuestras promociones vigentes</h3>
+      <p>Publicamos periódicamente paquetes de chequeo, promociones de laboratorio y jornadas de salud. Consúltanos o síguenos en Instagram para enterarte primero.</p>
+      <div class="btn-row btn-row--center">
+        <a class="btn btn--primary" href="{{ clinica.whatsapp | wa('Hola, ¿qué promociones tienen vigentes?') }}" target="_blank" rel="noopener">{% icon "whatsapp" %}Consultar promociones</a>
+        <a class="btn btn--outline" href="https://www.instagram.com/{{ clinica.instagram }}/" target="_blank" rel="noopener">{% icon "instagram" %}@{{ clinica.instagram }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--navy">
+  <div class="container split">
+    <div>
+      <p class="eyebrow eyebrow--light">{% icon "maletin" %}Portal empresarial</p>
+      <h2>{{ inicio.empresa_titulo }}</h2>
+      <p class="lead-light">{{ inicio.empresa_texto }}</p>
+      <ul class="checklist checklist--light">
+        {%- for p in inicio.empresa_puntos %}<li>{% icon "check" %}{{ p }}</li>{% endfor %}
+      </ul>
+      <div class="btn-row">
+        <a class="btn btn--white" href="/salud-ocupacional/#cotizacion">Solicitar cotización empresarial {% icon "flecha" %}</a>
+        <a class="btn btn--ghost-light" href="/salud-ocupacional/">Ver servicios</a>
+      </div>
+    </div>
+    <div class="feature-grid">
+      <div class="feature">{% icon "portapapeles" %}<strong>Evaluaciones ocupacionales</strong><span>Ingreso, periódicas y retiro</span></div>
+      <div class="feature">{% icon "oido" %}<strong>Evaluaciones complementarias</strong><span>Audiometría, optometría, espirometría</span></div>
+      <div class="feature">{% icon "escudo" %}<strong>Prevención de riesgos</strong><span>Planes y programas de vigilancia</span></div>
+      <div class="feature">{% icon "vehiculo" %}<strong>En su empresa</strong><span>Evaluaciones en sus instalaciones</span></div>
+    </div>
+  </div>
+</section>
+
+{%- if collections.articulos.length %}
+<section class="section">
+  <div class="container">
+    {{ m.sectionHead("Blog de salud", "Información confiable para cuidar tu salud y la de tu equipo de trabajo.", "Educación") }}
+    <div class="grid grid--3">
+      {%- for post in collections.articulos | limite(3) %}{% include "partials/post-card.njk" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{%- endif %}
+
+{{ m.ctaBand("Agenda tu cita hoy", "Envíanos tu solicitud por WhatsApp y te confirmaremos la disponibilidad.") }}

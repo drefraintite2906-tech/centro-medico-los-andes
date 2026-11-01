@@ -1,0 +1,35 @@
+---
+layout: layouts/base.njk
+titulo: Laboratorio y diagnóstico
+permalink: /laboratorio/
+descripcion_seo: "Laboratorio clínico, exámenes de sangre, orina y heces, ultrasonidos y electrocardiogramas en Panamá. Consulta preparación, disponibilidad y precios."
+---
+{% import "partials/macros.njk" as m with context %}
+{{ m.pageHero("Laboratorio y diagnóstico", "Estudios confiables para apoyar el diagnóstico y el seguimiento de tu salud.", "Diagnóstico", "microscopio") }}
+
+<section class="section">
+  <div class="container">
+    <div class="note note--info">
+      {% icon "info" %}
+      <p>Consulta la <strong>preparación</strong> de cada estudio antes de tu visita. Si tienes una orden médica, tenla a mano al escribirnos para darte disponibilidad y precio exactos.</p>
+    </div>
+    <div class="grid grid--3">
+      {%- for s in collections.laboratorio %}{{ m.serviceCard(s, "whatsapp", "Consultar disponibilidad o precio", "Hola, quisiera consultar disponibilidad y precio de") }}{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section--tint">
+  <div class="container split split--center">
+    <div>
+      <p class="eyebrow">Paquetes</p>
+      <h2>Paquetes de laboratorio y chequeos</h2>
+      <p class="lead">Contamos con paquetes para chequeos preventivos y para empresas. Consulta los paquetes vigentes o solicita uno a la medida.</p>
+    </div>
+    <div class="btn-row">
+      <a class="btn btn--primary" href="/promociones/">{% icon "etiqueta" %}Ver promociones vigentes</a>
+      <a class="btn btn--outline" href="{{ clinica.whatsapp | wa('Hola, quisiera información sobre los paquetes de laboratorio.') }}" target="_blank" rel="noopener">{% icon "whatsapp" %}Consultar paquetes</a>
+    </div>
+  </div>
+</section>
+{{ m.ctaBand("¿Tienes una orden de laboratorio?", "Escríbenos y te indicamos la preparación, el horario y el costo.") }}

@@ -1,0 +1,4 @@
+<script type="application/ld+json">{{ schemaClinica | json | safe }}</script>
+{%- if layout == "layouts/post.njk" %}
+<script type="application/ld+json">{{ {"@context": "https://schema.org", "@type": "Article", "headline": titulo, "description": resumen, "datePublished": page.date | isoDia, "author": {"@type": "Organization", "name": autor or clinica.nombre}, "publisher": {"@id": schemaClinica["@id"]}, "mainEntityOfPage": page.url | absUrl(clinica.url_sitio)} | json | safe }}</script>
+{%- endif %}

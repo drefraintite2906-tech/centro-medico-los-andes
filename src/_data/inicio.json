@@ -1,0 +1,23 @@
+{
+  "hero_etiqueta": "Clínica privada en Panamá",
+  "hero_titulo": "Tu salud y bienestar son nuestra prioridad",
+  "hero_subtitulo": "Atención médica integral, especialidades, diagnósticos y servicios de salud ocupacional en un solo lugar.",
+  "hero_imagen": "",
+  "hero_imagen_alt": "Atención médica en Centro Médico Los Andes",
+  "areas_titulo": "Todo lo que necesitas para cuidar tu salud",
+  "areas_subtitulo": "Servicios médicos, odontológicos y de diagnóstico con un enfoque cercano y profesional.",
+  "areas": [
+    { "titulo": "Especialidades médicas", "texto": "Medicina general, odontología, psiquiatría, psicología, ortopedia, nutrición y más.", "icono": "estetoscopio", "url": "/especialidades/" },
+    { "titulo": "Laboratorio y diagnóstico", "texto": "Laboratorio clínico, ultrasonidos, electrocardiogramas y otros estudios.", "icono": "microscopio", "url": "/laboratorio/" },
+    { "titulo": "Procedimientos médicos", "texto": "Cirugía menor, curaciones, inyectables, venoclisis, Papanicolaou y certificados.", "icono": "vendaje", "url": "/procedimientos/" },
+    { "titulo": "Salud Ocupacional", "texto": "Evaluaciones médicas laborales y gestión de riesgos para empresas.", "icono": "casco", "url": "/salud-ocupacional/" }
+  ],
+  "empresa_titulo": "Salud Ocupacional para empresas",
+  "empresa_texto": "Evaluaciones de ingreso, periódicas y de retiro, vigilancia de la salud, planes de prevención y capacitaciones. Podemos coordinar evaluaciones directamente en las instalaciones de tu empresa.",
+  "empresa_puntos": [
+    "Evaluaciones médicas ocupacionales y certificación de aptitud",
+    "Audiometría, optometría, espirometría y nutrición",
+    "Evaluación de riesgos, planes de emergencia y prevención",
+    "Visitas y evaluaciones en sus instalaciones, según coordinación"
+  ]
+}

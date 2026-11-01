@@ -1,0 +1,12 @@
+<article class="card post-card reveal">
+  <a href="{{ post.url }}" class="post-card__media" tabindex="-1" aria-hidden="true">
+    {%- if post.data.imagen %}<img src="{{ post.data.imagen }}" alt="" loading="lazy" width="640" height="360">
+    {%- else %}<span class="post-card__placeholder">{% icon "libro" %}</span>{% endif %}
+  </a>
+  <div class="card__body">
+    <p class="post-card__date"><time datetime="{{ post.date | isoDia }}">{{ post.date | fechaLarga }}</time></p>
+    <h3 class="card__title"><a href="{{ post.url }}">{{ post.data.titulo }}</a></h3>
+    <p class="card__text">{{ post.data.resumen }}</p>
+  </div>
+  <div class="card__foot"><a class="link-arrow" href="{{ post.url }}">Leer artículo {% icon "flecha" %}</a></div>
+</article>

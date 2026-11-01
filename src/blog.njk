@@ -1,0 +1,17 @@
+---
+layout: layouts/base.njk
+titulo: Blog de salud
+permalink: /blog/
+descripcion_seo: "Artículos de salud, prevención y salud ocupacional del equipo de Centro Médico Los Andes, Panamá."
+---
+{% import "partials/macros.njk" as m with context %}
+{{ m.pageHero("Blog de salud", "Información confiable para cuidar tu salud, la de tu familia y la de tu equipo de trabajo.", "Educación para la salud", "libro") }}
+<section class="section">
+  <div class="container">
+    {%- if collections.articulos.length %}
+    <div class="grid grid--3">{% for post in collections.articulos %}{% include "partials/post-card.njk" %}{% endfor %}</div>
+    {%- else %}
+    <div class="empty-state"><h2 class="h3">Próximamente nuevos artículos</h2></div>
+    {%- endif %}
+  </div>
+</section>

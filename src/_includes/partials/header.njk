@@ -1,0 +1,52 @@
+<div class="topbar">
+  <div class="container topbar__inner">
+    <ul class="topbar__list">
+      <li>{% icon "telefono" %}
+        {%- for t in clinica.telefonos %}<a href="{{ (clinica.prefijo_pais + t) | tel }}">{{ t }}</a>{% if not loop.last %}<span aria-hidden="true"> · </span>{% endif %}{% endfor %}
+      </li>
+      <li class="hide-sm">{% icon "reloj" %}
+        {%- for h in clinica.horarios %}<span>{{ h.dias }}: {{ h.horas }}</span>{% if not loop.last %}<span aria-hidden="true"> · </span>{% endif %}{% endfor %}
+      </li>
+    </ul>
+    <ul class="topbar__list">
+      <li class="hide-md"><a href="/contacto/#mapa">{% icon "ubicacion" %}C. C. Los Andes, local B15</a></li>
+      <li><a href="https://www.instagram.com/{{ clinica.instagram }}/" target="_blank" rel="noopener" aria-label="Instagram @{{ clinica.instagram }}">{% icon "instagram" %}<span class="hide-sm">@{{ clinica.instagram }}</span></a></li>
+    </ul>
+  </div>
+</div>
+
+<header class="site-header" data-header>
+  <div class="container site-header__inner">
+    <a class="brand" href="/" aria-label="{{ clinica.nombre }} – Inicio">
+      {%- if clinica.logo %}
+        <img class="brand__logo" src="{{ clinica.logo }}" alt="{{ clinica.nombre }}" height="56">
+      {%- else %}
+        <span class="brand__mark" aria-hidden="true">{% icon "cruz" %}</span>
+        <span class="brand__text"><span class="brand__top">Centro Médico</span><span class="brand__name">Los Andes</span></span>
+      {%- endif %}
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-principal" data-nav-toggle>
+      <span class="nav-toggle__open">{% icon "menu" %}</span><span class="nav-toggle__close">{% icon "cerrar" %}</span>
+      <span class="sr-only">Abrir menú</span>
+    </button>
+
+    <nav class="nav" id="menu-principal" aria-label="Menú principal" data-nav>
+      <ul class="nav__list">
+        {%- for item in menu.items %}
+        {%- set act = page.url | activo(item.url) %}
+        <li class="nav__item{% if item.hijos and item.hijos.length %} has-sub{% endif %}">
+          <a class="nav__link{% if act %} is-active{% endif %}" href="{{ item.url }}"{% if act %} aria-current="page"{% endif %}>{{ item.texto }}</a>
+          {%- if item.hijos and item.hijos.length %}
+          <button class="nav__subtoggle" type="button" aria-expanded="false" aria-label="Ver opciones de {{ item.texto }}" data-sub-toggle>{% icon "abajo" %}</button>
+          <ul class="nav__sub">
+            {%- for h in item.hijos %}<li><a href="{{ h.url }}">{{ h.texto }}</a></li>{% endfor %}
+          </ul>
+          {%- endif %}
+        </li>
+        {%- endfor %}
+      </ul>
+      <a class="btn btn--primary nav__cta" href="{{ menu.boton.url }}">{% icon "calendario" %}{{ menu.boton.texto }}</a>
+    </nav>
+  </div>
+</header>

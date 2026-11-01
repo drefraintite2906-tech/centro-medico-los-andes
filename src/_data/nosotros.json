@@ -1,0 +1,19 @@
+{
+  "titulo": "Nosotros",
+  "intro": "Centro Médico Los Andes es una clínica privada ubicada en el Centro Comercial Los Andes, en Panamá, que reúne en un solo lugar consultas de medicina general y especialidades, odontología, laboratorio clínico, ultrasonidos, procedimientos médicos y servicios de salud ocupacional para empresas.",
+  "imagen": "",
+  "mision": "Brindar atención médica integral, accesible y de calidad, con un trato humano y cercano, que contribuya a la salud y el bienestar de nuestros pacientes, sus familias y los trabajadores de las empresas que confían en nosotros.",
+  "vision": "Ser un centro médico de referencia en nuestra comunidad por la calidad de nuestros servicios, la integración de la atención clínica, el diagnóstico y la salud ocupacional, y el compromiso con la prevención.",
+  "valores": [
+    { "titulo": "Ética y confidencialidad", "texto": "Respetamos la privacidad del paciente y manejamos su información con responsabilidad." },
+    { "titulo": "Trato humano", "texto": "Escuchamos y explicamos con claridad, en un ambiente cómodo y respetuoso." },
+    { "titulo": "Calidad", "texto": "Trabajamos con criterios clínicos actualizados y mejora continua." },
+    { "titulo": "Prevención", "texto": "Promovemos el autocuidado, la detección temprana y los entornos laborales saludables." }
+  ],
+  "por_que": [
+    { "titulo": "Todo en un solo lugar", "texto": "Consulta, laboratorio, ultrasonido y procedimientos sin desplazarte a varios sitios.", "icono": "cruz" },
+    { "titulo": "Horario extendido", "texto": "Abrimos de lunes a sábado de 8:00 a. m. a 8:00 p. m. y los domingos de 9:00 a. m. a 5:00 p. m.", "icono": "reloj" },
+    { "titulo": "Ubicación accesible", "texto": "En el Centro Comercial Los Andes, frente a Doit Center.", "icono": "ubicacion" },
+    { "titulo": "Enfoque empresarial", "texto": "Servicios de salud ocupacional dirigidos por medicina del trabajo.", "icono": "maletin" }
+  ]
+}

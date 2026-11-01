@@ -1,0 +1,23 @@
+---
+layout: layouts/base.njk
+---
+{% import "partials/macros.njk" as m with context %}
+<section class="page-hero page-hero--post">
+  <div class="container container--narrow page-hero__inner">
+    <p class="eyebrow eyebrow--light"><a href="/blog/">Blog de salud</a></p>
+    <h1>{{ titulo }}</h1>
+    <p class="post-meta">{{ autor or clinica.nombre }} · <time datetime="{{ page.date | isoDia }}">{{ page.date | fechaLarga }}</time></p>
+  </div>
+</section>
+<article class="section">
+  <div class="container container--narrow">
+    {%- if imagen %}<img class="post-cover" src="{{ imagen }}" alt="{{ titulo }}" width="1200" height="630">{% endif %}
+    <div class="prose">{{ content | safe }}</div>
+    <aside class="note">
+      {% icon "info" %}
+      <p>Este artículo es informativo y no reemplaza la valoración médica individual. Si tiene síntomas o dudas, consulte con un profesional de la salud.</p>
+    </aside>
+    <p><a class="link-arrow" href="/blog/">Volver al blog {% icon "flecha" %}</a></p>
+  </div>
+</article>
+{{ m.ctaBand("¿Quieres agendar una consulta?", "Envíanos tu solicitud y te confirmaremos la disponibilidad.") }}

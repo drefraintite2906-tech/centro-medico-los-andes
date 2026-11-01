@@ -1,0 +1,49 @@
+{%- set tituloPagina = (titulo_seo or titulo or clinica.nombre) -%}
+{%- set tituloCompleto = tituloPagina if tituloPagina == clinica.nombre else tituloPagina + " | " + clinica.nombre + " – Panamá" -%}
+{%- set desc = descripcion_seo or resumen or descripcion or clinica.descripcion_seo -%}
+{%- set canonical = page.url | absUrl(clinica.url_sitio) -%}
+<!doctype html>
+<html lang="es-PA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://www.google.com https://maps.google.com; connect-src 'self'; form-action 'self' https:; base-uri 'self'; object-src 'none'">
+  <title>{{ tituloCompleto }}</title>
+  <meta name="description" content="{{ desc | striptags | truncate(160) }}">
+  {%- if noindex %}<meta name="robots" content="noindex">{% endif %}
+  <link rel="canonical" href="{{ canonical }}">
+  <meta name="theme-color" content="#102D54">
+  <meta name="geo.region" content="PA">
+  <meta name="geo.placename" content="{{ clinica.ciudad }}">
+  <meta property="og:type" content="{{ 'article' if layout == 'layouts/post.njk' else 'website' }}">
+  <meta property="og:locale" content="es_PA">
+  <meta property="og:site_name" content="{{ clinica.nombre }}">
+  <meta property="og:title" content="{{ tituloCompleto }}">
+  <meta property="og:description" content="{{ desc | striptags | truncate(200) }}">
+  <meta property="og:url" content="{{ canonical }}">
+  {%- set ogImg = imagen or inicio.hero_imagen or clinica.logo -%}
+  {%- if ogImg %}<meta property="og:image" content="{{ ogImg | absUrl(clinica.url_sitio) }}">{% endif %}
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  {% include "partials/schema.njk" %}
+</head>
+<body class="{{ claseBody or '' }}">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  {% include "partials/header.njk" %}
+  <main id="contenido" tabindex="-1">
+    {{ content | safe }}
+  </main>
+  {% include "partials/footer.njk" %}
+
+  <a class="wa-float" href="{{ clinica.whatsapp | wa('Hola, Centro Médico Los Andes. Quisiera más información.') }}" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+    {% icon "whatsapp" %}<span class="wa-float__txt">WhatsApp</span>
+  </a>
+
+  <script type="application/json" id="clinica-config">{{ {whatsapp: clinica.whatsapp, nombre: clinica.nombre, endpoint: clinica.formulario_endpoint, reservas: clinica.reservas} | json | safe }}</script>
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>

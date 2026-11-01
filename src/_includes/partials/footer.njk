@@ -1,0 +1,71 @@
+<section class="quickbar" aria-label="Contacto rápido">
+  <div class="container quickbar__grid">
+    <a class="quickbar__item" href="{{ (clinica.prefijo_pais + clinica.telefonos[0]) | tel }}">
+      <span class="quickbar__icon">{% icon "telefono" %}</span>
+      <span><strong>Llámanos</strong><span>{{ clinica.telefonos | join(" · ") }}</span></span>
+    </a>
+    <a class="quickbar__item" href="{{ clinica.whatsapp | wa('Hola, quisiera información.') }}" target="_blank" rel="noopener">
+      <span class="quickbar__icon">{% icon "whatsapp" %}</span>
+      <span><strong>WhatsApp</strong><span>{{ clinica.whatsapp_visible }}</span></span>
+    </a>
+    <a class="quickbar__item" href="/contacto/#mapa">
+      <span class="quickbar__icon">{% icon "ubicacion" %}</span>
+      <span><strong>Ubicación</strong><span>{{ clinica.direccion }}</span></span>
+    </a>
+    <div class="quickbar__item">
+      <span class="quickbar__icon">{% icon "reloj" %}</span>
+      <span><strong>Horario</strong>{% for h in clinica.horarios %}<span>{{ h.dias }}: {{ h.horas }}</span>{% endfor %}</span>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      {%- if clinica.logo %}
+        <img class="site-footer__logo" src="{{ clinica.logo }}" alt="{{ clinica.nombre }}" height="56">
+      {%- else %}
+        <p class="site-footer__name">{{ clinica.nombre }}</p>
+      {%- endif %}
+      <p>Atención médica integral, especialidades, diagnóstico y salud ocupacional en Panamá.</p>
+      <div class="social">
+        <a href="https://www.instagram.com/{{ clinica.instagram }}/" target="_blank" rel="noopener" aria-label="Instagram">{% icon "instagram" %}</a>
+        <a href="{{ clinica.whatsapp | wa() }}" target="_blank" rel="noopener" aria-label="WhatsApp">{% icon "whatsapp" %}</a>
+        <a href="{{ (clinica.prefijo_pais + clinica.telefonos[0]) | tel }}" aria-label="Llamar">{% icon "telefono" %}</a>
+      </div>
+    </div>
+    <nav aria-label="Servicios">
+      <p class="site-footer__title">Servicios</p>
+      <ul>
+        <li><a href="/especialidades/">Especialidades médicas</a></li>
+        <li><a href="/laboratorio/">Laboratorio y diagnóstico</a></li>
+        <li><a href="/procedimientos/">Procedimientos médicos</a></li>
+        <li><a href="/salud-ocupacional/">Salud Ocupacional</a></li>
+        <li><a href="/promociones/">Promociones</a></li>
+      </ul>
+    </nav>
+    <nav aria-label="La clínica">
+      <p class="site-footer__title">La clínica</p>
+      <ul>
+        <li><a href="/nosotros/">Nosotros</a></li>
+        <li><a href="/blog/">Blog de salud</a></li>
+        <li><a href="/contacto/">Contacto</a></li>
+        <li><a href="/agendar-cita/">Agendar cita</a></li>
+        <li><a href="/privacidad/">Política de privacidad</a></li>
+      </ul>
+    </nav>
+    <div>
+      <p class="site-footer__title">Contacto</p>
+      <ul class="site-footer__contact">
+        <li>{% icon "ubicacion" %}<span>{{ clinica.direccion }}, {{ clinica.ciudad }}</span></li>
+        <li>{% icon "telefono" %}<span>{% for t in clinica.telefonos %}<a href="{{ (clinica.prefijo_pais + t) | tel }}">{{ t }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</span></li>
+        <li>{% icon "whatsapp" %}<a href="{{ clinica.whatsapp | wa() }}" target="_blank" rel="noopener">{{ clinica.whatsapp_visible }}</a></li>
+        {%- if clinica.correo_administrativo %}<li>{% icon "correo" %}<a href="mailto:{{ clinica.correo_administrativo }}">{{ clinica.correo_administrativo }}</a></li>{% endif %}
+      </ul>
+    </div>
+  </div>
+  <div class="container site-footer__bottom">
+    <p>© {% anio %} {{ clinica.nombre }}. Todos los derechos reservados.</p>
+    <p>La información de este sitio es orientativa y no sustituye la consulta médica. En caso de emergencia, acuda al servicio de urgencias más cercano.</p>
+  </div>
+</footer>

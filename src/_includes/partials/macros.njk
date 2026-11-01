@@ -1,0 +1,89 @@
+{# Componentes reutilizables. Importar con: {% import "partials/macros.njk" as m with context %} #}
+
+{% macro pageHero(titulo, texto, etiqueta, icono) %}
+<section class="page-hero">
+  <div class="container page-hero__inner">
+    {%- if etiqueta %}<p class="eyebrow eyebrow--light">{% if icono %}{% icon icono %}{% endif %}{{ etiqueta }}</p>{% endif %}
+    <h1>{{ titulo }}</h1>
+    {%- if texto %}<p class="page-hero__lead">{{ texto }}</p>{% endif %}
+  </div>
+</section>
+{% endmacro %}
+
+{% macro sectionHead(titulo, texto, etiqueta, centrado=true) %}
+<div class="section-head{% if centrado %} section-head--center{% endif %}">
+  {%- if etiqueta %}<p class="eyebrow">{{ etiqueta }}</p>{% endif %}
+  <h2>{{ titulo }}</h2>
+  {%- if texto %}<p>{{ texto }}</p>{% endif %}
+</div>
+{% endmacro %}
+
+{# Tarjeta de servicio genérica. accion: "cita" | "whatsapp" | "ninguna" #}
+{% macro serviceCard(item, accion="whatsapp", textoBoton="Solicitar información", mensaje="") %}
+{%- set d = item.data -%}
+<article class="card reveal">
+  {%- if d.imagen %}<img class="card__img" src="{{ d.imagen }}" alt="{{ d.titulo }}" loading="lazy" width="640" height="360">{% endif %}
+  <div class="card__body">
+    <span class="card__icon">{% icon d.icono or "cruz" %}</span>
+    <h3 class="card__title">{{ d.titulo }}</h3>
+    <p class="card__text">{{ d.descripcion }}</p>
+    {%- if d.preparacion %}
+    <details class="card__prep">
+      <summary>{% icon "info" %}Preparación del paciente</summary>
+      <p>{{ d.preparacion }}</p>
+    </details>
+    {%- endif %}
+    {%- if d.pruebas and d.pruebas.length %}
+    <details class="card__prep">
+      <summary>{% icon "portapapeles" %}Pruebas disponibles</summary>
+      <ul class="checklist checklist--sm">{% for p in d.pruebas %}<li>{% icon "check" %}{{ p }}</li>{% endfor %}</ul>
+    </details>
+    {%- endif %}
+    {%- if item.content | striptags | trim %}
+    <details class="card__prep"><summary>{% icon "info" %}Más información</summary><div class="prose prose--sm">{{ item.content | safe }}</div></details>
+    {%- endif %}
+  </div>
+  {%- if accion == "cita" %}
+  <div class="card__foot"><a class="btn btn--outline btn--sm" href="/agendar-cita/?servicio={{ d.titulo | enc }}">{% icon "calendario" %}{{ textoBoton }}</a></div>
+  {%- elif accion == "whatsapp" %}
+  <div class="card__foot"><a class="btn btn--outline btn--sm" href="{{ clinica.whatsapp | wa((mensaje or 'Hola, quisiera información sobre') + ': ' + d.titulo + '.') }}" target="_blank" rel="noopener">{% icon "whatsapp" %}{{ textoBoton }}</a></div>
+  {%- endif %}
+</article>
+{% endmacro %}
+
+{% macro promoCard(item) %}
+{%- set d = item.data -%}
+<article class="card promo reveal" data-desde="{{ d.vigencia_desde | isoDia }}" data-hasta="{{ d.vigencia_hasta | isoDia }}">
+  <div class="promo__media">
+    {%- if d.imagen %}<img src="{{ d.imagen }}" alt="{{ d.titulo }}" loading="lazy" width="640" height="400">
+    {%- else %}<div class="promo__placeholder" aria-hidden="true">{% icon "etiqueta" %}</div>{% endif %}
+    {%- if d.categoria %}<span class="promo__cat">{{ d.categoria }}</span>{% endif %}
+  </div>
+  <div class="card__body">
+    <h3 class="card__title">{{ d.titulo }}</h3>
+    <p class="card__text">{{ d.descripcion }}</p>
+    <div class="promo__meta">
+      {%- if d.precio %}<span class="promo__price">{{ d.precio }}</span>{% endif %}
+      {%- if d.vigencia_hasta %}<span class="promo__date">{% icon "calendario" %}Válido hasta el {{ d.vigencia_hasta | fechaLarga }}</span>{% endif %}
+    </div>
+  </div>
+  <div class="card__foot">
+    <a class="btn btn--primary btn--sm" href="{{ clinica.whatsapp | wa('Hola, me interesa la promoción: ' + d.titulo + '. ¿Me pueden dar más información?') }}" target="_blank" rel="noopener">{% icon "whatsapp" %}Consultar</a>
+  </div>
+</article>
+{% endmacro %}
+
+{% macro ctaBand(titulo, texto) %}
+<section class="cta-band">
+  <div class="container cta-band__inner">
+    <div>
+      <h2>{{ titulo }}</h2>
+      {%- if texto %}<p>{{ texto }}</p>{% endif %}
+    </div>
+    <div class="btn-row">
+      <a class="btn btn--white" href="/agendar-cita/">{% icon "calendario" %}Agendar cita</a>
+      <a class="btn btn--ghost-light" href="{{ (clinica.prefijo_pais + clinica.telefonos[0]) | tel }}">{% icon "telefono" %}Llamar {{ clinica.telefonos[0] }}</a>
+    </div>
+  </div>
+</section>
+{% endmacro %}

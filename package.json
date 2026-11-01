@@ -1,0 +1,20 @@
+{
+  "name": "centro-medico-los-andes",
+  "version": "1.0.0",
+  "description": "Sitio web institucional de Centro Médico Los Andes (Panamá) con CMS administrable.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "eleventy --serve --port=8080",
+    "build": "eleventy",
+    "cms": "npx decap-server",
+    "clean": "rm -rf _site"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "3.1.7",
+    "markdown-it": "^14.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,13 @@
+<article class="card doctor reveal">
+  <div class="doctor__photo">
+    {%- if doc.data.foto %}<img src="{{ doc.data.foto }}" alt="{{ doc.data.nombre }}" loading="lazy" width="400" height="400">
+    {%- else %}<span>{% icon "medico" %}</span>{% endif %}
+  </div>
+  <div class="card__body">
+    <h3 class="card__title">{{ doc.data.nombre }}</h3>
+    <p class="doctor__spec">{{ doc.data.especialidad }}</p>
+    {%- if doc.data.bio %}<p class="card__text">{{ doc.data.bio }}</p>{% endif %}
+    {%- if doc.data.horario %}<p class="doctor__hours">{% icon "reloj" %}{{ doc.data.horario }}</p>{% endif %}
+  </div>
+  <div class="card__foot"><a class="btn btn--outline btn--sm" href="/agendar-cita/?servicio={{ doc.data.especialidad | enc }}&profesional={{ doc.data.nombre | enc }}">{% icon "calendario" %}Solicitar cita</a></div>
+</article>
