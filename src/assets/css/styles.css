@@ -523,3 +523,8 @@ h1, h2 { overflow-wrap: break-word; }
 .deliverables { counter-reset: d; list-style: none; padding: 0; margin: 0; display: grid; gap: .75rem; }
 .deliverables li { display: flex; gap: .9rem; align-items: flex-start; padding: 1rem 1.1rem; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); }
 .deliverables li::before { counter-increment: d; content: counter(d); flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--navy); color: #fff; font: 700 .9rem/1 var(--font-head); }
+
+/* Logotipo oficial: se muestra sin deformar ni recolorear */
+.brand__logo { height: 66px; max-width: 260px; }
+.site-footer__logo { background: #fff; padding: 10px 14px; border-radius: 12px; height: 76px; max-width: 240px; box-sizing: border-box; }
+@media (max-width: 640px) { .brand__logo { height: 46px; max-width: 170px; } }
