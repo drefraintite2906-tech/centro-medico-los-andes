@@ -30,6 +30,17 @@ descripcion_seo: "Conoce Centro Médico Los Andes, clínica privada en el Centro
   </div>
 </section>
 
+{%- set fotosGal = [] %}{% for s in nosotros.galeria %}{% if s.imagen %}{% set fotosGal = (fotosGal.push(s), fotosGal) %}{% endif %}{% endfor %}
+{%- if fotosGal.length %}
+<section class="section section--tint">
+  <div class="container">
+    {{ m.sectionHead("Nuestras instalaciones", "Espacios cómodos y preparados para tu atención.", "Conócenos") }}
+    {%- set slides = fotosGal %}{% set sliderClase = "slider--wide" %}{% set sliderIntervalo = 5 %}{% set sliderNombre = "Instalaciones de " + clinica.nombre %}
+    {% include "partials/carrusel.njk" %}
+  </div>
+</section>
+{%- endif %}
+
 <section class="section section--tint">
   <div class="container grid grid--2">
     <div class="card card--pad reveal"><span class="card__icon card__icon--lg">{% icon "diana" %}</span><h3>Misión</h3><p>{{ nosotros.mision }}</p></div>

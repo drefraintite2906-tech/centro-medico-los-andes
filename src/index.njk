@@ -23,7 +23,13 @@ claseBody: home
       </div>
     </div>
     <div class="hero__visual">
-      {%- if inicio.hero_imagen %}
+      {%- set fotosHero = [] %}{% for s in inicio.carrusel %}{% if s.imagen %}{% set fotosHero = (fotosHero.push(s), fotosHero) %}{% endif %}{% endfor %}
+      {%- if not fotosHero.length and not inicio.hero_imagen %}{% set fotosHero = carruselGenerico.slides %}{% endif %}
+      {%- if fotosHero.length %}
+        <div class="hero__badge"><span class="hero__badge-dot" aria-hidden="true"></span><span data-estado-horario>Abierto todos los días</span></div>
+        {%- set slides = fotosHero %}{% set sliderClase = "slider--hero" %}{% set sliderIntervalo = inicio.carrusel_intervalo %}{% set sliderNombre = "Fotografías de " + clinica.nombre %}
+        {% include "partials/carrusel.njk" %}
+      {%- elif inicio.hero_imagen %}
         <img class="hero__img" src="{{ inicio.hero_imagen }}" alt="{{ inicio.hero_imagen_alt }}" width="720" height="820" fetchpriority="high">
       {%- else %}
         <div class="hero__panel">

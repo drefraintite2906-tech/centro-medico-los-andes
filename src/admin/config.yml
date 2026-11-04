@@ -116,6 +116,17 @@ collections:
           - { label: "Subtítulo", name: "hero_subtitulo", widget: "text" }
           - { label: "Fotografía principal", name: "hero_imagen", widget: "image", required: false, hint: "Recomendado: foto real de la clínica, vertical, mínimo 1200 px" }
           - { label: "Texto alternativo de la foto", name: "hero_imagen_alt", widget: "string" }
+          - label: "Carrusel de fotos de la portada"
+            name: "carrusel"
+            widget: "list"
+            required: false
+            summary: "{{fields.titulo}}"
+            hint: "Si agrega fotos aquí, la portada mostrará un carrusel que cambia solo (reemplaza a la fotografía principal). Recomendado: 3 a 6 fotos horizontales de al menos 1200 px."
+            fields:
+              - { label: "Fotografía", name: "imagen", widget: "image" }
+              - { label: "Descripción de la foto (para accesibilidad y Google)", name: "alt", widget: "string", hint: "Ej.: Recepción de la clínica" }
+              - { label: "Texto sobre la foto (opcional)", name: "titulo", widget: "string", required: false }
+          - { label: "Segundos entre fotos", name: "carrusel_intervalo", widget: "number", value_type: "int", min: 3, max: 15, default: 5 }
           - { label: "Título de áreas", name: "areas_titulo", widget: "string" }
           - { label: "Subtítulo de áreas", name: "areas_subtitulo", widget: "string" }
           - label: "Áreas de atención (tarjetas)"
@@ -137,6 +148,16 @@ collections:
           - { label: "Título", name: "titulo", widget: "string" }
           - { label: "Introducción", name: "intro", widget: "text" }
           - { label: "Fotografía de instalaciones", name: "imagen", widget: "image", required: false }
+          - label: "Galería de instalaciones (carrusel)"
+            name: "galeria"
+            widget: "list"
+            required: false
+            summary: "{{fields.titulo}}"
+            hint: "Fotos de recepción, consultorios, laboratorio, etc. Se muestran en un carrusel en la página Nosotros."
+            fields:
+              - { label: "Fotografía", name: "imagen", widget: "image" }
+              - { label: "Descripción de la foto", name: "alt", widget: "string" }
+              - { label: "Texto sobre la foto (opcional)", name: "titulo", widget: "string", required: false }
           - { label: "Misión", name: "mision", widget: "text" }
           - { label: "Visión", name: "vision", widget: "text" }
           - label: "Valores"

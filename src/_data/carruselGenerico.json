@@ -1,0 +1,10 @@
+{
+  "nota": "Ilustraciones que se muestran en la portada mientras no se suban fotografías reales en Configuración > Página de inicio > Carrusel de fotos.",
+  "slides": [
+    { "imagen": "/assets/img/generico/consulta.svg", "alt": "Ilustración de consulta médica", "titulo": "Medicina general y especialidades" },
+    { "imagen": "/assets/img/generico/laboratorio.svg", "alt": "Ilustración de laboratorio clínico", "titulo": "Laboratorio clínico" },
+    { "imagen": "/assets/img/generico/diagnostico.svg", "alt": "Ilustración de estudios diagnósticos", "titulo": "Ultrasonidos y electrocardiogramas" },
+    { "imagen": "/assets/img/generico/odontologia.svg", "alt": "Ilustración de odontología", "titulo": "Odontología" },
+    { "imagen": "/assets/img/generico/ocupacional.svg", "alt": "Ilustración de salud ocupacional", "titulo": "Salud ocupacional para empresas" }
+  ]
+}

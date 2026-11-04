@@ -61,6 +61,12 @@ Detalles por colección:
 
 **Fotografías:** use fotos reales de la clínica y del equipo (con autorización de las personas que aparecen). Formato horizontal o vertical de al menos 1200 px; el panel las guarda en `assets/img/uploads/`.
 
+## 7b. Carrusel de imágenes (portada y Nosotros)
+- **Portada:** Configuración del sitio → Página de inicio → **Carrusel de fotos de la portada** → "Añadir". Suba cada foto con **"Elige una imagen" → Subir** (no use "Insert from URL"), escriba una descripción y, si desea, un texto sobre la foto. Puede ordenarlas arrastrando y elegir los **segundos entre fotos**.
+- Mientras el carrusel esté vacío, la portada muestra **ilustraciones genéricas** de la clínica. Al subir la primera foto, se reemplazan automáticamente.
+- **Nosotros:** Configuración del sitio → Página Nosotros → **Galería de instalaciones**. La sección "Nuestras instalaciones" aparece al subir la primera foto.
+- Recomendado: 3 a 6 fotos horizontales, de al menos 1200 px, livianas (menos de 500 KB cada una).
+
 ## 8. Crear una página o pestaña nueva
 1. **Páginas nuevas → Nueva página**: título, descripción y contenido. Publicar.
 2. La dirección será `/titulo-de-la-pagina/` (sin tildes ni espacios).

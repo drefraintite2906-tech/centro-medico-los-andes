@@ -1,0 +1,25 @@
+{# Carrusel de imágenes administrable.
+   Uso: {% set slides = lista %}{% set sliderClase = "slider--hero" %}{% set sliderIntervalo = 5 %}{% set sliderNombre = "..." %}{% include "partials/carrusel.njk" %} #}
+{%- set fotos = [] %}{% for s in slides %}{% if s.imagen %}{% set fotos = (fotos.push(s), fotos) %}{% endif %}{% endfor %}
+{%- if fotos.length %}
+<div class="slider {{ sliderClase }}" data-slider data-intervalo="{{ (sliderIntervalo or 5) * 1000 }}" role="region" aria-roledescription="carrusel" aria-label="{{ sliderNombre or 'Galería de imágenes' }}">
+  <div class="slider__track">
+    {%- for s in fotos %}
+    <figure class="slider__slide{% if loop.first %} is-active{% endif %}" role="group" aria-roledescription="diapositiva" aria-label="{{ loop.index }} de {{ fotos.length }}"{% if not loop.first %} aria-hidden="true"{% endif %}>
+      <img src="{{ s.imagen }}" alt="{{ s.alt or s.titulo or clinica.nombre }}" width="1200" height="900"{% if loop.first %} fetchpriority="high"{% else %} loading="lazy"{% endif %} decoding="async">
+      {%- if s.titulo %}<figcaption class="slider__caption">{{ s.titulo }}</figcaption>{% endif %}
+    </figure>
+    {%- endfor %}
+  </div>
+  {%- if fotos.length > 1 %}
+  <button class="slider__arrow slider__arrow--prev" type="button" data-slider-prev aria-label="Imagen anterior">{% icon "flecha" %}</button>
+  <button class="slider__arrow slider__arrow--next" type="button" data-slider-next aria-label="Imagen siguiente">{% icon "flecha" %}</button>
+  <div class="slider__controls">
+    <div class="slider__dots">
+      {%- for s in fotos %}<button type="button" class="slider__dot{% if loop.first %} is-active{% endif %}" data-slider-dot="{{ loop.index0 }}" aria-label="Ver imagen {{ loop.index }}"{% if loop.first %} aria-current="true"{% endif %}></button>{% endfor %}
+    </div>
+    <button class="slider__pause" type="button" data-slider-pause aria-label="Pausar carrusel"><span class="slider__pause-icon" aria-hidden="true"></span></button>
+  </div>
+  {%- endif %}
+</div>
+{%- endif %}

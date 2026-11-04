@@ -5,7 +5,7 @@
         {%- for t in clinica.telefonos %}<a href="{{ (clinica.prefijo_pais + t) | tel }}">{{ t }}</a>{% if not loop.last %}<span aria-hidden="true"> · </span>{% endif %}{% endfor %}
       </li>
       <li class="hide-sm">{% icon "reloj" %}
-        {%- for h in clinica.horarios %}<span>{{ h.dias }}: {{ h.horas }}</span>{% if not loop.last %}<span aria-hidden="true"> · </span>{% endif %}{% endfor %}
+        {%- for h in clinica.horarios | limite(2) %}<span>{{ h.dias }}: {{ h.horas }}</span>{% if not loop.last %}<span aria-hidden="true"> · </span>{% endif %}{% endfor %}
       </li>
     </ul>
     <ul class="topbar__list">
