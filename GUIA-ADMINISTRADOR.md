@@ -82,3 +82,7 @@ En Netlify → Forms puede ver, exportar a CSV, marcar como spam o borrar cada s
 
 ## 10. Usuarios del panel
 Solo pueden entrar personas autorizadas (ver INSTRUCCIONES-PUBLICACION.md, paso 4). Para retirar el acceso de un empleado, quítelo como colaborador del repositorio (o de Identity, según la opción elegida).
+
+## 11. Pantalla de la sala de espera (Modo TV)
+- **TV con internet (Smart TV, TV box o Chromecast con navegador):** abra `https://centromedicolosandes.netlify.app/tv/` y póngalo en pantalla completa. La presentación avanza sola, se repite sin fin, muestra la hora y **se actualiza sola** con lo que cambie en el panel (servicios, promociones vigentes, horarios).
+- **TV sin internet:** copie `material-impreso/video-sala-espera.mp4` a una memoria USB y reprodúzcalo en modo "repetir". Cuando cambie el contenido, pida regenerar el video (`npm run video:tv`).

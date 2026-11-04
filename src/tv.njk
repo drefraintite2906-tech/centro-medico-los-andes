@@ -1,0 +1,223 @@
+---
+permalink: /tv/
+eleventyExcludeFromCollections: true
+---
+{#- Modo TV / sala de espera. Presentación 16:9 que avanza sola y se repite.
+    Se alimenta del mismo contenido que el panel administrativo.
+    Parámetros: ?grabar=1 (sin reloj ni avance automático, para generar el video) -#}
+{%- set promos = collections.promociones | vigentes -%}
+{%- set slides = [] -%}
+<!doctype html>
+<html lang="es-PA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; base-uri 'self'; object-src 'none'">
+  <title>Sala de espera | {{ clinica.nombre }}</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="/assets/css/tv.css">
+</head>
+<body>
+<div class="tv-viewport">
+<div class="stage" data-stage>
+
+  {# ---------- 1. Bienvenida ---------- #}
+  <section class="slide slide--hero" data-dur="9">
+    <div class="bg-cross" aria-hidden="true"></div>
+    <div class="hero-wrap">
+      <div class="logo-card a" style="--d:0s">
+        {%- if clinica.logo %}<img src="{{ clinica.logo }}" alt="{{ clinica.nombre }}">{% else %}<strong>{{ clinica.nombre }}</strong>{% endif %}
+      </div>
+      <p class="eyebrow a" style="--d:.35s">Bienvenidos</p>
+      <h1 class="a" style="--d:.55s">{{ inicio.hero_titulo }}</h1>
+      <p class="lead a" style="--d:.8s">{{ inicio.hero_subtitulo }}</p>
+      <div class="pulse a" style="--d:1.1s" aria-hidden="true"><svg viewBox="0 0 600 80"><path d="M0 40 H220 l20 -30 l25 60 l25 -70 l25 60 l15 -20 H600"/></svg></div>
+    </div>
+  </section>
+
+  {# ---------- 2. Áreas de atención ---------- #}
+  <section class="slide" data-dur="10">
+    <header class="s-head"><p class="eyebrow a" style="--d:0s">Nuestros servicios</p><h2 class="a" style="--d:.15s">{{ inicio.areas_titulo }}</h2></header>
+    <div class="grid g4">
+      {%- for a in inicio.areas %}
+      <div class="card a" style="--d:{{ 0.35 + loop.index0 * 0.18 }}s"><span class="ic">{% icon a.icono %}</span><h3>{{ a.titulo }}</h3><p>{{ a.texto }}</p></div>
+      {%- endfor %}
+    </div>
+  </section>
+
+  {# ---------- 3. Especialidades ---------- #}
+  <section class="slide slide--light" data-dur="10">
+    <header class="s-head"><p class="eyebrow a" style="--d:0s">Consultas</p><h2 class="a" style="--d:.15s">Especialidades médicas</h2></header>
+    <div class="grid g4 chips">
+      {%- for e in collections.especialidades %}
+      <div class="chip a" style="--d:{{ 0.3 + loop.index0 * 0.12 }}s"><span class="ic">{% icon e.data.icono %}</span><span>{{ e.data.titulo }}</span></div>
+      {%- endfor %}
+    </div>
+    <p class="note a" style="--d:1.4s">{% icon "calendario" %}Solicita tu cita en recepción o por WhatsApp {{ clinica.whatsapp_visible }}</p>
+  </section>
+
+  {# ---------- 4. Laboratorio y diagnóstico ---------- #}
+  <section class="slide" data-dur="11">
+    <header class="s-head"><p class="eyebrow a" style="--d:0s">Diagnóstico</p><h2 class="a" style="--d:.15s">Laboratorio y estudios diagnósticos</h2></header>
+    <div class="grid g3">
+      {%- for s in collections.laboratorio %}
+      <div class="card card--row a" style="--d:{{ 0.3 + loop.index0 * 0.14 }}s"><span class="ic">{% icon s.data.icono %}</span><div><h3>{{ s.data.titulo }}</h3><p>{{ s.data.descripcion | truncate(95) }}</p></div></div>
+      {%- endfor %}
+    </div>
+    <p class="note note--warn a" style="--d:1.4s">{% icon "info" %}¿Exámenes de sangre? Algunos requieren ayuno de 8 a 12 horas. Pregunte en recepción por la preparación.</p>
+  </section>
+
+  {# ---------- 5. Procedimientos ---------- #}
+  <section class="slide slide--light" data-dur="11">
+    <header class="s-head"><p class="eyebrow a" style="--d:0s">Atención ambulatoria</p><h2 class="a" style="--d:.15s">Procedimientos médicos y certificados</h2></header>
+    <div class="grid g4 chips">
+      {%- for s in collections.procedimientos %}
+      <div class="chip a" style="--d:{{ 0.3 + loop.index0 * 0.09 }}s"><span class="ic">{% icon s.data.icono %}</span><span>{{ s.data.titulo }}</span></div>
+      {%- endfor %}
+    </div>
+    <p class="note a" style="--d:1.5s">{% icon "info" %}{{ clinica.aviso_procedimientos }}</p>
+  </section>
+
+  {# ---------- 6. Salud ocupacional ---------- #}
+  <section class="slide slide--navy" data-dur="11">
+    <div class="bg-cross" aria-hidden="true"></div>
+    <header class="s-head"><p class="eyebrow a" style="--d:0s">Portal empresarial</p><h2 class="a" style="--d:.15s">Salud Ocupacional para empresas</h2></header>
+    <div class="cols">
+      <div class="col a" style="--d:.35s">
+        <h3>{% icon "portapapeles" %}Evaluaciones ocupacionales</h3>
+        <ul>{% for s in collections.ocupacional | porGrupo("evaluaciones") %}<li>{% icon "check" %}{{ s.data.titulo }}</li>{% endfor %}</ul>
+      </div>
+      <div class="col a" style="--d:.6s">
+        <h3>{% icon "oido" %}Evaluaciones complementarias</h3>
+        <ul>{% for s in collections.ocupacional | porGrupo("complementarias") %}<li>{% icon "check" %}{{ s.data.titulo }}</li>{% endfor %}</ul>
+      </div>
+      <div class="col a" style="--d:.85s">
+        <h3>{% icon "escudo" %}Prevención de riesgos</h3>
+        <ul>{% for s in collections.ocupacional | porGrupo("prevencion") %}<li>{% icon "check" %}{{ s.data.titulo }}</li>{% endfor %}</ul>
+      </div>
+    </div>
+  </section>
+
+  {# ---------- 7. Empresas: en sus instalaciones ---------- #}
+  <section class="slide slide--navy" data-dur="10">
+    <div class="bg-cross" aria-hidden="true"></div>
+    <div class="split">
+      <div>
+        <p class="eyebrow a" style="--d:0s">{% icon "vehiculo" %}Servicios en empresas</p>
+        <h2 class="a" style="--d:.15s">Llevamos la evaluación a su empresa</h2>
+        <p class="lead a" style="--d:.35s">Coordinamos jornadas de evaluación médica en sus instalaciones, según coordinación y disponibilidad.</p>
+        <ul class="ticks a" style="--d:.6s">
+          {%- for v in ocupacional.ventajas | limite(4) %}<li>{% icon "check" %}{{ v.titulo }}</li>{% endfor %}
+        </ul>
+      </div>
+      <div class="qr-card a" style="--d:.8s">
+        <img src="/assets/img/qr/qr-whatsapp.png" alt="Código QR de WhatsApp">
+        <strong>Solicite su cotización</strong>
+        <span>Escanee y escríbanos por WhatsApp</span>
+      </div>
+    </div>
+  </section>
+
+  {# ---------- 8. Promociones ---------- #}
+  {%- if promos.length %}
+  {%- for p in promos | limite(3) %}
+  <section class="slide slide--promo" data-dur="9" data-desde="{{ p.data.vigencia_desde | isoDia }}" data-hasta="{{ p.data.vigencia_hasta | isoDia }}">
+    <div class="split">
+      <div>
+        <p class="eyebrow a" style="--d:0s">{% icon "etiqueta" %}{{ p.data.categoria or "Promoción" }}</p>
+        <h2 class="a" style="--d:.15s">{{ p.data.titulo }}</h2>
+        <p class="lead a" style="--d:.35s">{{ p.data.descripcion }}</p>
+        {%- if p.data.precio %}<p class="price a" style="--d:.55s">{{ p.data.precio }}</p>{% endif %}
+        {%- if p.data.vigencia_hasta %}<p class="small a" style="--d:.7s">Válido hasta el {{ p.data.vigencia_hasta | fechaLarga }}</p>{% endif %}
+      </div>
+      <div class="promo-media a" style="--d:.4s">
+        {%- if p.data.imagen %}<img src="{{ p.data.imagen }}" alt="{{ p.data.titulo }}">{% else %}<span class="ic ic--xl">{% icon "etiqueta" %}</span>{% endif %}
+      </div>
+    </div>
+  </section>
+  {%- endfor %}
+  {%- else %}
+  <section class="slide slide--promo" data-dur="8">
+    <div class="center-wrap">
+      <span class="ic ic--xl a" style="--d:0s">{% icon "etiqueta" %}</span>
+      <h2 class="a" style="--d:.2s">Pregunte por nuestras promociones</h2>
+      <p class="lead a" style="--d:.4s">Paquetes de chequeo, promociones de laboratorio, odontología y jornadas de salud.</p>
+      <p class="pill a" style="--d:.6s">{% icon "instagram" %}@{{ clinica.instagram }}</p>
+    </div>
+  </section>
+  {%- endif %}
+
+  {# ---------- 9. Consejos (preguntas frecuentes) ---------- #}
+  <section class="slide slide--light" data-dur="11">
+    <header class="s-head"><p class="eyebrow a" style="--d:0s">¿Sabías que…?</p><h2 class="a" style="--d:.15s">Información útil para tu visita</h2></header>
+    <div class="grid g3">
+      {%- for f in faq.pacientes | limite(5) %}{% if loop.index > 2 %}
+      <div class="card tip a" style="--d:{{ 0.3 + (loop.index0 - 2) * 0.2 }}s"><h3>{{ f.pregunta }}</h3><p>{{ f.respuesta | truncate(170) }}</p></div>
+      {%- endif %}{% endfor %}
+    </div>
+  </section>
+
+  {# ---------- 10. Horario y contacto ---------- #}
+  <section class="slide slide--navy" data-dur="11">
+    <div class="bg-cross" aria-hidden="true"></div>
+    <div class="split">
+      <div>
+        <p class="eyebrow a" style="--d:0s">Estamos para atenderte</p>
+        <h2 class="a" style="--d:.15s">Horario de atención</h2>
+        <ul class="hours a" style="--d:.35s">
+          {%- for h in clinica.horarios %}<li><span>{{ h.dias }}</span><strong>{{ h.horas }}</strong></li>{% endfor %}
+        </ul>
+        <ul class="contact a" style="--d:.6s">
+          <li>{% icon "telefono" %}{{ clinica.telefonos | join(" · ") }}</li>
+          <li>{% icon "whatsapp" %}{{ clinica.whatsapp_visible }}</li>
+          <li>{% icon "instagram" %}@{{ clinica.instagram }}</li>
+          <li>{% icon "ubicacion" %}{{ clinica.direccion }}</li>
+        </ul>
+      </div>
+      <div class="qr-pair a" style="--d:.8s">
+        <div class="qr-card"><img src="/assets/img/qr/qr-sitio-web.png" alt="Código QR del sitio web"><strong>Sitio web</strong><span>Servicios y citas</span></div>
+        <div class="qr-card qr-card--wa"><img src="/assets/img/qr/qr-whatsapp.png" alt="Código QR de WhatsApp"><strong>WhatsApp</strong><span>Escríbenos</span></div>
+      </div>
+    </div>
+  </section>
+
+  {# ---------- 11. Agenda tu cita ---------- #}
+  <section class="slide slide--hero" data-dur="9">
+    <div class="bg-cross" aria-hidden="true"></div>
+    <div class="split">
+      <div>
+        <p class="eyebrow a" style="--d:0s">{% icon "calendario" %}Agenda tu próxima cita</p>
+        <h2 class="big a" style="--d:.15s">Escanea el código y agenda desde tu celular</h2>
+        <ol class="steps a" style="--d:.45s">
+          <li>Abre la cámara de tu celular</li>
+          <li>Apunta al código QR</li>
+          <li>Envía tu solicitud y te confirmamos la disponibilidad</li>
+        </ol>
+      </div>
+      <div class="qr-card qr-card--big a" style="--d:.6s">
+        <img src="/assets/img/qr/qr-sitio-web.png" alt="Código QR del sitio web">
+        <strong>{{ clinica.url_sitio | replace("https://", "") }}</strong>
+      </div>
+    </div>
+  </section>
+
+  {# ---------- Barra inferior fija ---------- #}
+  <footer class="tv-bar">
+    <div class="tv-bar__brand">{% if clinica.logo %}<img src="{{ clinica.logo }}" alt="">{% endif %}</div>
+    <div class="tv-bar__info">
+      <span>{% icon "telefono" %}{{ clinica.telefonos | join(" · ") }}</span>
+      <span>{% icon "whatsapp" %}{{ clinica.whatsapp_visible }}</span>
+      <span>{% icon "instagram" %}@{{ clinica.instagram }}</span>
+    </div>
+    <div class="tv-bar__clock" data-clock></div>
+    <div class="tv-progress"><span data-progress></span></div>
+  </footer>
+</div>
+</div>
+<script src="/assets/js/tv.js" defer></script>
+</body>
+</html>
