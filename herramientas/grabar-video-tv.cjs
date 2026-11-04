@@ -74,5 +74,20 @@ function servir() {
   ff.stdin.end();
   await new Promise((r) => ff.on("close", r));
   await browser.close(); srv.close();
-  console.log(`4/4 Video listo: ${SALIDA} (${cuadros} cuadros, ${(fs.statSync(SALIDA).size / 1048576).toFixed(1)} MB)`);
+  console.log(`4/5 Video sin música: ${SALIDA} (${cuadros} cuadros, ${(fs.statSync(SALIDA).size / 1048576).toFixed(1)} MB)`);
+
+  // 5) Música instrumental ORIGINAL (compuesta por herramientas/componer-musica.py) mezclada a -18 LUFS
+  const dur = segundos;
+  const wav = SALIDA.replace(/\.mp4$/, "-musica.wav");
+  const m4a = path.join(path.dirname(SALIDA), "musica-sala-espera.m4a");
+  const conMusica = SALIDA.replace(/\.mp4$/, "-con-musica.mp4");
+  try {
+    execSync(`python3 "${path.join(__dirname, "componer-musica.py")}" ${dur} "${wav}"`, { stdio: "inherit" });
+    execSync(`ffmpeg -y -v error -i "${wav}" -af "loudnorm=I=-18:TP=-2:LRA=7" -ar 44100 -c:a aac -b:a 192k "${m4a}"`);
+    execSync(`ffmpeg -y -v error -i "${SALIDA}" -i "${m4a}" -map 0:v -map 1:a -c copy -shortest -movflags +faststart "${conMusica}"`);
+    fs.unlinkSync(wav);
+    console.log(`5/5 Video con música: ${conMusica} (${(fs.statSync(conMusica).size / 1048576).toFixed(1)} MB)`);
+  } catch (e) {
+    console.warn("No se pudo agregar la música (requiere python3 con numpy y scipy):", e.message);
+  }
 })().catch((e) => { console.error(e); process.exit(1); });
