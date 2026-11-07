@@ -16,9 +16,80 @@
     return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
   }
   function waUrl(texto) { return "https://wa.me/" + WA + "?text=" + encodeURIComponent(texto); }
+  // Celular/tableta: abre WhatsApp en la misma pestaña (va directo a la app).
+  // Computadora: muestra un cuadro de ayuda con QR para terminar desde el celular, abrir WhatsApp
+  // en la PC, copiar el mensaje o llamar. Evita abrir pestañas repetidas.
+  var esMovil = /Android|iPhone|iPad|iPod|Mobile|Silk|Opera Mini/i.test(navigator.userAgent) ||
+    (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+  var ultimoEnvio = 0;
   function abrirWhatsApp(texto) {
-    var w = window.open(waUrl(texto), "_blank", "noopener");
-    if (!w) window.location.href = waUrl(texto);
+    var ahora = Date.now();
+    if (ahora - ultimoEnvio < 2500) return; // evita dobles clics
+    ultimoEnvio = ahora;
+    if (esMovil) { window.location.href = waUrl(texto); return; }
+    mostrarAyudaPC(texto);
+  }
+
+  function cargarQR(cb) {
+    if (window.qrcode) return cb();
+    var s = document.createElement("script");
+    s.src = "/assets/js/vendor/qrcode.js";
+    s.onload = function () { cb(); }; s.onerror = function () { cb(new Error("qr")); };
+    document.head.appendChild(s);
+  }
+  function qrSVG(url) {
+    var q = window.qrcode(0, "L"); q.addData(url); q.make();
+    var n = q.getModuleCount(), m = 4, size = n + m * 2, d = "";
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (q.isDark(r, c)) d += "M" + (c + m) + " " + (r + m) + "h1v1h-1z";
+    return '<svg viewBox="0 0 ' + size + " " + size + '" shape-rendering="crispEdges" role="img" aria-label="Código QR para enviar el mensaje desde su celular"><rect width="100%" height="100%" fill="#fff"/><path fill="#102D54" d="' + d + '"/></svg>';
+  }
+  // Versión compacta del mensaje para el QR (menos caracteres = código más fácil de escanear)
+  function urlQR(texto) {
+    var corto = texto.replace(/\*/g, "").replace(/•\s?/g, "- ").replace(/\n{2,}/g, "\n")
+      .replace(/\nEntiendo que esta es una solicitud[\s\S]*$/, "");
+    return "https://api.whatsapp.com/send?phone=" + WA + "&text=" + encodeURIComponent(corto).replace(/%20/g, "+");
+  }
+  var dlg = null;
+  function mostrarAyudaPC(texto) {
+    if (!dlg) {
+      dlg = document.createElement("dialog");
+      dlg.className = "wa-dialog";
+      dlg.setAttribute("aria-labelledby", "wa-dialog-titulo");
+      dlg.innerHTML =
+        '<button type="button" class="wa-dialog__close" data-cerrar aria-label="Cerrar">×</button>' +
+        '<h2 id="wa-dialog-titulo">Tu mensaje está listo</h2>' +
+        '<p class="wa-dialog__lead">Elige cómo enviarlo a la clínica (' + (CFG.whatsappVisible || ("+" + WA)) + '):</p>' +
+        '<div class="wa-dialog__grid">' +
+          '<div class="wa-dialog__qr"><div data-qr class="wa-dialog__qrbox"></div><strong>Opción 1 · Desde tu celular</strong><span>Abre la cámara, escanea el código y pulsa <b>Enviar</b> en WhatsApp.</span></div>' +
+          '<div class="wa-dialog__opts">' +
+            '<a class="btn btn--wa btn--block" data-abrir target="_blank" rel="noopener">Opción 2 · Abrir WhatsApp en esta computadora</a>' +
+            '<p class="wa-dialog__hint">Si no tienes WhatsApp instalado en la PC, te pedirá vincular tu WhatsApp con WhatsApp Web.</p>' +
+            '<button type="button" class="btn btn--outline btn--block" data-copiar>Copiar mensaje</button>' +
+            '<a class="btn btn--outline btn--block" href="tel:' + ((CFG.prefijo || "+507") + (CFG.telefono || "")).replace(/[^\d+]/g, "") + '">Llamar al ' + (CFG.telefono || "") + '</a>' +
+          "</div>" +
+        "</div>" +
+        '<p class="wa-dialog__note">Tu solicitud no es una cita confirmada: la clínica te confirmará la fecha y la hora.</p>';
+      document.body.appendChild(dlg);
+      dlg.addEventListener("click", function (e) {
+        if (e.target === dlg || e.target.closest("[data-cerrar]")) dlg.close();
+      });
+    }
+    var abrir = dlg.querySelector("[data-abrir]");
+    abrir.href = waUrl(texto);
+    abrir.onclick = function () { setTimeout(function () { dlg.close(); }, 300); };
+    var copiar = dlg.querySelector("[data-copiar]");
+    copiar.textContent = "Copiar mensaje";
+    copiar.onclick = function () {
+      var ok = function () { copiar.textContent = "¡Mensaje copiado!"; };
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(texto).then(ok, function () {});
+      else { var ta = document.createElement("textarea"); ta.value = texto; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); ok(); } catch (e) {} ta.remove(); }
+    };
+    var box = dlg.querySelector("[data-qr]");
+    box.innerHTML = '<span class="wa-dialog__loading">Generando código…</span>';
+    cargarQR(function (err) {
+      box.innerHTML = err ? '<span class="wa-dialog__loading">No se pudo generar el código. Usa la opción 2.</span>' : qrSVG(urlQR(texto));
+    });
+    if (typeof dlg.showModal === "function") dlg.showModal(); else window.open(waUrl(texto), "_blank", "noopener");
   }
   function limpiar(v) { return String(v || "").replace(/[<>]/g, "").replace(/\s+/g, " ").trim(); }
 

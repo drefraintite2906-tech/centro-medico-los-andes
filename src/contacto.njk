@@ -56,7 +56,7 @@ descripcion_seo: "Contacta a Centro Médico Los Andes: Centro Comercial Los Ande
       <p class="hp" aria-hidden="true"><label>No llenar: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <div class="form__grid">
         <div class="field"><label for="k-nombre">Nombre *</label><input id="k-nombre" name="nombre" required maxlength="100" autocomplete="name"></div>
-        <div class="field"><label for="k-telefono">Teléfono *</label><input id="k-telefono" name="telefono" type="tel" required pattern="^[+()0-9\s-]{7,20}$" maxlength="20" autocomplete="tel"></div>
+        <div class="field"><label for="k-telefono">Teléfono *</label><input id="k-telefono" name="telefono" type="tel" required pattern="[0-9+\(\)\s\-]{7,20}" maxlength="20" autocomplete="tel"></div>
         <div class="field field--full"><label for="k-correo">Correo electrónico</label><input id="k-correo" name="correo" type="email" maxlength="120" autocomplete="email"></div>
         <div class="field field--full"><label for="k-mensaje">Mensaje *</label><textarea id="k-mensaje" name="mensaje" rows="4" required maxlength="1000"></textarea>
           <small class="hint">No incluyas información clínica sensible en este formulario.</small></div>

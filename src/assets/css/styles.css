@@ -571,3 +571,23 @@ h1, h2 { overflow-wrap: break-word; }
 .hero__badge-dot { width: 9px; height: 9px; border-radius: 50%; background: #9AA8B8; }
 .hero__badge:has(.is-open) .hero__badge-dot { background: var(--wa); box-shadow: 0 0 0 4px rgba(31,168,85,.2); }
 .hero__badge .is-open { color: var(--wa-600); }
+
+/* ---------- Ayuda para enviar por WhatsApp desde computadora ---------- */
+.wa-dialog { width: min(760px, calc(100vw - 32px)); max-height: calc(100vh - 32px); border: 0; border-radius: var(--radius-lg); padding: 2rem; box-shadow: var(--shadow-lg); color: var(--ink); }
+.wa-dialog::backdrop { background: rgba(11,33,64,.6); backdrop-filter: blur(3px); }
+.wa-dialog h2 { font-size: 1.6rem; margin: 0 2rem .35rem 0; }
+.wa-dialog__lead { color: var(--muted); margin-bottom: 1.4rem; }
+.wa-dialog__close { position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--gray); color: var(--navy); font-size: 1.6rem; line-height: 1; cursor: pointer; }
+.wa-dialog__close:hover { background: var(--sky); }
+.wa-dialog__grid { display: grid; grid-template-columns: 260px 1fr; gap: 1.75rem; align-items: start; }
+.wa-dialog__qr { display: flex; flex-direction: column; gap: .4rem; text-align: center; }
+.wa-dialog__qrbox { width: 260px; height: 260px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; padding: 8px; }
+.wa-dialog__qrbox svg { width: 100%; height: 100%; }
+.wa-dialog__qr strong { color: var(--navy); font-family: var(--font-head); margin-top: .4rem; }
+.wa-dialog__qr span { font-size: .88rem; color: var(--muted); }
+.wa-dialog__opts { display: grid; gap: .7rem; }
+.wa-dialog__opts .btn { white-space: normal; text-align: center; }
+.wa-dialog__hint { font-size: .82rem; color: var(--muted); margin: -.2rem 0 .3rem; }
+.wa-dialog__loading { font-size: .9rem; color: var(--muted); padding: 1rem; }
+.wa-dialog__note { margin: 1.4rem 0 0; padding: .8rem 1rem; border-radius: 10px; background: var(--sky); font-size: .88rem; color: var(--navy); }
+@media (max-width: 640px) { .wa-dialog__grid { grid-template-columns: 1fr; } .wa-dialog__qr { align-items: center; } }
