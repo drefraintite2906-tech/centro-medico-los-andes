@@ -722,14 +722,22 @@
     }
     var colorNivel = { ok: COL.ok, medio: "#8A5A00", alto: "#A83C12", critico: COL.rojo, bajo: COL.morado };
 
-    // Encabezado
+    // Encabezado: logo sobre blanco y título en franja azul
     ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, W, 100000);
-    ctx.fillStyle = COL.navy; ctx.fillRect(0, 0, W, 190);
-    ctx.fillStyle = COL.blue; ctx.fillRect(0, 190, W, 8);
-    txt(CLINICA.toUpperCase(), M, 62, "600 24px " + F, "#A9CBEA");
-    txt("Resumen de control en casa", M, 118, "800 48px " + H, "#FFFFFF");
-    txt("Presión arterial · Glicemia · Exámenes", M, 160, "24px " + F, "rgba(255,255,255,.85)");
-    y = 236;
+    var top = 0;
+    if (logoImg) {
+      var lh = 150, lw = Math.min(W - 2 * M, lh * logoImg.naturalWidth / logoImg.naturalHeight);
+      lh = lw * logoImg.naturalHeight / logoImg.naturalWidth;
+      ctx.drawImage(logoImg, M, 24, lw, lh);
+      txt("Seguimiento en casa", W - M, 24 + lh / 2 + 10, "600 24px " + F, COL.blue, "right");
+      top = lh + 48;
+    }
+    ctx.fillStyle = COL.navy; ctx.fillRect(0, top, W, 150);
+    ctx.fillStyle = COL.blue; ctx.fillRect(0, top + 150, W, 8);
+    if (!logoImg) txt(CLINICA.toUpperCase(), M, top + 40, "600 22px " + F, "#A9CBEA");
+    txt("Resumen de control en casa", M, top + (logoImg ? 78 : 92), "800 48px " + H, "#FFFFFF");
+    txt("Presión arterial · Glicemia · Exámenes", M, top + (logoImg ? 122 : 132), "24px " + F, "rgba(255,255,255,.85)");
+    y = top + 200;
     txt(p.nombre + (e !== "" ? "  ·  " + e + " años" : ""), M, y, "700 34px " + H, COL.navy); y += 44;
     linea("Período: " + textoPeriodo(dias) + "   ·   Generado: " + fechaHora(Date.now()), COL.texto);
     if (p.medico) linea("Para: " + p.medico, COL.texto);
@@ -797,6 +805,20 @@
     return c;
   }
 
+  /* ---------- Logo para el reporte ---------- */
+  var logoImg = null, logoPromesa = null;
+  function cargarLogo() {
+    if (logoPromesa) return logoPromesa;
+    logoPromesa = new Promise(function (ok) {
+      if (!CFG.logo) return ok(null);
+      var img = new Image();
+      img.onload = function () { logoImg = img; ok(img); };
+      img.onerror = function () { ok(null); };
+      img.src = CFG.logo;
+    });
+    return logoPromesa;
+  }
+
   /* ---------- Enviar ---------- */
   var vistaPrevia = $("[data-preview]"), preparado = null;
   var ayudaCompartir = $("[data-compartir-ayuda]");
@@ -808,7 +830,7 @@
     var hay = filtrar(datos.presiones, dias).length + filtrar(datos.glicemias, dias).length + filtrar(datos.examenes, dias).length;
     if (!hay) { mostrarAlerta("aviso", ["No hay registros en el período elegido. Elija un período más largo o anote sus tomas primero."]); return; }
     btn.disabled = true; btn.textContent = "Preparando…";
-    var listo = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    var listo = Promise.all([document.fonts && document.fonts.ready ? document.fonts.ready : null, cargarLogo()]);
     listo.then(function () {
       var canvas = generarImagen(dias), texto = resumenTexto(dias);
       var hoy = isoDia(new Date()), base = "resumen-salud-" + nombreArchivo(datos.perfil.nombre) + "-" + hoy;
