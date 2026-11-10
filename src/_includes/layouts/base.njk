@@ -29,6 +29,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
+  {%- if cssExtra %}
+  <link rel="stylesheet" href="{{ cssExtra }}?v={{ build.version }}">{% endif %}
+  {%- if appSalud %}
+  <link rel="manifest" href="/mi-salud/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/assets/img/app/icono-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Mi salud CMLA">{% endif %}
   {% include "partials/schema.njk" %}
 </head>
 <body class="{{ claseBody or '' }}">
@@ -45,5 +53,7 @@
 
   <script type="application/json" id="clinica-config">{{ {whatsapp: clinica.whatsapp, whatsappVisible: clinica.whatsapp_visible, telefono: clinica.telefonos[0], prefijo: clinica.prefijo_pais, nombre: clinica.nombre, endpoint: clinica.formulario_endpoint, reservas: clinica.reservas} | json | safe }}</script>
   <script src="/assets/js/main.js" defer></script>
+  {%- if jsExtra %}
+  <script src="{{ jsExtra }}?v={{ build.version }}" defer></script>{% endif %}
 </body>
 </html>

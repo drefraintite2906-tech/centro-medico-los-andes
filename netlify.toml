@@ -35,3 +35,14 @@
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=604800"
+
+# "Mi control de salud": el service worker y el manifiesto deben revisarse en cada visita
+[[headers]]
+  for = "/mi-salud/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/mi-salud/manifest.webmanifest"
+  [headers.values]
+    Cache-Control = "no-cache"

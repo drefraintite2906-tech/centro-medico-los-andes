@@ -86,3 +86,22 @@ Solo pueden entrar personas autorizadas (ver INSTRUCCIONES-PUBLICACION.md, paso 
 ## 11. Pantalla de la sala de espera (Modo TV)
 - **TV con internet (Smart TV, TV box o Chromecast con navegador):** abra `https://centromedicolosandes.netlify.app/tv/` y póngalo en pantalla completa. La presentación avanza sola, se repite sin fin, muestra la hora y **se actualiza sola** con lo que cambie en el panel (servicios, promociones vigentes, horarios).
 - **TV sin internet:** copie `material-impreso/video-sala-espera-con-musica.mp4` (o la versión sin música) a una memoria USB y reprodúzcalo en modo "repetir". Cuando cambie el contenido, pida regenerar el video (`npm run video:tv`).
+
+---
+
+## Mi control de salud (seguimiento de pacientes en casa)
+**Dirección:** `https://SU-DOMINIO/mi-salud/` · enlace en el pie de página · QR listo en `material-impreso/qr-mi-salud.png`.
+
+**Qué hace:** el paciente anota su **presión arterial** (sistólica, diastólica, pulso, fecha, hora, brazo y posición), su **glicemia** (valor, momento, fecha y hora) y sus **exámenes** (resultado y foto o PDF). Desde la pestaña **Enviar** genera una **imagen con gráficas y tablas** y la manda por **WhatsApp** a su médico, junto con un texto de resumen y las fotos de los exámenes.
+
+**Costo cero y privacidad:** no hay servidor ni base de datos. Los datos quedan **solo en el teléfono del paciente**. La clínica únicamente recibe lo que el paciente decide enviar.
+
+**Cómo entregarla al paciente:**
+1. Envíele el enlace por WhatsApp o muéstrele el QR en la consulta.
+2. Pídale que la **agregue a la pantalla de inicio** (Android: menú ⋮ → *Instalar aplicación*; iPhone: Compartir → *Agregar a inicio*). En iPhone esto evita que Safari borre los datos tras varios días sin uso.
+3. Si su médico tiene otra meta, el paciente la cambia en **Mis datos → Metas indicadas por mi médico** (por defecto: PA < 130/80; glicemia en ayunas 80–130; 2 h después de comer < 180 mg/dL).
+4. Recomiéndele **crear un respaldo** una vez al mes (Mis datos → Crear respaldo) y guardarlo en Drive, iCloud o su propio chat.
+
+**Avisos automáticos:** al guardar una presión de 180/120 o más, una presión baja, una glicemia menor de 70 o de 300 o más, la herramienta muestra qué hacer y cuándo acudir a urgencias.
+
+**Limitaciones:** si el paciente cambia de teléfono sin respaldo, pierde los datos; el médico no ve nada hasta que el paciente lo envía; no hay recordatorios automáticos.

@@ -1,0 +1,330 @@
+---
+layout: layouts/base.njk
+titulo: Mi control de salud
+permalink: /mi-salud/
+descripcion_seo: "Anote en su celular su presión arterial, glicemia y resultados de exámenes, y envíe a su médico un resumen con gráficas por WhatsApp. Gratis y privado: los datos quedan en su teléfono."
+claseBody: app-salud
+cssExtra: /assets/css/mi-salud.css
+jsExtra: /assets/js/mi-salud.js
+appSalud: true
+---
+<section class="page-hero page-hero--compact">
+  <div class="container page-hero__inner">
+    <p class="eyebrow eyebrow--light">{% icon "corazon" %}Seguimiento en casa</p>
+    <h1>Mi control de salud</h1>
+    <p class="page-hero__lead">Anote su presión, su glicemia y sus exámenes. Luego envíe a su médico un resumen con gráficas por WhatsApp.</p>
+  </div>
+</section>
+
+<section class="section salud-section">
+  <div class="container salud" data-salud>
+    <noscript><div class="note note--warn">{% icon "alerta" %}<p>Para usar esta herramienta, active JavaScript en su navegador.</p></div></noscript>
+    <div class="note note--warn" data-sin-almacen hidden>{% icon "alerta" %}<p><strong>Este navegador no permite guardar datos</strong> (por ejemplo, en modo incógnito). Abra esta página en una ventana normal de Chrome o Safari.</p></div>
+
+    {# ---------- Primera vez ---------- #}
+    <div class="card card--pad salud-bienvenida" data-bienvenida hidden>
+      <h2 class="h3">Bienvenido(a)</h2>
+      <ul class="salud-puntos">
+        <li>{% icon "candado" %}<span><strong>Privado:</strong> sus datos se guardan solo en este teléfono. La clínica no los recibe hasta que usted decida enviarlos.</span></li>
+        <li>{% icon "corazon" %}<span>Anote su presión arterial, glicemia y resultados de exámenes con fecha y hora.</span></li>
+        <li>{% icon "whatsapp" %}<span>Envíe a su médico un resumen con gráficas por WhatsApp, cuando usted quiera.</span></li>
+      </ul>
+      <form class="form" data-form="bienvenida" novalidate>
+        <div class="form__grid">
+          <div class="field field--full">
+            <label for="b-nombre">Su nombre completo *</label>
+            <input id="b-nombre" name="nombre" type="text" required minlength="3" maxlength="80" autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="b-medico">Nombre de su médico (opcional)</label>
+            <input id="b-medico" name="medico" type="text" maxlength="80" placeholder="Dr(a)…">
+          </div>
+          <div class="field">
+            <label for="b-wa">WhatsApp de su médico (opcional)</label>
+            <input id="b-wa" name="whatsapp" type="tel" inputmode="tel" maxlength="20" placeholder="{{ clinica.whatsapp_visible }}">
+            <small class="hint">Si lo deja vacío, se usará el WhatsApp de la clínica.</small>
+          </div>
+          <label class="check field--full"><input type="checkbox" name="acepto" required><span>Entiendo que mis datos se guardan solo en este dispositivo, que soy responsable de enviarlos y de hacer respaldos, y que esta herramienta <strong>no es un servicio de emergencias</strong>. He leído la <a href="/privacidad/" target="_blank">política de privacidad</a>. *</span></label>
+        </div>
+        <p class="form__error" role="alert" data-form-error></p>
+        <button class="btn btn--primary btn--lg btn--block" type="submit">Comenzar</button>
+      </form>
+    </div>
+
+    {# ---------- Aplicación ---------- #}
+    <div data-app hidden>
+      <p class="salud-saludo" data-saludo></p>
+      <div class="salud-tabs" role="tablist" aria-label="Secciones">
+        <button type="button" role="tab" id="t-presion" aria-controls="p-presion" data-tab="presion">{% icon "corazon" %}<span>Presión</span></button>
+        <button type="button" role="tab" id="t-glicemia" aria-controls="p-glicemia" data-tab="glicemia">{% icon "gota" %}<span>Glicemia</span></button>
+        <button type="button" role="tab" id="t-examenes" aria-controls="p-examenes" data-tab="examenes">{% icon "matraz" %}<span>Exámenes</span></button>
+        <button type="button" role="tab" id="t-enviar" aria-controls="p-enviar" data-tab="enviar">{% icon "whatsapp" %}<span>Enviar</span></button>
+        <button type="button" role="tab" id="t-datos" aria-controls="p-datos" data-tab="datos">{% icon "usuarios" %}<span>Mis datos</span></button>
+      </div>
+
+      <div class="salud-alerta" data-alerta role="alert" hidden></div>
+
+      {# Presión #}
+      <div class="salud-panel" role="tabpanel" id="p-presion" aria-labelledby="t-presion" data-panel="presion" hidden>
+        <div class="salud-grid">
+          <form class="card card--pad form" data-form="presion" novalidate>
+            <h2 class="h3">Nueva toma de presión</h2>
+            <p class="small muted">Sistólica = número de arriba (alto) · Diastólica = número de abajo (bajo).</p>
+            <div class="form__grid form__grid--3">
+              <div class="field">
+                <label for="pa-sis">Sistólica *</label>
+                <input id="pa-sis" name="sis" type="number" inputmode="numeric" required min="60" max="260" placeholder="120">
+              </div>
+              <div class="field">
+                <label for="pa-dia">Diastólica *</label>
+                <input id="pa-dia" name="dia" type="number" inputmode="numeric" required min="30" max="160" placeholder="80">
+              </div>
+              <div class="field">
+                <label for="pa-pulso">Pulso</label>
+                <input id="pa-pulso" name="pulso" type="number" inputmode="numeric" min="30" max="220" placeholder="72">
+              </div>
+            </div>
+            <div class="form__grid">
+              <div class="field"><label for="pa-fecha">Fecha *</label><input id="pa-fecha" name="fecha" type="date" required></div>
+              <div class="field"><label for="pa-hora">Hora *</label><input id="pa-hora" name="hora" type="time" required></div>
+              <div class="field">
+                <label for="pa-brazo">Brazo</label>
+                <select id="pa-brazo" name="brazo"><option value="">—</option><option value="izq">Izquierdo</option><option value="der">Derecho</option></select>
+              </div>
+              <div class="field">
+                <label for="pa-pos">Posición</label>
+                <select id="pa-pos" name="posicion"><option value="sentado">Sentado(a)</option><option value="pie">De pie</option><option value="acostado">Acostado(a)</option></select>
+              </div>
+              <div class="field field--full">
+                <label for="pa-nota">Nota (opcional)</label>
+                <input id="pa-nota" name="nota" type="text" maxlength="140" placeholder="Ej.: dolor de cabeza, antes de mi pastilla…">
+              </div>
+            </div>
+            <p class="form__error" role="alert" data-form-error></p>
+            <button class="btn btn--primary btn--lg btn--block" type="submit">Guardar toma</button>
+            <details class="salud-tips">
+              <summary>¿Cómo tomarse bien la presión?</summary>
+              <ul>
+                <li>Descanse 5 minutos sentado(a), con la espalda apoyada y los pies en el piso.</li>
+                <li>No fume, no tome café ni haga ejercicio 30 minutos antes.</li>
+                <li>Brazo apoyado a la altura del corazón y sin ropa apretada.</li>
+                <li>No hable durante la toma. Si su médico lo indica, haga 2 tomas separadas por 1 minuto.</li>
+                <li>Mídase a la misma hora cada día: en la mañana antes de sus medicamentos y en la noche.</li>
+              </ul>
+            </details>
+          </form>
+          <div class="card card--pad salud-resumen">
+            <h2 class="h3">Últimos 30 días</h2>
+            <div class="salud-stats" data-stats="presion"></div>
+            <div class="salud-grafica"><canvas data-grafica="presion" role="img" aria-label="Gráfica de presión arterial de los últimos 30 días"></canvas></div>
+            <h3 class="h4">Mis registros</h3>
+            <ul class="salud-lista" data-lista="presion"></ul>
+          </div>
+        </div>
+      </div>
+
+      {# Glicemia #}
+      <div class="salud-panel" role="tabpanel" id="p-glicemia" aria-labelledby="t-glicemia" data-panel="glicemia" hidden>
+        <div class="salud-grid">
+          <form class="card card--pad form" data-form="glicemia" novalidate>
+            <h2 class="h3">Nueva toma de glicemia</h2>
+            <div class="form__grid">
+              <div class="field">
+                <label for="g-valor">Glicemia (mg/dL) *</label>
+                <input id="g-valor" name="valor" type="number" inputmode="numeric" required min="20" max="600" placeholder="110">
+              </div>
+              <div class="field">
+                <label for="g-momento">Momento *</label>
+                <select id="g-momento" name="momento" required>
+                  <option value="ayunas">En ayunas</option>
+                  <option value="antes">Antes de comer</option>
+                  <option value="despues">2 h después de comer</option>
+                  <option value="dormir">Al acostarse</option>
+                  <option value="azar">Al azar</option>
+                </select>
+              </div>
+              <div class="field"><label for="g-fecha">Fecha *</label><input id="g-fecha" name="fecha" type="date" required></div>
+              <div class="field"><label for="g-hora">Hora *</label><input id="g-hora" name="hora" type="time" required></div>
+              <div class="field field--full">
+                <label for="g-nota">Nota (opcional)</label>
+                <input id="g-nota" name="nota" type="text" maxlength="140" placeholder="Ej.: 10 unidades de insulina, cena tarde…">
+              </div>
+            </div>
+            <p class="form__error" role="alert" data-form-error></p>
+            <button class="btn btn--primary btn--lg btn--block" type="submit">Guardar toma</button>
+            <details class="salud-tips">
+              <summary>¿Cómo medir bien la glicemia?</summary>
+              <ul>
+                <li>Lávese y séquese bien las manos antes de pincharse.</li>
+                <li>"En ayunas" significa al menos 8 horas sin comer.</li>
+                <li>"Después de comer" se mide 2 horas después del primer bocado.</li>
+                <li>Revise que las tiras no estén vencidas.</li>
+              </ul>
+            </details>
+          </form>
+          <div class="card card--pad salud-resumen">
+            <h2 class="h3">Últimos 30 días</h2>
+            <div class="salud-stats" data-stats="glicemia"></div>
+            <div class="salud-grafica"><canvas data-grafica="glicemia" role="img" aria-label="Gráfica de glicemia de los últimos 30 días"></canvas></div>
+            <h3 class="h4">Mis registros</h3>
+            <ul class="salud-lista" data-lista="glicemia"></ul>
+          </div>
+        </div>
+      </div>
+
+      {# Exámenes #}
+      <div class="salud-panel" role="tabpanel" id="p-examenes" aria-labelledby="t-examenes" data-panel="examenes" hidden>
+        <div class="salud-grid">
+          <form class="card card--pad form" data-form="examenes" novalidate>
+            <h2 class="h3">Nuevo resultado de examen</h2>
+            <div class="form__grid">
+              <div class="field field--full">
+                <label for="e-nombre">Examen *</label>
+                <input id="e-nombre" name="nombre" type="text" required maxlength="60" list="e-lista" placeholder="Ej.: Hemoglobina glicosilada (HbA1c)">
+                <datalist id="e-lista">
+                  <option value="Hemoglobina glicosilada (HbA1c)"></option>
+                  <option value="Glucosa en ayunas"></option>
+                  <option value="Colesterol total"></option>
+                  <option value="Colesterol LDL"></option>
+                  <option value="Colesterol HDL"></option>
+                  <option value="Triglicéridos"></option>
+                  <option value="Creatinina"></option>
+                  <option value="Nitrógeno de urea (BUN)"></option>
+                  <option value="Ácido úrico"></option>
+                  <option value="Hemograma completo"></option>
+                  <option value="Urinálisis"></option>
+                  <option value="Microalbuminuria"></option>
+                  <option value="TSH"></option>
+                  <option value="Perfil hepático"></option>
+                  <option value="Electrocardiograma"></option>
+                  <option value="Ultrasonido"></option>
+                </datalist>
+              </div>
+              <div class="field">
+                <label for="e-resultado">Resultado</label>
+                <input id="e-resultado" name="resultado" type="text" maxlength="40" placeholder="Ej.: 7.2">
+              </div>
+              <div class="field">
+                <label for="e-unidad">Unidad</label>
+                <input id="e-unidad" name="unidad" type="text" maxlength="15" list="e-unidades" placeholder="Ej.: %">
+                <datalist id="e-unidades"><option value="%"></option><option value="mg/dL"></option><option value="g/dL"></option><option value="mUI/L"></option><option value="mg/g"></option></datalist>
+              </div>
+              <div class="field"><label for="e-fecha">Fecha del examen *</label><input id="e-fecha" name="fecha" type="date" required></div>
+              <div class="field"><label for="e-lab">Laboratorio (opcional)</label><input id="e-lab" name="laboratorio" type="text" maxlength="60" placeholder="Ej.: CMLA"></div>
+              <div class="field field--full">
+                <label for="e-archivos">Foto o PDF del resultado (opcional, hasta 3)</label>
+                <input id="e-archivos" name="archivos" type="file" accept="image/*,application/pdf" multiple>
+                <small class="hint">Tome la foto de frente, con buena luz y que se lean bien los números.</small>
+              </div>
+              <div class="field field--full">
+                <label for="e-nota">Nota (opcional)</label>
+                <input id="e-nota" name="nota" type="text" maxlength="140">
+              </div>
+            </div>
+            <p class="form__error" role="alert" data-form-error></p>
+            <button class="btn btn--primary btn--lg btn--block" type="submit">Guardar resultado</button>
+          </form>
+          <div class="card card--pad salud-resumen">
+            <h2 class="h3">Mis exámenes</h2>
+            <ul class="salud-lista" data-lista="examenes"></ul>
+          </div>
+        </div>
+      </div>
+
+      {# Enviar #}
+      <div class="salud-panel" role="tabpanel" id="p-enviar" aria-labelledby="t-enviar" data-panel="enviar" hidden>
+        <div class="salud-grid">
+          <div class="card card--pad form">
+            <h2 class="h3">Enviar resumen a mi médico</h2>
+            <ol class="salud-pasos">
+              <li>Elija el período y pulse <strong>Preparar resumen</strong>.</li>
+              <li>Pulse <strong>Enviar por WhatsApp</strong>, elija WhatsApp y luego el chat de su médico.</li>
+            </ol>
+            <div class="form__grid">
+              <div class="field field--full">
+                <label for="r-periodo">Período</label>
+                <select id="r-periodo" data-periodo>
+                  <option value="7">Últimos 7 días</option>
+                  <option value="14">Últimas 2 semanas</option>
+                  <option value="30" selected>Último mes</option>
+                  <option value="90">Últimos 3 meses</option>
+                  <option value="365">Último año</option>
+                  <option value="0">Todo</option>
+                </select>
+              </div>
+              <label class="check field--full"><input type="checkbox" data-incluir-fotos checked><span>Adjuntar las fotos y PDF de mis exámenes de ese período</span></label>
+            </div>
+            <button class="btn btn--primary btn--lg btn--block" type="button" data-preparar>Preparar resumen</button>
+            <p class="small muted" data-destino></p>
+          </div>
+          <div class="card card--pad salud-preview" data-preview hidden>
+            <h2 class="h3">Vista previa</h2>
+            <div class="salud-preview__acciones">
+              <button class="btn btn--wa btn--lg btn--block" type="button" data-compartir>{% icon "whatsapp" %}Enviar por WhatsApp (con gráficas)</button>
+              <button class="btn btn--outline btn--block" type="button" data-enviar-texto>Enviar solo el texto al WhatsApp de mi médico</button>
+              <button class="btn btn--outline btn--block" type="button" data-descargar>Guardar la imagen en el teléfono</button>
+            </div>
+            <p class="small muted" data-compartir-ayuda></p>
+            <img class="salud-preview__img" data-preview-img alt="Resumen con gráficas para el médico">
+            <details class="salud-tips">
+              <summary>Ver el texto del resumen</summary>
+              <pre class="salud-preview__texto" data-preview-texto></pre>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      {# Mis datos #}
+      <div class="salud-panel" role="tabpanel" id="p-datos" aria-labelledby="t-datos" data-panel="datos" hidden>
+        <div class="salud-grid">
+          <form class="card card--pad form" data-form="perfil" novalidate>
+            <h2 class="h3">Mis datos</h2>
+            <div class="form__grid">
+              <div class="field field--full"><label for="d-nombre">Nombre completo *</label><input id="d-nombre" name="nombre" type="text" required minlength="3" maxlength="80"></div>
+              <div class="field"><label for="d-nac">Fecha de nacimiento</label><input id="d-nac" name="nacimiento" type="date"></div>
+              <div class="field"><label for="d-medico">Nombre de mi médico</label><input id="d-medico" name="medico" type="text" maxlength="80"></div>
+              <div class="field field--full">
+                <label for="d-wa">WhatsApp de mi médico</label>
+                <input id="d-wa" name="whatsapp" type="tel" inputmode="tel" maxlength="20" placeholder="{{ clinica.whatsapp_visible }}">
+                <small class="hint">Si lo deja vacío, se usará el WhatsApp de la clínica ({{ clinica.whatsapp_visible }}).</small>
+              </div>
+            </div>
+            <h3 class="h4 salud-sub">Metas indicadas por mi médico</h3>
+            <p class="small muted">Cambie estos valores solo si su médico se lo indica.</p>
+            <div class="form__grid">
+              <div class="field"><label for="m-sis">Presión sistólica menor de</label><input id="m-sis" name="paSis" type="number" min="100" max="180" required></div>
+              <div class="field"><label for="m-dia">Presión diastólica menor de</label><input id="m-dia" name="paDia" type="number" min="60" max="110" required></div>
+              <div class="field"><label for="m-aymin">Glicemia en ayunas desde</label><input id="m-aymin" name="gluAyMin" type="number" min="60" max="150" required></div>
+              <div class="field"><label for="m-aymax">Glicemia en ayunas hasta</label><input id="m-aymax" name="gluAyMax" type="number" min="90" max="250" required></div>
+              <div class="field field--full"><label for="m-post">Glicemia 2 h después de comer menor de</label><input id="m-post" name="gluPostMax" type="number" min="120" max="300" required></div>
+            </div>
+            <p class="form__error" role="alert" data-form-error></p>
+            <button class="btn btn--primary btn--block" type="submit">Guardar cambios</button>
+          </form>
+          <div class="card card--pad salud-resumen">
+            <h2 class="h3">Respaldo de mis datos</h2>
+            <p class="small">Sus datos solo están en este teléfono. Si lo pierde, lo cambia o borra el navegador, <strong>se pierden</strong>. Haga un respaldo una vez al mes y guárdelo en Google Drive, iCloud o en su propio chat de WhatsApp.</p>
+            <div class="salud-botones">
+              <button class="btn btn--primary btn--block" type="button" data-exportar>Crear respaldo</button>
+              <label class="btn btn--outline btn--block salud-file">Restaurar un respaldo<input type="file" accept=".json,application/json" data-importar></label>
+            </div>
+            <h3 class="h4 salud-sub">Tenerla como aplicación</h3>
+            <ul class="small salud-instalar">
+              <li><strong>Android (Chrome):</strong> menú ⋮ → <em>Agregar a la pantalla principal</em> o <em>Instalar aplicación</em>.</li>
+              <li><strong>iPhone (Safari):</strong> botón Compartir → <em>Agregar a inicio</em>. En iPhone esto también evita que Safari borre los datos si pasa varios días sin usar la página.</li>
+            </ul>
+            <button class="btn btn--primary btn--block" type="button" data-instalar hidden>Instalar en este teléfono</button>
+            <h3 class="h4 salud-sub">Borrar todo</h3>
+            <p class="small muted">Elimina de este teléfono todos sus registros, fotos y datos personales.</p>
+            <button class="btn btn--outline btn--block salud-peligro" type="button" data-borrar-todo>Borrar todos mis datos</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note note--warn salud-emergencia">
+      {% icon "alerta" %}
+      <p><strong>Esta herramienta no es un servicio de emergencias ni reemplaza la consulta.</strong> Acuda de inmediato a urgencias si tiene dolor de pecho, falta de aire, debilidad o adormecimiento de un lado del cuerpo, dificultad para hablar, confusión o desmayo, o si su presión está en 180/120 o más con síntomas.</p>
+    </div>
+  </div>
+</section>

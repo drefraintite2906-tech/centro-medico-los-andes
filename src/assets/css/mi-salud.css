@@ -1,0 +1,118 @@
+/* ==========================================================================
+   Mi control de salud – estilos propios (se cargan solo en /mi-salud/)
+   ========================================================================== */
+.app-salud .wa-float { display: none; }
+.salud [hidden] { display: none !important; }
+.page-hero--compact .page-hero__inner { padding-block: clamp(1.75rem, 4vw, 3rem); }
+.salud-section { padding-block: clamp(1.25rem, 3vw, 2.5rem) clamp(2.5rem, 5vw, 4rem); background: var(--gray); }
+.salud { display: flex; flex-direction: column; gap: 1.25rem; }
+.salud .note { margin: 0; }
+.salud-emergencia { margin-top: .5rem !important; }
+
+.salud-bienvenida { max-width: 720px; margin-inline: auto; width: 100%; }
+.salud-puntos { list-style: none; padding: 0; margin: 0 0 1.5rem; display: grid; gap: .8rem; }
+.salud-puntos li { display: flex; gap: .75rem; align-items: flex-start; }
+.salud-puntos .icon { color: var(--blue); margin-top: .2em; }
+
+.salud-saludo { margin: 0; font-weight: 600; color: var(--navy); }
+
+/* Pestañas */
+.salud-tabs {
+  position: sticky; top: calc(var(--header-h) + 6px); z-index: 20;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: .35rem;
+  padding: .35rem; background: #fff; border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-sm);
+}
+.salud-tabs button {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .2rem;
+  min-height: 58px; padding: .45rem .2rem; border: 0; border-radius: 12px; background: transparent;
+  font: 600 .82rem/1.15 var(--font-body); color: var(--muted); cursor: pointer;
+}
+.salud-tabs button .icon { width: 1.45em; height: 1.45em; }
+.salud-tabs button:hover { background: var(--sky); color: var(--navy); }
+.salud-tabs button[aria-selected="true"] { background: var(--navy); color: #fff; }
+@media (min-width: 720px) {
+  .salud-tabs button { flex-direction: row; gap: .5rem; font-size: .95rem; }
+}
+
+.salud-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 1.25rem; align-items: start; }
+@media (max-width: 900px) { .salud-grid { grid-template-columns: minmax(0, 1fr); } }
+.salud .card { background: #fff; }
+.salud .card h2 { margin-bottom: 1rem; }
+.salud .card:hover { box-shadow: var(--shadow-sm); border-color: var(--line); }
+.salud .form__grid + .form__grid { margin-top: 1rem; }
+.form__grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 560px) { .form__grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; } .form__grid--3 label { font-size: .8rem; } }
+.salud input[type="number"] { font-size: 1.25rem; font-weight: 600; }
+.salud-sub { margin: 1.75rem 0 .4rem; }
+
+.salud-tips { margin-top: 1.1rem; font-size: .92rem; }
+.salud-tips summary { cursor: pointer; font-weight: 600; color: var(--blue); }
+.salud-tips ul { margin: .6rem 0 0; padding-left: 1.2rem; }
+.salud-tips li { margin-bottom: .3rem; }
+
+/* Alertas al guardar */
+.salud-alerta { padding: 1rem 1.2rem; border-radius: var(--radius); border: 1px solid; font-size: .97rem; }
+.salud-alerta p { margin: 0 0 .5rem; }
+.salud-alerta p:last-of-type { margin-bottom: 0; }
+.salud-alerta--critico { background: #FDECEA; border-color: #E6A39B; color: #7B1E14; }
+.salud-alerta--aviso { background: var(--warn-bg); border-color: var(--warn-line); color: #6B4A05; }
+.salud-alerta--ok { background: #E8F6EE; border-color: #A7DBBC; color: #155C33; }
+.salud-alerta__cerrar { margin-top: .75rem; }
+
+/* Estadísticas */
+.salud-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: .6rem; margin-bottom: 1rem; }
+.salud-stat { background: var(--sky); border-radius: 12px; padding: .7rem .85rem; }
+.salud-stat strong { display: block; font: 700 1.3rem/1.15 var(--font-head); color: var(--navy); }
+.salud-stat span { font-size: .8rem; color: var(--muted); }
+.salud-vacio { color: var(--muted); font-size: .95rem; margin: 0 0 1rem; }
+
+.salud-grafica { position: relative; width: 100%; margin-bottom: 1.25rem; }
+.salud-grafica canvas { display: block; width: 100%; height: 240px; }
+.salud-grafica[hidden] { display: none; }
+
+/* Lista de registros */
+.salud-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+.reg { display: grid; grid-template-columns: 1fr auto; gap: .2rem .75rem; align-items: center; padding: .7rem .8rem; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.reg__main { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .7rem; }
+.reg__valor { font: 700 1.15rem/1.2 var(--font-head); color: var(--navy); }
+.reg__valor small { font: 500 .78rem var(--font-body); color: var(--muted); }
+.reg__extra { font-size: .88rem; color: var(--ink); }
+.reg__meta { grid-column: 1; font-size: .82rem; color: var(--muted); }
+.reg__nota { grid-column: 1; font-size: .85rem; color: var(--ink); }
+.reg__fotos { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .3rem; }
+.reg__fotos button { border: 1px solid var(--line); border-radius: 8px; padding: 0; background: #fff; cursor: pointer; overflow: hidden; width: 64px; height: 64px; display: grid; place-items: center; font: 700 .75rem var(--font-body); color: var(--navy); }
+.reg__fotos img { width: 100%; height: 100%; object-fit: cover; }
+.reg__borrar { grid-row: 1 / span 2; grid-column: 2; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: #fff; color: var(--muted); font-size: 1.3rem; line-height: 1; cursor: pointer; }
+.reg__borrar:hover { color: #B42318; border-color: #E6A39B; background: #FDECEA; }
+.salud-mas { margin-top: .75rem; }
+
+.badge { display: inline-block; padding: .15rem .55rem; border-radius: 999px; font: 600 .75rem/1.4 var(--font-body); white-space: nowrap; }
+.badge--ok { background: #E8F6EE; color: #1E6B3F; }
+.badge--medio { background: #FFF4D6; color: #8A5A00; }
+.badge--alto { background: #FDEBE3; color: #A83C12; }
+.badge--critico { background: #C0392B; color: #fff; }
+.badge--bajo { background: #EFE9FA; color: #5B3E96; }
+
+/* Enviar */
+.salud-pasos { padding-left: 1.2rem; margin: 0 0 1.25rem; }
+.salud-pasos li { margin-bottom: .35rem; }
+.salud .btn--block + .small { margin-top: .75rem; }
+.salud-preview__acciones { display: grid; gap: .6rem; margin-bottom: .75rem; }
+.salud-preview__acciones .btn { white-space: normal; text-align: center; }
+.salud-preview__img { width: 100%; border: 1px solid var(--line); border-radius: 12px; margin-top: .75rem; }
+.salud-preview__texto { white-space: pre-wrap; font: .85rem/1.5 var(--font-body); background: var(--gray); padding: .9rem; border-radius: 10px; margin: .6rem 0 0; }
+
+/* Mis datos */
+.salud-botones { display: grid; gap: .6rem; }
+.salud-file { position: relative; overflow: hidden; }
+.salud-file input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.salud-instalar { padding-left: 1.1rem; }
+.salud-instalar li { margin-bottom: .4rem; }
+.salud-peligro { --fg: #B42318; --bd: #E6A39B; }
+.salud-peligro:hover { --bg: #FDECEA; --fg: #8E1B12; --bd: #B42318; }
+
+/* Visor de fotos */
+.salud-visor { border: 0; padding: 0; background: transparent; max-width: min(96vw, 900px); max-height: 92vh; }
+.salud-visor::backdrop { background: rgba(11, 33, 64, .85); }
+.salud-visor img { max-width: 100%; max-height: 84vh; display: block; border-radius: 10px; background: #fff; }
+.salud-visor button { margin: .6rem auto 0; display: flex; }
