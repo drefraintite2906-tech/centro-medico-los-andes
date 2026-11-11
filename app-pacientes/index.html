@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap">
   <link rel="stylesheet" href="assets/sitio.css?v=1">
-  <link rel="stylesheet" href="assets/app.css?v=1">
+  <link rel="stylesheet" href="assets/app.css?v=2">
 </head>
 <body class="app-salud">
   <header class="app-bar">
@@ -56,7 +56,27 @@
             <input id="b-wa" name="whatsapp" type="tel" inputmode="tel" maxlength="20" placeholder="+507 6056-8129">
             <small class="hint">Si lo deja vacío, se usará el WhatsApp de la clínica.</small>
           </div>
-          <label class="check field--full"><input type="checkbox" name="acepto" required><span>Entiendo que mis datos se guardan solo en este dispositivo, que soy responsable de enviarlos y de hacer respaldos, y que esta herramienta <strong>no es un servicio de emergencias</strong>. He leído la <a href="https://centromedicolosandes.netlify.app/privacidad/" rel="noopener" target="_blank">política de privacidad</a>. *</span></label>
+          <div class="field field--full salud-consentimiento">
+            <h3 class="h4">Consentimiento informado y confidencialidad</h3>
+            <p class="small">Antes de comenzar, lea cómo se protegen sus datos de salud y qué autoriza al usar esta aplicación.</p>
+            <details class="salud-legal-box">
+              <summary>Leer el consentimiento completo</summary>
+              <div data-consentimiento-texto></div>
+            </details>
+            <div class="field">
+              <label for="b-otorga">¿Quién acepta? *</label>
+              <select id="b-otorga" name="otorgadoPor" required>
+                <option value="paciente">Yo, el (la) paciente</option>
+                <option value="representante">Padre, madre, tutor o representante legal del paciente</option>
+              </select>
+            </div>
+            <div class="field" data-campo-representante hidden>
+              <label for="b-rep">Nombre del representante *</label>
+              <input id="b-rep" name="representante" type="text" maxlength="80">
+            </div>
+            <label class="check"><input type="checkbox" name="consentimiento" required><span><strong>Consentimiento:</strong> doy mi consentimiento expreso para registrar mis datos de salud en esta aplicación, sabiendo que se guardan solo en este dispositivo, que soy responsable de protegerlo, de enviarlos y de hacer respaldos, y que esta herramienta <strong>no es un servicio de emergencias</strong>. *</span></label>
+            <label class="check"><input type="checkbox" name="autorizacion" required><span><strong>Autorización:</strong> autorizo a Centro Médico Los Andes y a mi médico tratante a recibir, revisar, usar para mi atención e incorporar a mi expediente clínico la información que yo decida enviarles, y a contactarme sobre ella, bajo <strong>estricta confidencialidad y secreto profesional</strong>. *</span></label>
+          </div>
         </div>
         <p class="form__error" role="alert" data-form-error></p>
         <button class="btn btn--primary btn--lg btn--block" type="submit">Comenzar</button>
@@ -326,6 +346,13 @@
               <li><strong>iPhone (Safari):</strong> botón Compartir → <em>Agregar a inicio</em>. En iPhone esto también evita que Safari borre los datos si pasa varios días sin usar la página.</li>
             </ul>
             <button class="btn btn--primary btn--block" type="button" data-instalar hidden>Instalar en este teléfono</button>
+            <h3 class="h4 salud-sub">Consentimiento y confidencialidad</h3>
+            <p class="small" data-consentimiento-estado></p>
+            <details class="salud-legal-box">
+              <summary>Ver el consentimiento</summary>
+              <div data-consentimiento-texto></div>
+            </details>
+            <button class="btn btn--outline btn--block salud-peligro" type="button" data-retirar>Retirar mi consentimiento</button>
             <h3 class="h4 salud-sub">Borrar todo</h3>
             <p class="small muted">Elimina de este teléfono todos sus registros, fotos y datos personales.</p>
             <button class="btn btn--outline btn--block salud-peligro" type="button" data-borrar-todo>Borrar todos mis datos</button>
@@ -334,6 +361,22 @@
       </div>
     </div>
 
+
+    <template id="texto-consentimiento">
+      <div class="salud-legal">
+        <p><strong>Consentimiento informado para el registro y envío de datos de salud – «Mi control de salud»</strong><br>Versión 1.0 · noviembre de 2026</p>
+        <p><strong>Responsable:</strong> Centro Médico Los Andes, Centro Comercial Los Andes, local B15, frente a Doit Center, Panamá. Teléfonos 237-9094 / 237-6615 · WhatsApp +507 6056-8129 · cmlosande2003@gmail.com.</p>
+        <p><strong>1. Datos que se registran.</strong> Su nombre, fecha de nacimiento, el nombre y WhatsApp de su médico, sus tomas de presión arterial y pulso, sus glicemias, los resultados de exámenes (incluidas fotos o PDF) y las notas que usted escriba. Son <strong>datos sensibles de salud</strong> protegidos por la Ley 81 de 2019 sobre Protección de Datos Personales y su reglamento, y por la Ley 68 de 2003 sobre los derechos y deberes de los pacientes.</p>
+        <p><strong>2. Dónde se guardan.</strong> Únicamente en la memoria de este dispositivo (teléfono, tableta o computadora). <strong>No se envían a ningún servidor</strong> y la clínica no tiene acceso a ellos mientras usted no los envíe.</p>
+        <p><strong>3. Para qué se usan.</strong> Para que usted lleve el control de su salud en casa y, cuando usted lo decida, comparta un resumen con su médico tratante.</p>
+        <p><strong>4. Envío y autorización.</strong> El envío es <strong>voluntario</strong> y lo hace usted mediante WhatsApp, un servicio de terceros sujeto a sus propias condiciones de privacidad. Verifique siempre que el número de destino sea el de su médico o el de la clínica. Al enviar, usted autoriza a Centro Médico Los Andes y a su médico tratante a recibir esa información, revisarla con fines de atención médica, incorporarla a su expediente clínico y comunicarse con usted sobre ella.</p>
+        <p><strong>5. Confidencialidad.</strong> La información que la clínica reciba se trata con <strong>confidencialidad y secreto profesional</strong>: se usa exclusivamente para su atención médica, solo la consulta el personal de salud autorizado y no se comparte con terceros (incluido su empleador) sin su autorización escrita, salvo obligación legal o mandato de autoridad competente. Se conserva como parte de su expediente clínico durante el tiempo que exige la normativa.</p>
+        <p><strong>6. Sus responsabilidades.</strong> Proteger el acceso a su dispositivo con clave o huella, hacer respaldos periódicos, no compartir el dispositivo sin cuidado y anotar los valores con veracidad. Los datos los registra usted y la clínica no los verifica hasta revisarlos en consulta.</p>
+        <p><strong>7. Sus derechos.</strong> Puede ejercer sus derechos de acceso, rectificación, cancelación, oposición y portabilidad (ARCO) sobre la información enviada a la clínica, por los medios de contacto indicados arriba. En esta aplicación puede borrar sus datos o <strong>retirar su consentimiento</strong> en cualquier momento desde «Mis datos». Retirarlo no afecta la información que ya envió, que forma parte de su expediente clínico.</p>
+        <p><strong>8. No es un servicio de emergencias.</strong> Los avisos de la aplicación son orientativos y no reemplazan la consulta. Ante síntomas de alarma acuda a urgencias.</p>
+        <p><strong>9. Menores de edad y personas que no pueden decidir.</strong> El padre, la madre, el tutor o el representante legal otorga este consentimiento en su nombre.</p>
+      </div>
+    </template>
     <div class="note note--warn salud-emergencia">
       <svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
       <p><strong>Esta herramienta no es un servicio de emergencias ni reemplaza la consulta.</strong> Acuda de inmediato a urgencias si tiene dolor de pecho, falta de aire, debilidad o adormecimiento de un lado del cuerpo, dificultad para hablar, confusión o desmayo, o si su presión está en 180/120 o más con síntomas.</p>
@@ -349,6 +392,6 @@
     </div>
   </footer>
   <script type="application/json" id="clinica-config">{"whatsapp": "50760568129", "whatsappVisible": "+507 6056-8129", "telefono": "237-9094", "prefijo": "+507", "nombre": "Centro Médico Los Andes", "logo": "assets/logo.jpg"}</script>
-  <script src="assets/app.js?v=1" defer></script>
+  <script src="assets/app.js?v=2" defer></script>
 </body>
 </html>

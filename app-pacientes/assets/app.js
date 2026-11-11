@@ -17,6 +17,7 @@
   var BRAZOS = { izq: "brazo izq.", der: "brazo der." };
   var POSICIONES = { sentado: "sentado(a)", pie: "de pie", acostado: "acostado(a)" };
   var DIA = 86400000;
+  var CONSENT_VERSION = "1.0";
 
   function $(s, el) { return (el || raiz).querySelector(s); }
   function $$(s, el) { return Array.prototype.slice.call((el || raiz).querySelectorAll(s)); }
@@ -260,6 +261,31 @@
 
   /* ---------- Bienvenida y perfil ---------- */
   var bienvenida = $("[data-bienvenida]"), app = $("[data-app]");
+  function consentOK() {
+    var c = datos.perfil.consentimiento;
+    return !!(c && c.version === CONSENT_VERSION && c.almacenamiento && c.autorizacion);
+  }
+  function textoConsentimiento() {
+    var c = datos.perfil.consentimiento;
+    if (!c) return "";
+    return "Consentimiento v" + c.version + " otorgado el " + fechaHora(new Date(c.fecha).getTime()) + " por " +
+      (c.otorgadoPor === "representante" ? "su representante legal (" + c.representante + ")" : "el (la) paciente");
+  }
+  function mostrarBienvenida() {
+    app.hidden = true; bienvenida.hidden = false;
+    var f = $('[data-form="bienvenida"]');
+    if (datos.perfil.nombre) f.elements.nombre.value = datos.perfil.nombre;
+    if (datos.perfil.medico) f.elements.medico.value = datos.perfil.medico;
+    if (datos.perfil.whatsapp) f.elements.whatsapp.value = "+" + datos.perfil.whatsapp;
+  }
+  // Texto completo del consentimiento (una sola fuente: bienvenida y «Mis datos»)
+  var tplConsent = document.getElementById("texto-consentimiento");
+  $$("[data-consentimiento-texto]").forEach(function (box) { if (tplConsent) box.appendChild(tplConsent.content.cloneNode(true)); });
+  var selOtorga = $('[name="otorgadoPor"]'), campoRep = $("[data-campo-representante]");
+  selOtorga.addEventListener("change", function () {
+    var r = selOtorga.value === "representante";
+    campoRep.hidden = !r; campoRep.querySelector("input").required = r;
+  });
   function mostrarApp() {
     bienvenida.hidden = true; app.hidden = false;
     $("[data-saludo]").textContent = "Hola, " + (datos.perfil.nombre.split(" ")[0] || "") + ".";
@@ -272,7 +298,11 @@
     datos.perfil.nombre = limpiar(f.elements.nombre.value, 80);
     datos.perfil.medico = limpiar(f.elements.medico.value, 80);
     datos.perfil.whatsapp = normalizarWA(f.elements.whatsapp.value);
-    datos.perfil.acepto = true; datos.perfil.aceptoFecha = new Date().toISOString();
+    var otorga = f.elements.otorgadoPor.value === "representante" ? "representante" : "paciente";
+    var rep = limpiar(f.elements.representante.value, 80);
+    if (otorga === "representante" && rep.length < 3) { error(f, "Escriba el nombre del representante que acepta."); f.elements.representante.focus(); return; }
+    datos.perfil.consentimiento = { version: CONSENT_VERSION, fecha: new Date().toISOString(), otorgadoPor: otorga, representante: otorga === "representante" ? rep : "", almacenamiento: true, autorizacion: true };
+    datos.perfil.acepto = true;
     if (guardar()) { pedirPersistencia(); llenarPerfil(); mostrarApp(); window.scrollTo({ top: 0 }); }
   });
 
@@ -283,6 +313,7 @@
     f.elements.medico.value = p.medico || ""; f.elements.whatsapp.value = p.whatsapp ? "+" + p.whatsapp : "";
     Object.keys(METAS_DEF).forEach(function (k) { f.elements[k].value = m[k]; });
     f.elements.nacimiento.max = isoDia(new Date());
+    $("[data-consentimiento-estado]").textContent = consentOK() ? textoConsentimiento() + ". Puede retirarlo cuando quiera." : "";
     $("[data-destino]").textContent = "El texto se enviará a: " + (p.medico ? p.medico + " · " : "") + "+" + (p.whatsapp || WA_CLINICA) + (p.whatsapp ? "" : " (clínica)") + ". Puede cambiarlo en «Mis datos».";
   }
   formPerfil.addEventListener("submit", function (e) {
@@ -642,6 +673,7 @@
     var p = datos.perfil, m = datos.metas, L = [];
     var pa = filtrar(datos.presiones, dias), gl = filtrar(datos.glicemias, dias), ex = filtrar(datos.examenes, dias);
     var sp = statsPA(pa), sg = statsGlu(gl), e = edad(p.nacimiento);
+    L.push("🔒 *INFORMACIÓN CONFIDENCIAL DE SALUD* – uso exclusivo del médico tratante");
     L.push("*Resumen de control en casa*");
     L.push("Paciente: " + p.nombre + (e !== "" ? " (" + e + " años)" : ""));
     if (p.medico) L.push("Para: " + p.medico);
@@ -669,6 +701,7 @@
     else L.push("• Sin exámenes en el período.");
     L.push("");
     L.push("_Datos anotados por el paciente en «Mi control de salud» de " + CLINICA + ". No han sido verificados por la clínica._");
+    if (consentOK()) L.push("_" + textoConsentimiento() + ": autoriza a la clínica y a su médico tratante a recibir esta información, usarla para su atención e incorporarla a su expediente, bajo confidencialidad._");
     return L.join("\n");
   }
 
@@ -729,7 +762,8 @@
       var lh = 150, lw = Math.min(W - 2 * M, lh * logoImg.naturalWidth / logoImg.naturalHeight);
       lh = lw * logoImg.naturalHeight / logoImg.naturalWidth;
       ctx.drawImage(logoImg, M, 24, lw, lh);
-      txt("Seguimiento en casa", W - M, 24 + lh / 2 + 10, "600 24px " + F, COL.blue, "right");
+      txt("CONFIDENCIAL", W - M, 24 + lh / 2 - 6, "800 28px " + H, COL.rojo, "right");
+      txt("Uso exclusivo del médico tratante", W - M, 24 + lh / 2 + 28, "20px " + F, COL.texto, "right");
       top = lh + 48;
     }
     ctx.fillStyle = COL.navy; ctx.fillRect(0, top, W, 150);
@@ -791,10 +825,14 @@
 
     // Pie
     y += 24;
-    ctx.fillStyle = "#F4F6F8"; ctx.fillRect(0, y, W, 120);
+    ctx.fillStyle = "#F4F6F8"; ctx.fillRect(0, y, W, 230);
     txt("Datos anotados por el paciente en «Mi control de salud». No han sido verificados por la clínica.", M, y + 48, "20px " + F, COL.texto);
-    txt("Metas: PA < " + m.paSis + "/" + m.paDia + " · Glicemia ayunas " + m.gluAyMin + "–" + m.gluAyMax + " · 2 h después de comer < " + m.gluPostMax + " mg/dL", M, y + 84, "20px " + F, COL.texto);
-    return y + 120;
+    txt("Metas: PA < " + m.paSis + "/" + m.paDia + " · Glicemia ayunas " + m.gluAyMin + "–" + m.gluAyMax + " · 2 h después de comer < " + m.gluPostMax + " mg/dL", M, y + 82, "20px " + F, COL.texto);
+    ctx.font = "600 20px " + F;
+    txt(recortar(ctx, consentOK() ? textoConsentimiento() + "." : "Sin consentimiento registrado.", W - 2 * M), M, y + 128, ctx.font, COL.navy);
+    txt("Autoriza a la clínica y a su médico tratante a recibir esta información, usarla para su atención e", M, y + 160, "20px " + F, COL.texto);
+    txt("incorporarla a su expediente. Información confidencial de salud (Ley 81 de 2019 y Ley 68 de 2003).", M, y + 190, "20px " + F, COL.texto);
+    return y + 230;
   }
   function generarImagen(dias) {
     var c = document.createElement("canvas");
@@ -917,19 +955,28 @@
           return a && typeof a.url === "string" && /^data:(image\/jpeg|application\/pdf);base64,/.test(a.url) ? archivoPut(k, a) : null;
         }));
       }).then(function () {
-        nuevoDatos.perfil.acepto = true; datos = nuevoDatos; guardar(); llenarPerfil(); pintarTodo(); mostrarApp(); irA("datos");
+        datos = nuevoDatos; guardar(); llenarPerfil(); pintarTodo();
+        if (!consentOK()) { mostrarBienvenida(); return; }
+        mostrarApp(); irA("datos");
         mostrarAlerta("ok", ["Respaldo restaurado: " + resumen + "."]);
       });
     }).catch(function () {
       mostrarAlerta("critico", ["El archivo no es un respaldo válido de «Mi control de salud»."]);
     }).then(function () { input.value = ""; });
   });
+  $("[data-retirar]").addEventListener("click", function () {
+    if (!window.confirm("Al retirar su consentimiento se borrarán de este teléfono todos sus registros, fotos y datos, y dejará de usar la aplicación.\n\nLa información que ya envió a su médico forma parte de su expediente clínico; para consultarla, corregirla u oponerse a su uso, comuníquese con la clínica.\n\n¿Desea retirar su consentimiento?")) return;
+    borrarTodoYRecargar();
+  });
   $("[data-borrar-todo]").addEventListener("click", function () {
     if (!window.confirm("¿Borrar TODOS sus datos de este teléfono? Se perderán sus registros y fotos. Esta acción no se puede deshacer.")) return;
     if (!window.confirm("Confirme otra vez: ¿borrar todo?")) return;
+    borrarTodoYRecargar();
+  });
+  function borrarTodoYRecargar() {
     try { localStorage.removeItem(KEY); } catch (e) {}
     archivosBorrarTodo().catch(function () {}).then(function () { window.location.reload(); });
-  });
+  }
 
   /* ---------- Instalación (Android/Chrome) ---------- */
   var eventoInstalar = null, btnInstalar = $("[data-instalar]");
@@ -944,12 +991,12 @@
   if (!almacenOK) { $("[data-sin-almacen]").hidden = false; return; }
   llenarPerfil();
   pintarTodo();
-  if (datos.perfil.acepto && datos.perfil.nombre) mostrarApp(); else bienvenida.hidden = false;
+  if (consentOK() && datos.perfil.nombre) mostrarApp(); else mostrarBienvenida();
 
   // Recordatorio de respaldo: si hay datos y pasó más de un mes
   var ult = datos.perfil.ultimoRespaldo ? new Date(datos.perfil.ultimoRespaldo).getTime() : 0;
   var total = datos.presiones.length + datos.glicemias.length + datos.examenes.length;
-  if (datos.perfil.acepto && total >= 10 && Date.now() - ult > 30 * DIA) {
+  if (consentOK() && total >= 10 && Date.now() - ult > 30 * DIA) {
     mostrarAlerta("aviso", ["Le recomendamos <strong>crear un respaldo</strong> de sus datos (pestaña «Mis datos»). Si cambia o pierde el teléfono, podrá recuperarlos."]);
   }
 })();
