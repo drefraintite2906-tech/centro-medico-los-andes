@@ -1,33 +1,45 @@
----
-layout: layouts/base.njk
-titulo: Mi control de salud
-permalink: /mi-salud/
-descripcion_seo: "Anote en su celular su presión arterial, glicemia y resultados de exámenes, y envíe a su médico un resumen con gráficas por WhatsApp. Gratis y privado: los datos quedan en su teléfono."
-claseBody: app-salud
-cssExtra: /assets/css/mi-salud.css
-jsExtra: /assets/js/mi-salud.js
-appSalud: true
----
-<section class="page-hero page-hero--compact">
-  <div class="container page-hero__inner">
-    <p class="eyebrow eyebrow--light">{% icon "corazon" %}Seguimiento en casa</p>
-    <h1>Mi control de salud</h1>
-    <p class="page-hero__lead">Anote su presión, su glicemia y sus exámenes. Luego envíe a su médico un resumen con gráficas por WhatsApp.</p>
-  </div>
-</section>
-
+<!doctype html>
+<html lang="es-PA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; base-uri 'self'; object-src 'none'">
+  <title>Mi control de salud | Centro Médico Los Andes</title>
+  <meta name="description" content="Anote su presión arterial, glicemia y exámenes en su celular y envíe a su médico un resumen con gráficas por WhatsApp. Gratis y privado: los datos quedan en su teléfono.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#102D54">
+  <link rel="icon" href="iconos/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="iconos/icono-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Mi salud CMLA">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/sitio.css?v=1">
+  <link rel="stylesheet" href="assets/app.css?v=1">
+</head>
+<body class="app-salud">
+  <header class="app-bar">
+    <div class="container app-bar__inner">
+      <img class="app-bar__logo" src="assets/logo.jpg" alt="Centro Médico Los Andes" height="48">
+      <span class="app-bar__titulo">Mi control<br>de salud</span>
+    </div>
+  </header>
+  <main id="contenido">
 <section class="section salud-section">
   <div class="container salud" data-salud>
-    <noscript><div class="note note--warn">{% icon "alerta" %}<p>Para usar esta herramienta, active JavaScript en su navegador.</p></div></noscript>
-    <div class="note note--warn" data-sin-almacen hidden>{% icon "alerta" %}<p><strong>Este navegador no permite guardar datos</strong> (por ejemplo, en modo incógnito). Abra esta página en una ventana normal de Chrome o Safari.</p></div>
+    <noscript><div class="note note--warn"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><p>Para usar esta herramienta, active JavaScript en su navegador.</p></div></noscript>
+    <div class="note note--warn" data-sin-almacen hidden><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><p><strong>Este navegador no permite guardar datos</strong> (por ejemplo, en modo incógnito). Abra esta página en una ventana normal de Chrome o Safari.</p></div>
 
-    {# ---------- Primera vez ---------- #}
+    
     <div class="card card--pad salud-bienvenida" data-bienvenida hidden>
       <h2 class="h3">Bienvenido(a)</h2>
       <ul class="salud-puntos">
-        <li>{% icon "candado" %}<span><strong>Privado:</strong> sus datos se guardan solo en este teléfono. La clínica no los recibe hasta que usted decida enviarlos.</span></li>
-        <li>{% icon "corazon" %}<span>Anote su presión arterial, glicemia y resultados de exámenes con fecha y hora.</span></li>
-        <li>{% icon "whatsapp" %}<span>Envíe a su médico un resumen con gráficas por WhatsApp, cuando usted quiera.</span></li>
+        <li><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span><strong>Privado:</strong> sus datos se guardan solo en este teléfono. La clínica no los recibe hasta que usted decida enviarlos.</span></li>
+        <li><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg><span>Anote su presión arterial, glicemia y resultados de exámenes con fecha y hora.</span></li>
+        <li><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 20.5l1.3-4.1A8.6 8.6 0 1 1 8 19.6z"/><path d="M9.2 8.3c-.3 3.3 3.2 6.8 6.5 6.5l.9-1.5-2-1.1-.9.8a4.6 4.6 0 0 1-2.4-2.4l.8-.9-1.1-2z"/></svg><span>Envíe a su médico un resumen con gráficas por WhatsApp, cuando usted quiera.</span></li>
       </ul>
       <form class="form" data-form="bienvenida" novalidate>
         <div class="form__grid">
@@ -41,30 +53,30 @@ appSalud: true
           </div>
           <div class="field">
             <label for="b-wa">WhatsApp de su médico (opcional)</label>
-            <input id="b-wa" name="whatsapp" type="tel" inputmode="tel" maxlength="20" placeholder="{{ clinica.whatsapp_visible }}">
+            <input id="b-wa" name="whatsapp" type="tel" inputmode="tel" maxlength="20" placeholder="+507 6056-8129">
             <small class="hint">Si lo deja vacío, se usará el WhatsApp de la clínica.</small>
           </div>
-          <label class="check field--full"><input type="checkbox" name="acepto" required><span>Entiendo que mis datos se guardan solo en este dispositivo, que soy responsable de enviarlos y de hacer respaldos, y que esta herramienta <strong>no es un servicio de emergencias</strong>. He leído la <a href="/privacidad/" target="_blank">política de privacidad</a>. *</span></label>
+          <label class="check field--full"><input type="checkbox" name="acepto" required><span>Entiendo que mis datos se guardan solo en este dispositivo, que soy responsable de enviarlos y de hacer respaldos, y que esta herramienta <strong>no es un servicio de emergencias</strong>. He leído la <a href="https://centromedicolosandes.netlify.app/privacidad/" rel="noopener" target="_blank">política de privacidad</a>. *</span></label>
         </div>
         <p class="form__error" role="alert" data-form-error></p>
         <button class="btn btn--primary btn--lg btn--block" type="submit">Comenzar</button>
       </form>
     </div>
 
-    {# ---------- Aplicación ---------- #}
+    
     <div data-app hidden>
       <p class="salud-saludo" data-saludo></p>
       <div class="salud-tabs" role="tablist" aria-label="Secciones">
-        <button type="button" role="tab" id="t-presion" aria-controls="p-presion" data-tab="presion">{% icon "corazon" %}<span>Presión</span></button>
-        <button type="button" role="tab" id="t-glicemia" aria-controls="p-glicemia" data-tab="glicemia">{% icon "gota" %}<span>Glicemia</span></button>
-        <button type="button" role="tab" id="t-examenes" aria-controls="p-examenes" data-tab="examenes">{% icon "matraz" %}<span>Exámenes</span></button>
-        <button type="button" role="tab" id="t-enviar" aria-controls="p-enviar" data-tab="enviar">{% icon "whatsapp" %}<span>Enviar</span></button>
-        <button type="button" role="tab" id="t-datos" aria-controls="p-datos" data-tab="datos">{% icon "usuarios" %}<span>Mis datos</span></button>
+        <button type="button" role="tab" id="t-presion" aria-controls="p-presion" data-tab="presion"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg><span>Presión</span></button>
+        <button type="button" role="tab" id="t-glicemia" aria-controls="p-glicemia" data-tab="glicemia"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.7s-6.5 7.1-6.5 11.8a6.5 6.5 0 0 0 13 0C18.5 9.8 12 2.7 12 2.7z"/></svg><span>Glicemia</span></button>
+        <button type="button" role="tab" id="t-examenes" aria-controls="p-examenes" data-tab="examenes"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 3h6"/><path d="M10 3v6.5L4.5 19A1.5 1.5 0 0 0 5.8 21h12.4a1.5 1.5 0 0 0 1.3-2L14 9.5V3"/><path d="M7 15h10"/></svg><span>Exámenes</span></button>
+        <button type="button" role="tab" id="t-enviar" aria-controls="p-enviar" data-tab="enviar"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 20.5l1.3-4.1A8.6 8.6 0 1 1 8 19.6z"/><path d="M9.2 8.3c-.3 3.3 3.2 6.8 6.5 6.5l.9-1.5-2-1.1-.9.8a4.6 4.6 0 0 1-2.4-2.4l.8-.9-1.1-2z"/></svg><span>Enviar</span></button>
+        <button type="button" role="tab" id="t-datos" aria-controls="p-datos" data-tab="datos"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Mis datos</span></button>
       </div>
 
       <div class="salud-alerta" data-alerta role="alert" hidden></div>
 
-      {# Presión #}
+      
       <div class="salud-panel" role="tabpanel" id="p-presion" aria-labelledby="t-presion" data-panel="presion" hidden>
         <div class="salud-grid">
           <form class="card card--pad form" data-form="presion" novalidate>
@@ -123,7 +135,7 @@ appSalud: true
         </div>
       </div>
 
-      {# Glicemia #}
+      
       <div class="salud-panel" role="tabpanel" id="p-glicemia" aria-labelledby="t-glicemia" data-panel="glicemia" hidden>
         <div class="salud-grid">
           <form class="card card--pad form" data-form="glicemia" novalidate>
@@ -172,7 +184,7 @@ appSalud: true
         </div>
       </div>
 
-      {# Exámenes #}
+      
       <div class="salud-panel" role="tabpanel" id="p-examenes" aria-labelledby="t-examenes" data-panel="examenes" hidden>
         <div class="salud-grid">
           <form class="card card--pad form" data-form="examenes" novalidate>
@@ -231,7 +243,7 @@ appSalud: true
         </div>
       </div>
 
-      {# Enviar #}
+      
       <div class="salud-panel" role="tabpanel" id="p-enviar" aria-labelledby="t-enviar" data-panel="enviar" hidden>
         <div class="salud-grid">
           <div class="card card--pad form">
@@ -260,7 +272,7 @@ appSalud: true
           <div class="card card--pad salud-preview" data-preview hidden>
             <h2 class="h3">Vista previa</h2>
             <div class="salud-preview__acciones">
-              <button class="btn btn--wa btn--lg btn--block" type="button" data-compartir>{% icon "whatsapp" %}Enviar por WhatsApp (con gráficas)</button>
+              <button class="btn btn--wa btn--lg btn--block" type="button" data-compartir><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 20.5l1.3-4.1A8.6 8.6 0 1 1 8 19.6z"/><path d="M9.2 8.3c-.3 3.3 3.2 6.8 6.5 6.5l.9-1.5-2-1.1-.9.8a4.6 4.6 0 0 1-2.4-2.4l.8-.9-1.1-2z"/></svg>Enviar por WhatsApp (con gráficas)</button>
               <button class="btn btn--outline btn--block" type="button" data-enviar-texto>Enviar solo el texto al WhatsApp de mi médico</button>
               <button class="btn btn--outline btn--block" type="button" data-descargar>Guardar la imagen en el teléfono</button>
             </div>
@@ -274,7 +286,7 @@ appSalud: true
         </div>
       </div>
 
-      {# Mis datos #}
+      
       <div class="salud-panel" role="tabpanel" id="p-datos" aria-labelledby="t-datos" data-panel="datos" hidden>
         <div class="salud-grid">
           <form class="card card--pad form" data-form="perfil" novalidate>
@@ -285,8 +297,8 @@ appSalud: true
               <div class="field"><label for="d-medico">Nombre de mi médico</label><input id="d-medico" name="medico" type="text" maxlength="80"></div>
               <div class="field field--full">
                 <label for="d-wa">WhatsApp de mi médico</label>
-                <input id="d-wa" name="whatsapp" type="tel" inputmode="tel" maxlength="20" placeholder="{{ clinica.whatsapp_visible }}">
-                <small class="hint">Si lo deja vacío, se usará el WhatsApp de la clínica ({{ clinica.whatsapp_visible }}).</small>
+                <input id="d-wa" name="whatsapp" type="tel" inputmode="tel" maxlength="20" placeholder="+507 6056-8129">
+                <small class="hint">Si lo deja vacío, se usará el WhatsApp de la clínica (+507 6056-8129).</small>
               </div>
             </div>
             <h3 class="h4 salud-sub">Metas indicadas por mi médico</h3>
@@ -323,8 +335,20 @@ appSalud: true
     </div>
 
     <div class="note note--warn salud-emergencia">
-      {% icon "alerta" %}
+      <svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
       <p><strong>Esta herramienta no es un servicio de emergencias ni reemplaza la consulta.</strong> Acuda de inmediato a urgencias si tiene dolor de pecho, falta de aire, debilidad o adormecimiento de un lado del cuerpo, dificultad para hablar, confusión o desmayo, o si su presión está en 180/120 o más con síntomas.</p>
     </div>
   </div>
 </section>
+  </main>
+  <footer class="app-pie">
+    <div class="container">
+      <p><strong>Centro Médico Los Andes</strong> · Centro Comercial Los Andes, local B15, frente a Doit Center, Panamá</p>
+      <p><a href="tel:+5072379094">237-9094</a> · <a href="tel:+5072376615">237-6615</a> · <a href="https://wa.me/50760568129" rel="noopener">WhatsApp +507 6056-8129</a></p>
+      <p><a href="https://centromedicolosandes.netlify.app/" rel="noopener">Sitio web</a> · <a href="https://centromedicolosandes.netlify.app/agendar-cita/" rel="noopener">Agendar cita</a> · <a href="https://centromedicolosandes.netlify.app/privacidad/" rel="noopener">Privacidad</a></p>
+    </div>
+  </footer>
+  <script type="application/json" id="clinica-config">{"whatsapp": "50760568129", "whatsappVisible": "+507 6056-8129", "telefono": "237-9094", "prefijo": "+507", "nombre": "Centro Médico Los Andes", "logo": "assets/logo.jpg"}</script>
+  <script src="assets/app.js?v=1" defer></script>
+</body>
+</html>

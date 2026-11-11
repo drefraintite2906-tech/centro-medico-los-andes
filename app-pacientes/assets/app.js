@@ -1,4 +1,4 @@
-/* Centro Médico Los Andes – "Mi control de salud"
+/* Centro Médico Los Andes – "Mi control de salud" (aplicación independiente, publicada en GitHub Pages)
    Todo se guarda SOLO en el dispositivo del paciente (localStorage + IndexedDB para fotos/PDF).
    No hay servidor ni base de datos: el paciente decide cuándo enviar el resumen por WhatsApp. */
 (function () {
@@ -936,7 +936,7 @@
   window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); eventoInstalar = e; btnInstalar.hidden = false; });
   btnInstalar.addEventListener("click", function () { if (!eventoInstalar) return; eventoInstalar.prompt(); eventoInstalar = null; btnInstalar.hidden = true; });
   if ("serviceWorker" in navigator && window.isSecureContext) {
-    window.addEventListener("load", function () { navigator.serviceWorker.register("/mi-salud/sw.js", { scope: "/mi-salud/" }).catch(function () {}); });
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js", { scope: "./" }).catch(function () {}); });
   }
 
   /* ---------- Inicio ---------- */

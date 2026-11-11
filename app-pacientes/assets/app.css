@@ -116,3 +116,15 @@
 .salud-visor::backdrop { background: rgba(11, 33, 64, .85); }
 .salud-visor img { max-width: 100%; max-height: 84vh; display: block; border-radius: 10px; background: #fff; }
 .salud-visor button { margin: .6rem auto 0; display: flex; }
+
+/* ---------- Aplicación independiente (GitHub Pages) ---------- */
+.app-salud { --header-h: 68px; background: var(--gray); }
+.app-bar { position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: 1px solid var(--line); padding-top: env(safe-area-inset-top); }
+.app-bar__inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: var(--header-h); }
+.app-bar__logo { height: 48px; width: auto; max-width: 60vw; object-fit: contain; }
+.app-bar__titulo { font: 700 .95rem/1.15 var(--font-head); color: var(--navy); text-align: right; }
+.app-salud .salud-section { padding-top: 1rem; }
+.app-salud .salud-tabs { top: calc(var(--header-h) + env(safe-area-inset-top) + 6px); }
+.app-pie { background: var(--navy); color: rgba(255,255,255,.85); padding: 1.5rem 0 calc(1.5rem + env(safe-area-inset-bottom)); font-size: .88rem; }
+.app-pie p { margin: 0 0 .4rem; }
+.app-pie a { color: #A9CBEA; }

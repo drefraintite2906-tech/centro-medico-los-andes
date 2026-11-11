@@ -36,8 +36,6 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/admin/config.yml": "admin/config.yml" });
   eleventyConfig.addPassthroughCopy({ "src/admin/index.html": "admin/index.html" });
   eleventyConfig.addPassthroughCopy({ "src/assets/img/favicon.svg": "favicon.svg" });
-  // "Mi control de salud": manifiesto y service worker (funciona sin internet e instalable)
-  eleventyConfig.addPassthroughCopy({ "src/pwa": "mi-salud" });
   eleventyConfig.ignores.add("src/admin/**");
   eleventyConfig.addWatchTarget("src/assets/");
 

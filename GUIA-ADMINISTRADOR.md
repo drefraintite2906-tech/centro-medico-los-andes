@@ -89,10 +89,14 @@ Solo pueden entrar personas autorizadas (ver INSTRUCCIONES-PUBLICACION.md, paso 
 
 ---
 
-## Mi control de salud (seguimiento de pacientes en casa)
-**Dirección:** `https://SU-DOMINIO/mi-salud/` · enlace en el pie de página · QR listo en `material-impreso/qr-mi-salud.png`.
+## Mi control de salud (aplicación de pacientes, aparte del sitio web)
+**Dirección:** https://drefraintite2906-tech.github.io/centro-medico-los-andes/ · QR listo en `material-impreso/qr-mi-salud.png` · enlace en el pie del sitio web.
 
-**Qué hace:** el paciente anota su **presión arterial** (sistólica, diastólica, pulso, fecha, hora, brazo y posición), su **glicemia** (valor, momento, fecha y hora) y sus **exámenes** (resultado y foto o PDF). Desde la pestaña **Enviar** genera una **imagen con gráficas y tablas** y la manda por **WhatsApp** a su médico, junto con un texto de resumen y las fotos de los exámenes.
+**Dónde vive:** carpeta `app-pacientes/` de este repositorio. Se publica **gratis en GitHub Pages** y **no usa créditos de Netlify**: aunque el sitio web esté pausado, la app sigue funcionando. Cada cambio en esa carpeta se publica solo en 1–2 minutos (pestaña **Actions** del repositorio).
+
+**Activación (una sola vez):** en GitHub, repositorio → **Settings → Pages → Build and deployment → Source: GitHub Actions**. Luego en **Actions → Publicar app de pacientes → Run workflow**.
+
+**Qué hace:** el paciente anota su **presión arterial** (sistólica, diastólica, pulso, fecha, hora, brazo y posición), su **glicemia** (valor, momento, fecha y hora) y sus **exámenes** (resultado y foto o PDF). Desde la pestaña **Enviar** genera una **imagen con el logo, gráficas y tablas** y la manda por **WhatsApp** a su médico, junto con un texto de resumen y las fotos de los exámenes.
 
 **Costo cero y privacidad:** no hay servidor ni base de datos. Los datos quedan **solo en el teléfono del paciente**. La clínica únicamente recibe lo que el paciente decide enviar.
 
@@ -102,6 +106,6 @@ Solo pueden entrar personas autorizadas (ver INSTRUCCIONES-PUBLICACION.md, paso 
 3. Si su médico tiene otra meta, el paciente la cambia en **Mis datos → Metas indicadas por mi médico** (por defecto: PA < 130/80; glicemia en ayunas 80–130; 2 h después de comer < 180 mg/dL).
 4. Recomiéndele **crear un respaldo** una vez al mes (Mis datos → Crear respaldo) y guardarlo en Drive, iCloud o su propio chat.
 
-**Avisos automáticos:** al guardar una presión de 180/120 o más, una presión baja, una glicemia menor de 70 o de 300 o más, la herramienta muestra qué hacer y cuándo acudir a urgencias.
+**Avisos automáticos:** al guardar una presión de 180/120 o más, una presión baja, una glicemia menor de 70 o de 300 o más, la app muestra qué hacer y cuándo acudir a urgencias.
 
-**Limitaciones:** si el paciente cambia de teléfono sin respaldo, pierde los datos; el médico no ve nada hasta que el paciente lo envía; no hay recordatorios automáticos.
+**Limitaciones:** si el paciente cambia de teléfono sin respaldo, pierde los datos; el médico no ve nada hasta que el paciente lo envía; no hay recordatorios automáticos. **No cambie la dirección de la app**: los datos de cada paciente quedan ligados a esa dirección.

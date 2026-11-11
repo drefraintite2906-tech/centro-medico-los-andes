@@ -36,13 +36,15 @@
   [headers.values]
     Cache-Control = "public, max-age=604800"
 
-# "Mi control de salud": el service worker y el manifiesto deben revisarse en cada visita
-[[headers]]
-  for = "/mi-salud/sw.js"
-  [headers.values]
-    Cache-Control = "no-cache"
+# "Mi control de salud" es una aplicación aparte, publicada gratis en GitHub Pages (carpeta app-pacientes/)
+[[redirects]]
+  from = "/mi-salud"
+  to = "https://drefraintite2906-tech.github.io/centro-medico-los-andes/"
+  status = 302
+  force = true
 
-[[headers]]
-  for = "/mi-salud/manifest.webmanifest"
-  [headers.values]
-    Cache-Control = "no-cache"
+[[redirects]]
+  from = "/mi-salud/*"
+  to = "https://drefraintite2906-tech.github.io/centro-medico-los-andes/"
+  status = 302
+  force = true
