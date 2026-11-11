@@ -90,13 +90,13 @@ Solo pueden entrar personas autorizadas (ver INSTRUCCIONES-PUBLICACION.md, paso 
 ---
 
 ## Mi control de salud (aplicación de pacientes, aparte del sitio web)
-**Dirección:** https://drefraintite2906-tech.github.io/centro-medico-los-andes/ · QR listo en `material-impreso/qr-mi-salud.png` · enlace en el pie del sitio web.
+**Dirección:** https://drefraintite2906-tech.github.io/centro-medico-los-andes/ · QR listo en `material-impreso/qr-mi-salud.png`. **Solo para pacientes:** no aparece en el sitio web ni en buscadores; se entrega con el QR o el enlace.
 
 **Dónde vive:** carpeta `app-pacientes/` de este repositorio. Se publica **gratis en GitHub Pages** y **no usa créditos de Netlify**: aunque el sitio web esté pausado, la app sigue funcionando. Cada cambio en esa carpeta se publica solo en 1–2 minutos (pestaña **Actions** del repositorio).
 
 **Activación (una sola vez):** en GitHub, repositorio → **Settings → Pages → Build and deployment → Source: GitHub Actions**. Luego en **Actions → Publicar app de pacientes → Run workflow**.
 
-**Qué hace:** el paciente anota su **presión arterial** (sistólica, diastólica, pulso, fecha, hora, brazo y posición), su **glicemia** (valor, momento, fecha y hora) y sus **exámenes** (resultado y foto o PDF). Desde la pestaña **Enviar** genera una **imagen con el logo, gráficas y tablas** y la manda por **WhatsApp** a su médico, junto con un texto de resumen y las fotos de los exámenes.
+**Qué hace:** el paciente anota su **presión arterial** (sistólica, diastólica, pulso, fecha, hora, brazo y posición), su **glicemia** (valor, momento, fecha y hora) y sus **exámenes** (resultado y foto o PDF). Desde la pestaña **Enviar** genera una **imagen con el logo, gráficas y tablas** y la envía a su médico como prefiera: **WhatsApp**, **correo electrónico** o **cualquier otra aplicación** del teléfono (Telegram, Outlook, etc.), con el texto del resumen y las fotos de los exámenes. También puede **imprimirla o guardarla en PDF** para llevarla a la consulta.
 
 **Costo cero y privacidad:** no hay servidor ni base de datos. Los datos quedan **solo en el teléfono del paciente**. La clínica únicamente recibe lo que el paciente decide enviar.
 

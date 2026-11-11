@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap">
   <link rel="stylesheet" href="assets/sitio.css?v=1">
-  <link rel="stylesheet" href="assets/app.css?v=2">
+  <link rel="stylesheet" href="assets/app.css?v=3">
 </head>
 <body class="app-salud">
   <header class="app-bar">
@@ -55,6 +55,10 @@
             <label for="b-wa">WhatsApp de su médico (opcional)</label>
             <input id="b-wa" name="whatsapp" type="tel" inputmode="tel" maxlength="20" placeholder="+507 6056-8129">
             <small class="hint">Si lo deja vacío, se usará el WhatsApp de la clínica.</small>
+          </div>
+          <div class="field field--full">
+            <label for="b-correo">Correo de su médico (opcional)</label>
+            <input id="b-correo" name="correo" type="email" inputmode="email" maxlength="100" placeholder="medico@ejemplo.com">
           </div>
           <div class="field field--full salud-consentimiento">
             <h3 class="h4">Consentimiento informado y confidencialidad</h3>
@@ -270,7 +274,7 @@
             <h2 class="h3">Enviar resumen a mi médico</h2>
             <ol class="salud-pasos">
               <li>Elija el período y pulse <strong>Preparar resumen</strong>.</li>
-              <li>Pulse <strong>Enviar por WhatsApp</strong>, elija WhatsApp y luego el chat de su médico.</li>
+              <li>Elija cómo enviarlo: <strong>WhatsApp</strong>, <strong>correo</strong> o <strong>cualquier otra aplicación</strong>. También puede imprimirlo o guardarlo en PDF para llevarlo a su consulta.</li>
             </ol>
             <div class="form__grid">
               <div class="field field--full">
@@ -292,8 +296,10 @@
           <div class="card card--pad salud-preview" data-preview hidden>
             <h2 class="h3">Vista previa</h2>
             <div class="salud-preview__acciones">
-              <button class="btn btn--wa btn--lg btn--block" type="button" data-compartir><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 20.5l1.3-4.1A8.6 8.6 0 1 1 8 19.6z"/><path d="M9.2 8.3c-.3 3.3 3.2 6.8 6.5 6.5l.9-1.5-2-1.1-.9.8a4.6 4.6 0 0 1-2.4-2.4l.8-.9-1.1-2z"/></svg>Enviar por WhatsApp (con gráficas)</button>
-              <button class="btn btn--outline btn--block" type="button" data-enviar-texto>Enviar solo el texto al WhatsApp de mi médico</button>
+              <button class="btn btn--primary btn--lg btn--block" type="button" data-compartir>Compartir con gráficas (WhatsApp, correo u otra app)</button>
+              <button class="btn btn--wa btn--block" type="button" data-enviar-texto>Enviar el texto al WhatsApp de mi médico</button>
+              <button class="btn btn--outline btn--block" type="button" data-enviar-correo>Enviar por correo electrónico</button>
+              <button class="btn btn--outline btn--block" type="button" data-imprimir>Imprimir o guardar en PDF</button>
               <button class="btn btn--outline btn--block" type="button" data-descargar>Guardar la imagen en el teléfono</button>
             </div>
             <p class="small muted" data-compartir-ayuda></p>
@@ -319,6 +325,10 @@
                 <label for="d-wa">WhatsApp de mi médico</label>
                 <input id="d-wa" name="whatsapp" type="tel" inputmode="tel" maxlength="20" placeholder="+507 6056-8129">
                 <small class="hint">Si lo deja vacío, se usará el WhatsApp de la clínica (+507 6056-8129).</small>
+              </div>
+              <div class="field field--full">
+                <label for="d-correo">Correo electrónico de mi médico</label>
+                <input id="d-correo" name="correo" type="email" inputmode="email" maxlength="100" placeholder="medico@ejemplo.com">
               </div>
             </div>
             <h3 class="h4 salud-sub">Metas indicadas por mi médico</h3>
@@ -391,7 +401,8 @@
       <p><a href="https://centromedicolosandes.netlify.app/" rel="noopener">Sitio web</a> · <a href="https://centromedicolosandes.netlify.app/agendar-cita/" rel="noopener">Agendar cita</a> · <a href="https://centromedicolosandes.netlify.app/privacidad/" rel="noopener">Privacidad</a></p>
     </div>
   </footer>
+  <div class="solo-impresion" aria-hidden="true"><img data-imprimir-img alt=""></div>
   <script type="application/json" id="clinica-config">{"whatsapp": "50760568129", "whatsappVisible": "+507 6056-8129", "telefono": "237-9094", "prefijo": "+507", "nombre": "Centro Médico Los Andes", "logo": "assets/logo.jpg"}</script>
-  <script src="assets/app.js?v=2" defer></script>
+  <script src="assets/app.js?v=3" defer></script>
 </body>
 </html>

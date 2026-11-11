@@ -138,3 +138,12 @@
 .salud-legal { max-height: 340px; overflow-y: auto; margin-top: .6rem; font-size: .86rem; line-height: 1.55; }
 .salud-legal p { margin: 0 0 .7rem; }
 .salud-resumen .salud-legal-box { margin-bottom: .75rem; }
+
+/* Impresión del resumen (solo la imagen del reporte) */
+.solo-impresion { display: none; }
+@media print {
+  @page { margin: 10mm; }
+  body > *:not(.solo-impresion) { display: none !important; }
+  .solo-impresion { display: block !important; }
+  .solo-impresion img { width: 100%; height: auto; }
+}

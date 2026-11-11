@@ -42,6 +42,10 @@
     if (d.length === 7 || d.length === 8) d = "507" + d; // número de Panamá sin código de país
     return d.length >= 10 ? d : "";
   }
+  function normalizarCorreo(v) {
+    var c = String(v || "").trim().toLowerCase();
+    return /^[^\s@<>]+@[^\s@<>]+\.[a-z]{2,}$/.test(c) ? c.slice(0, 100) : "";
+  }
   function edad(iso) {
     if (!iso) return "";
     var n = new Date(iso + "T00:00:00"), h = new Date(), e = h.getFullYear() - n.getFullYear();
@@ -51,7 +55,7 @@
 
   /* ---------- Almacenamiento ---------- */
   function nuevo() {
-    return { version: 1, perfil: { nombre: "", nacimiento: "", medico: "", whatsapp: "", acepto: false }, metas: Object.assign({}, METAS_DEF), presiones: [], glicemias: [], examenes: [] };
+    return { version: 1, perfil: { nombre: "", nacimiento: "", medico: "", whatsapp: "", correo: "", acepto: false }, metas: Object.assign({}, METAS_DEF), presiones: [], glicemias: [], examenes: [] };
   }
   function normalizar(d) {
     var n = nuevo();
@@ -277,6 +281,7 @@
     if (datos.perfil.nombre) f.elements.nombre.value = datos.perfil.nombre;
     if (datos.perfil.medico) f.elements.medico.value = datos.perfil.medico;
     if (datos.perfil.whatsapp) f.elements.whatsapp.value = "+" + datos.perfil.whatsapp;
+    if (datos.perfil.correo) f.elements.correo.value = datos.perfil.correo;
   }
   // Texto completo del consentimiento (una sola fuente: bienvenida y «Mis datos»)
   var tplConsent = document.getElementById("texto-consentimiento");
@@ -298,6 +303,8 @@
     datos.perfil.nombre = limpiar(f.elements.nombre.value, 80);
     datos.perfil.medico = limpiar(f.elements.medico.value, 80);
     datos.perfil.whatsapp = normalizarWA(f.elements.whatsapp.value);
+    if (f.elements.correo.value.trim() && !normalizarCorreo(f.elements.correo.value)) { error(f, "Revise el correo de su médico."); f.elements.correo.focus(); return; }
+    datos.perfil.correo = normalizarCorreo(f.elements.correo.value);
     var otorga = f.elements.otorgadoPor.value === "representante" ? "representante" : "paciente";
     var rep = limpiar(f.elements.representante.value, 80);
     if (otorga === "representante" && rep.length < 3) { error(f, "Escriba el nombre del representante que acepta."); f.elements.representante.focus(); return; }
@@ -311,21 +318,26 @@
     var f = formPerfil, p = datos.perfil, m = datos.metas;
     f.elements.nombre.value = p.nombre || ""; f.elements.nacimiento.value = p.nacimiento || "";
     f.elements.medico.value = p.medico || ""; f.elements.whatsapp.value = p.whatsapp ? "+" + p.whatsapp : "";
+    f.elements.correo.value = p.correo || "";
     Object.keys(METAS_DEF).forEach(function (k) { f.elements[k].value = m[k]; });
     f.elements.nacimiento.max = isoDia(new Date());
     $("[data-consentimiento-estado]").textContent = consentOK() ? textoConsentimiento() + ". Puede retirarlo cuando quiera." : "";
-    $("[data-destino]").textContent = "El texto se enviará a: " + (p.medico ? p.medico + " · " : "") + "+" + (p.whatsapp || WA_CLINICA) + (p.whatsapp ? "" : " (clínica)") + ". Puede cambiarlo en «Mis datos».";
+    $("[data-destino]").textContent = "Destino: " + (p.medico ? p.medico + " · " : "") + "WhatsApp +" + (p.whatsapp || WA_CLINICA) + (p.whatsapp ? "" : " (clínica)") +
+      (p.correo ? " · correo " + p.correo : "") + ". Puede cambiarlo en «Mis datos».";
   }
   formPerfil.addEventListener("submit", function (e) {
     e.preventDefault();
     var f = e.currentTarget; if (!validar(f)) return;
     var wa = f.elements.whatsapp.value.trim();
     if (wa && !normalizarWA(wa)) { error(f, "Revise el número de WhatsApp de su médico."); return; }
+    var correo = f.elements.correo.value.trim();
+    if (correo && !normalizarCorreo(correo)) { error(f, "Revise el correo electrónico de su médico."); return; }
     if (Number(f.elements.gluAyMin.value) >= Number(f.elements.gluAyMax.value)) { error(f, "La glicemia en ayunas «desde» debe ser menor que «hasta»."); return; }
     datos.perfil.nombre = limpiar(f.elements.nombre.value, 80);
     datos.perfil.nacimiento = f.elements.nacimiento.value || "";
     datos.perfil.medico = limpiar(f.elements.medico.value, 80);
     datos.perfil.whatsapp = normalizarWA(wa);
+    datos.perfil.correo = normalizarCorreo(correo);
     Object.keys(METAS_DEF).forEach(function (k) { datos.metas[k] = Number(f.elements[k].value); });
     if (guardar()) { llenarPerfil(); pintarTodo(); mostrarApp(); irA("datos"); mostrarAlerta("ok", ["Cambios guardados."]); }
   });
@@ -886,8 +898,8 @@
         $("[data-preview-texto]").textContent = texto;
         var puede = navigator.canShare && navigator.canShare({ files: preparado.archivos });
         ayudaCompartir.textContent = puede ?
-          "Se abrirá el menú para compartir: elija WhatsApp y luego el chat de su médico. Se enviarán " + preparado.archivos.length + " archivo(s)." :
-          "Este navegador no permite compartir archivos directamente. Al pulsar el botón verde se guardará la imagen y se abrirá WhatsApp con el texto: adjunte la imagen en el chat con el clip 📎.";
+          "«Compartir» abre el menú del teléfono: elija WhatsApp, Gmail, Outlook, Telegram u otra aplicación y luego a su médico. Se enviarán " + preparado.archivos.length + " archivo(s) y el texto." :
+          "Este navegador no permite compartir archivos directamente: al compartir o enviar por correo se guardará la imagen en su equipo para que la adjunte.";
         vistaPrevia.hidden = false;
         vistaPrevia.scrollIntoView({ behavior: "smooth", block: "start" });
       });
@@ -916,7 +928,30 @@
       return;
     }
     descargar(preparado.url, preparado.png.name);
-    abrirWA(preparado.texto);
+    mostrarAlerta("aviso", ["Se guardó la imagen del resumen en su equipo (" + esc(preparado.png.name) + "). Adjúntela en el mensaje o correo para su médico. También puede usar «Enviar por correo» o «Enviar el texto al WhatsApp de mi médico»."]);
+  });
+  function textoPlano(t) { return t.replace(/[*_]/g, "").replace(/🔒 /g, ""); }
+  $("[data-enviar-correo]").addEventListener("click", function () {
+    if (!preparado) return;
+    var p = datos.perfil, asunto = "Resumen de control en casa – " + p.nombre + " – CONFIDENCIAL";
+    var cuerpo = textoPlano(preparado.texto) + "\n\nSe adjunta la imagen del resumen con gráficas.";
+    if (navigator.canShare && navigator.canShare({ files: preparado.archivos })) {
+      // Con adjuntos: el paciente elige su aplicación de correo en el menú del teléfono
+      if (p.correo && navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(p.correo).catch(function () {});
+      mostrarAlerta("aviso", [p.correo ? "Elija su aplicación de correo (Gmail, Outlook…). El correo de su médico, <strong>" + esc(p.correo) + "</strong>, quedó copiado: péguelo en «Para»." : "Elija su aplicación de correo (Gmail, Outlook…) y escriba el correo de su médico en «Para»."]);
+      navigator.share({ files: preparado.archivos, title: asunto, text: cuerpo }).catch(function () {});
+      return;
+    }
+    // Sin poder adjuntar automáticamente: se guarda la imagen y se abre el correo con el texto
+    descargar(preparado.url, preparado.png.name);
+    window.location.href = "mailto:" + encodeURIComponent(p.correo || "") + "?subject=" + encodeURIComponent(asunto) + "&body=" + encodeURIComponent(cuerpo);
+    mostrarAlerta("aviso", ["Se abrió su correo con el resumen y se guardó la imagen (" + esc(preparado.png.name) + "). Adjúntela antes de enviar."]);
+  });
+  $("[data-imprimir]").addEventListener("click", function () {
+    if (!preparado) return;
+    var img = document.querySelector("[data-imprimir-img]");
+    img.onload = function () { window.print(); };
+    if (img.src === preparado.url && img.complete) window.print(); else img.src = preparado.url;
   });
   $("[data-enviar-texto]").addEventListener("click", function () { if (preparado) abrirWA(preparado.texto); });
   $("[data-descargar]").addEventListener("click", function () { if (preparado) descargar(preparado.url, preparado.png.name); });
