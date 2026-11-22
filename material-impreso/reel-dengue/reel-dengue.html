@@ -34,7 +34,7 @@ body{font-family:"Open Sans",sans-serif;color:#fff;position:relative}
 
 /* ---------- Escenas ---------- */
 .esc{position:absolute;inset:0;opacity:0;animation:entra .6s ease var(--s) both}
-.esc>.in{position:absolute;inset:0;animation:sale .5s ease calc(var(--s) + var(--d) - .5s) forwards;padding:250px 80px 330px;display:flex;flex-direction:column;justify-content:center}
+.esc>.in{position:absolute;inset:0;animation:sale .5s ease calc(var(--s) + var(--d) - .5s) forwards;padding:300px 80px 320px;display:flex;flex-direction:column;justify-content:center}
 @keyframes entra{from{opacity:0}to{opacity:1}}
 @keyframes sale{to{opacity:0;transform:scale(1.04)}}
 .rv{animation:sube .8s cubic-bezier(.2,.85,.25,1) calc(var(--s) + .35s + var(--i,0) * .42s) both}
@@ -92,13 +92,17 @@ body{font-family:"Open Sans",sans-serif;color:#fff;position:relative}
 .dato .ico svg{stroke:#fff;width:48px;height:48px}
 .aviso{margin-top:60px;font-size:26px;opacity:.75;text-align:center;line-height:1.35}
 .marca{position:absolute;left:0;right:0;top:1640px;text-align:center;font-family:"Poppins";font-weight:600;font-size:30px;letter-spacing:.08em;opacity:.8}
+#cab{position:absolute;left:50%;top:70px;width:380px;margin-left:-190px;background:#fff;border-radius:28px;padding:10px 22px;box-shadow:0 14px 40px rgba(0,0,0,.28)}
+#cab img{display:block;width:100%}
 </style>
 </head>
 <body>
 <div id="bg"><div class="blob b1"></div><div class="blob b2"></div></div>
 <div id="bgRojo"></div>
 <div id="bgBlanco"></div>
-<svg class="pulso" style="top:150px" viewBox="0 0 1080 160"><path d="M0 80 H380 L420 80 L445 20 L475 140 L505 50 L525 80 H1080"/></svg>
+<svg class="pulso" style="top:75px" viewBox="0 0 1080 160"><path d="M0 80 H380 L420 80 L445 20 L475 140 L505 50 L525 80 H1080"/></svg>
+
+<div id="cab"><img src="logo.jpg" alt="Centro Médico Los Andes"></div>
 
 <!-- 1. Gancho -->
 <section class="esc" data-d="5.5"><div class="in" style="text-align:center;align-items:center">
@@ -129,7 +133,7 @@ body{font-family:"Open Sans",sans-serif;color:#fff;position:relative}
 </div></section>
 
 <!-- 3. Síntomas -->
-<section class="esc" data-d="10.5"><div class="in" style="padding-top:270px">
+<section class="esc" data-d="10.5"><div class="in" style="padding-top:300px">
   <div class="etq rv" style="--i:0">Síntomas</div>
   <div class="h tit rv" style="--i:1;font-size:80px;margin-top:24px">¿Cómo se manifiesta?</div>
   <div class="lista" style="gap:18px;margin-top:36px">
@@ -178,7 +182,7 @@ body{font-family:"Open Sans",sans-serif;color:#fff;position:relative}
 </div></section>
 
 <!-- 7. Signos de alarma (fondo rojo) -->
-<section class="esc rojo" data-d="13" id="escAlarma"><div class="in" style="padding-top:260px">
+<section class="esc rojo" data-d="13" id="escAlarma"><div class="in" style="padding-top:290px">
   <div class="etq rv" style="--i:0">⚠ Signos de alarma</div>
   <div class="lista" style="gap:16px;margin-top:34px">
     <div class="item rv" style="--i:1"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/><path d="M4 4l3 3M20 4l-3 3"/></svg></div><div class="tx">Dolor de barriga intenso y continuo</div></div>
@@ -240,6 +244,9 @@ function fondo(id, escId) {
 fondo("bgRojo", "escAlarma");
 const ic = escenas.findIndex((e) => e.id === "escCierre");
 document.getElementById("bgBlanco").animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, delay: tramos[ic][0] * 1000, fill: "both" });
+document.getElementById("cab").animate([{ opacity: 0, transform: "translateY(-30px)" }, { opacity: 1, transform: "none" }], { duration: 700, delay: 100, fill: "both", easing: "ease-out" });
+document.getElementById("cab").firstElementChild.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 500, delay: tramos[ic][0] * 1000, fill: "both" });
+document.getElementById("cab").animate([{ boxShadow: "0 14px 40px rgba(0,0,0,.28)" }, { boxShadow: "0 0 0 rgba(0,0,0,0)" }], { duration: 500, delay: tramos[ic][0] * 1000, fill: "forwards" });
 window.reel = { TOTAL };
 </script>
 </body>
