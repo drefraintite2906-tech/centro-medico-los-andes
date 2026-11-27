@@ -55,7 +55,7 @@
 
   /* ---------- Almacenamiento ---------- */
   function nuevo() {
-    return { version: 1, perfil: { nombre: "", nacimiento: "", medico: "", whatsapp: "", correo: "", acepto: false }, metas: Object.assign({}, METAS_DEF), presiones: [], glicemias: [], examenes: [] };
+    return { version: 1, perfil: { nombre: "", nacimiento: "", medico: "", whatsapp: "", correo: "", acepto: false }, metas: Object.assign({}, METAS_DEF), presiones: [], glicemias: [], examenes: [], nutri: Nutri.nuevoNutri() };
   }
   function normalizar(d) {
     var n = nuevo();
@@ -63,6 +63,7 @@
     n.perfil = Object.assign(n.perfil, d.perfil || {});
     n.metas = Object.assign(n.metas, d.metas || {});
     ["presiones", "glicemias", "examenes"].forEach(function (k) { n[k] = Array.isArray(d[k]) ? d[k].filter(function (r) { return r && r.id; }) : []; });
+    n.nutri = Nutri.normalizarNutri(d.nutri);
     return n;
   }
   var almacenOK = true;
@@ -321,9 +322,66 @@
     f.elements.correo.value = p.correo || "";
     Object.keys(METAS_DEF).forEach(function (k) { f.elements[k].value = m[k]; });
     f.elements.nacimiento.max = isoDia(new Date());
+    llenarNutri();
     $("[data-consentimiento-estado]").textContent = consentOK() ? textoConsentimiento() + ". Puede retirarlo cuando quiera." : "";
     $("[data-destino]").textContent = "Destino: " + (p.medico ? p.medico + " · " : "") + "WhatsApp +" + (p.whatsapp || WA_CLINICA) + (p.whatsapp ? "" : " (clínica)") +
       (p.correo ? " · correo " + p.correo : "") + ". Puede cambiarlo en «Mis datos».";
+  }
+  var LABS = ["glucosa", "hba1c", "colesterol", "ldl", "hdl", "trigliceridos", "creatinina", "acidoUrico"];
+  var CLASE_IMC = { bajo: "Bajo peso", normal: "Normal", sobrepeso: "Sobrepeso", obesidad1: "Obesidad grado I", obesidad2: "Obesidad grado II", obesidad3: "Obesidad grado III" };
+  function numONull(v) { v = String(v == null ? "" : v).trim().replace(",", "."); if (v === "") return null; var x = Number(v); return isFinite(x) ? x : null; }
+  function metaActual() { return Nutri.metaDiaria(datos.nutri.perfil, edad(datos.perfil.nacimiento)); }
+  function pintarMeta() {
+    var caja = $("[data-meta-explicacion]"); if (!caja) return;
+    var p = datos.nutri.perfil, h = "", im = Nutri.imc(p.pesoKg, p.tallaCm);
+    if (im && isFinite(im.valor)) h += "<p>Su índice de masa corporal (IMC) es <strong>" + String(Math.round(im.valor * 10) / 10).replace(".", ",") + "</strong>: " + esc(CLASE_IMC[im.clase] || "") + ".</p>";
+    var r = metaActual();
+    if (r.fuente === "medico") h += "<p><strong>Meta indicada por su médico: " + Math.round(r.kcal) + " kcal</strong></p>";
+    else if (r.fuente === "calculo") {
+      h += "<p><strong>Su meta diaria: " + Math.round(r.kcal) + " kcal</strong></p>";
+      if (r.detalle) h += "<p class=\"small\">" + esc(r.detalle) + "</p>";
+      if (r.minimoAplicado) h += "<p class=\"small\">Este es el mínimo seguro; consulte a su médico.</p>";
+    } else if (r.fuente === "requiereMedico") h += "<p>Pida a su médico su meta diaria de calorías.</p>";
+    else h += "<p>Complete sexo, peso, talla, fecha de nacimiento, actividad y objetivo para calcular su meta.</p>";
+    caja.innerHTML = h;
+  }
+  function llenarNutri() {
+    var f = formPerfil, p = datos.nutri.perfil;
+    Array.prototype.forEach.call(f.querySelectorAll('input[name="nSexo"]'), function (r) { r.checked = r.value === p.sexo; });
+    f.elements.nPeso.value = p.pesoKg == null ? "" : p.pesoKg;
+    f.elements.nTalla.value = p.tallaCm == null ? "" : p.tallaCm;
+    f.elements.nCintura.value = p.cinturaCm == null ? "" : p.cinturaCm;
+    f.elements.nActividad.value = p.actividad || "";
+    f.elements.nObjetivo.value = p.objetivo || "";
+    f.elements.nMetaMedico.value = p.metaMedico == null ? "" : p.metaMedico;
+    Array.prototype.forEach.call(f.querySelectorAll('input[name="nCond"]'), function (c) { c.checked = (p.condiciones || []).indexOf(c.value) >= 0; });
+    LABS.forEach(function (k) {
+      var l = p.labs && p.labs[k];
+      f.elements["lab_" + k].value = l && l.v != null ? l.v : "";
+      f.elements["labf_" + k].value = l && l.fecha ? l.fecha : "";
+      f.elements["labf_" + k].max = isoDia(new Date());
+    });
+    pintarMeta();
+  }
+  function guardarNutri(f) {
+    var p = datos.nutri.perfil, sx = f.querySelector('input[name="nSexo"]:checked');
+    p.sexo = sx ? sx.value : "";
+    p.pesoKg = numONull(f.elements.nPeso.value);
+    p.tallaCm = numONull(f.elements.nTalla.value);
+    p.cinturaCm = numONull(f.elements.nCintura.value);
+    p.actividad = f.elements.nActividad.value || "";
+    p.objetivo = f.elements.nObjetivo.value || "";
+    p.metaMedico = numONull(f.elements.nMetaMedico.value);
+    p.condiciones = Array.prototype.filter.call(f.querySelectorAll('input[name="nCond"]'), function (c) { return c.checked; }).map(function (c) { return c.value; });
+    p.labs = p.labs || {};
+    LABS.forEach(function (k) {
+      var v = numONull(f.elements["lab_" + k].value);
+      p.labs[k] = v == null ? null : { v: v, fecha: f.elements["labf_" + k].value || isoDia(new Date()) };
+    });
+    if (p.pesoKg != null) {
+      var ps = datos.nutri.pesos, ult = ps.length ? ps[ps.length - 1] : null;
+      if (!ult || ult.kg !== p.pesoKg) ps.push({ id: uid(), t: Date.now(), kg: p.pesoKg });
+    }
   }
   formPerfil.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -339,6 +397,7 @@
     datos.perfil.whatsapp = normalizarWA(wa);
     datos.perfil.correo = normalizarCorreo(correo);
     Object.keys(METAS_DEF).forEach(function (k) { datos.metas[k] = Number(f.elements[k].value); });
+    guardarNutri(f);
     if (guardar()) { llenarPerfil(); pintarTodo(); mostrarApp(); irA("datos"); mostrarAlerta("ok", ["Cambios guardados."]); }
   });
 

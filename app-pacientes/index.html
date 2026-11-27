@@ -340,6 +340,45 @@
               <div class="field"><label for="m-aymax">Glicemia en ayunas hasta</label><input id="m-aymax" name="gluAyMax" type="number" min="90" max="250" required></div>
               <div class="field field--full"><label for="m-post">Glicemia 2 h después de comer menor de</label><input id="m-post" name="gluPostMax" type="number" min="120" max="300" required></div>
             </div>
+            <h3 class="h4 salud-sub">Perfil nutricional</h3>
+            <p class="small muted">Opcional. Sirve para calcular su meta diaria de calorías.</p>
+            <div class="form__grid">
+              <fieldset class="field field--full"><legend>Sexo</legend>
+                <label class="check"><input type="radio" name="nSexo" value="M"><span>Hombre</span></label>
+                <label class="check"><input type="radio" name="nSexo" value="F"><span>Mujer</span></label>
+              </fieldset>
+              <div class="field"><label for="n-peso">Peso (kg)</label><input id="n-peso" name="nPeso" type="number" inputmode="decimal" min="20" max="400" step="0.1"></div>
+              <div class="field"><label for="n-talla">Talla (cm)</label><input id="n-talla" name="nTalla" type="number" inputmode="decimal" min="100" max="230" step="0.1"></div>
+              <div class="field"><label for="n-cintura">Cintura (cm)</label><input id="n-cintura" name="nCintura" type="number" inputmode="decimal" min="40" max="250" step="0.1"></div>
+              <div class="field"><label for="n-act">Actividad física</label><select id="n-act" name="nActividad">
+                <option value="">Seleccione</option><option value="sedentario">Sedentaria (casi no se mueve)</option><option value="ligera">Ligera (camina o se mueve 1 a 3 días)</option><option value="moderada">Moderada (ejercicio 3 a 5 días)</option><option value="intensa">Intensa (ejercicio casi todos los días)</option></select></div>
+              <div class="field"><label for="n-obj">Objetivo</label><select id="n-obj" name="nObjetivo">
+                <option value="">Seleccione</option><option value="bajar">Bajar de peso</option><option value="mantener">Mantener mi peso</option><option value="subir">Subir de peso</option></select></div>
+              <div class="field"><label for="n-meta">Meta de calorías indicada por mi médico</label><input id="n-meta" name="nMetaMedico" type="number" inputmode="numeric" min="1000" max="5000" step="10"><small class="hint">Si su médico le indicó una meta, escríbala aquí</small></div>
+            </div>
+            <fieldset class="field"><legend>Condiciones de salud</legend>
+              <label class="check"><input type="checkbox" name="nCond" value="dm2"><span>Diabetes tipo 2</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="prediabetes"><span>Prediabetes</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="hta"><span>Hipertensión arterial</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="dislipidemia"><span>Colesterol o triglicéridos altos</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="erc"><span>Enfermedad de los riñones</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="higado_graso"><span>Hígado graso</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="gota"><span>Gota o ácido úrico alto</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="embarazo"><span>Embarazo o lactancia</span></label>
+            </fieldset>
+            <h4 class="h4 salud-sub">Mis últimos laboratorios</h4>
+            <p class="small muted">Solo llene los que tenga. Si no pone fecha, se usa la de hoy.</p>
+            <div class="form__grid">
+              <div class="field"><label for="n-lab-glucosa">Glucosa en ayunas (mg/dL)</label><input id="n-lab-glucosa" name="lab_glucosa" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_glucosa" type="date" aria-label="Fecha de Glucosa en ayunas"></div>
+              <div class="field"><label for="n-lab-hba1c">Hemoglobina glicosilada (HbA1c) (%)</label><input id="n-lab-hba1c" name="lab_hba1c" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_hba1c" type="date" aria-label="Fecha de Hemoglobina glicosilada (HbA1c)"></div>
+              <div class="field"><label for="n-lab-colesterol">Colesterol total (mg/dL)</label><input id="n-lab-colesterol" name="lab_colesterol" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_colesterol" type="date" aria-label="Fecha de Colesterol total"></div>
+              <div class="field"><label for="n-lab-ldl">Colesterol LDL (mg/dL)</label><input id="n-lab-ldl" name="lab_ldl" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_ldl" type="date" aria-label="Fecha de Colesterol LDL"></div>
+              <div class="field"><label for="n-lab-hdl">Colesterol HDL (mg/dL)</label><input id="n-lab-hdl" name="lab_hdl" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_hdl" type="date" aria-label="Fecha de Colesterol HDL"></div>
+              <div class="field"><label for="n-lab-trigliceridos">Triglicéridos (mg/dL)</label><input id="n-lab-trigliceridos" name="lab_trigliceridos" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_trigliceridos" type="date" aria-label="Fecha de Triglicéridos"></div>
+              <div class="field"><label for="n-lab-creatinina">Creatinina (mg/dL)</label><input id="n-lab-creatinina" name="lab_creatinina" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_creatinina" type="date" aria-label="Fecha de Creatinina"></div>
+              <div class="field"><label for="n-lab-acidoUrico">Ácido úrico (mg/dL)</label><input id="n-lab-acidoUrico" name="lab_acidoUrico" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_acidoUrico" type="date" aria-label="Fecha de Ácido úrico"></div>
+            </div>
+            <div class="note" data-meta-explicacion aria-live="polite"></div>
             <p class="form__error" role="alert" data-form-error></p>
             <button class="btn btn--primary btn--block" type="submit">Guardar cambios</button>
           </form>
@@ -403,6 +442,7 @@
   </footer>
   <div class="solo-impresion" aria-hidden="true"><img data-imprimir-img alt=""></div>
   <script type="application/json" id="clinica-config">{"whatsapp": "50760568129", "whatsappVisible": "+507 6056-8129", "telefono": "237-9094", "prefijo": "+507", "nombre": "Centro Médico Los Andes", "logo": "assets/logo.jpg"}</script>
-  <script src="assets/app.js?v=3" defer></script>
+  <script src="assets/nutri.js?v=1" defer></script>
+  <script src="assets/app.js?v=4" defer></script>
 </body>
 </html>
