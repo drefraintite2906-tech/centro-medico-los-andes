@@ -25,7 +25,7 @@ const itemOk = { nombre: "Arroz", porcion: "1 taza", g: 150, kcal: 200, carb: 40
 function montar(opts = {}) {
   const contador = opts.contador || contadorMem();
   const llamadas = [];
-  const crearMensaje = opts.crearMensaje || (async (p) => { llamadas.push(p); return mensaje({ items: [itemOk], motivo: null }); });
+  const crearMensaje = opts.crearMensaje || (async (p) => { llamadas.push(p); return mensaje({ items: [itemOk], motivo: "" }); });
   const handler = crearHandler({ crearMensaje, contador, limiteMes: opts.limiteMes ?? 3000, ahora: AHORA });
   return { handler, contador, llamadas, crearMensaje };
 }
@@ -99,7 +99,7 @@ test("claves de contador en hora de Panamá", async () => {
 test("construirPeticion", () => {
   const p = construirPeticion({ imagen: IMG, tiempo: "cena", nota: "sin sal", dispositivo: DISP });
   assert.equal(p.model, "claude-opus-5-5");
-  assert.equal(p.max_tokens, 4000);
+  assert.equal(p.max_tokens, 16000);
   assert.equal(p.output_config.effort, "low");
   assert.equal(p.output_config.format.type, "json_schema");
   assert.equal(p.output_config.format.schema, ESQUEMA_PLATO);
@@ -147,7 +147,7 @@ test("sanea la respuesta", () => {
       { ...itemOk, kcal: "300", nombre: "y".repeat(200) },
       ...Array.from({ length: 38 }, () => itemOk),
     ],
-    motivo: null,
+    motivo: "",
   }));
   assert.equal(r.items.length, 30);
   assert.equal(r.items[0].kcal, 0);
@@ -188,4 +188,25 @@ test("validarSolicitud", () => {
   assert.equal(validarSolicitud({ ...base, dispositivo: "A!" }).ok, false);
   assert.equal(validarSolicitud({ ...base, nota: "x".repeat(121) }).ok, false);
   assert.equal(validarSolicitud(null).ok, false);
+});
+
+test("motivo es string en el esquema y \"\" se interpreta como null", () => {
+  assert.deepEqual(ESQUEMA_PLATO.properties.motivo, { type: "string" });
+  assert.equal(interpretarRespuesta(mensaje({ items: [itemOk], motivo: "" })).motivo, null);
+  assert.equal(interpretarRespuesta(mensaje({ items: [], motivo: "No es comida" })).motivo, "No es comida");
+});
+
+test("comida: motivo vacío llega como null al cliente", async () => {
+  const { handler } = montar();
+  const r = await handler(post(base));
+  assert.equal((await r.json()).motivo, null);
+});
+
+test("interpretarRespuesta usa el último bloque de texto", () => {
+  const r = interpretarRespuesta({ stop_reason: "end_turn", content: [
+    { type: "text", text: "{\"items\": [" },
+    { type: "text", text: JSON.stringify({ items: [itemOk], motivo: "" }) },
+  ] });
+  assert.equal(r.items.length, 1);
+  assert.equal(r.items[0].nombre, "Arroz");
 });

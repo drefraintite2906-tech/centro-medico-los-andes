@@ -31,7 +31,7 @@ export const ESQUEMA_PLATO = {
         additionalProperties: false,
       },
     },
-    motivo: { type: ["string", "null"] },
+    motivo: { type: "string" },
   },
   required: ["items", "motivo"],
   additionalProperties: false,
@@ -44,7 +44,7 @@ Por cada alimento devuelve: kcal, carbohidratos (carb, g), proteínas (prot, g),
 Usa solo estas etiquetas cuando apliquen: carne_roja, visceras, mariscos, bebida_azucarada, fritura, alcohol.
 Indica tu confianza en cada alimento: alta, media o baja.
 No des consejos médicos ni recomendaciones de salud.
-Si la imagen no es comida, devuelve items vacío y un motivo breve en español; si es comida, motivo es null.`;
+Si la imagen no es comida, devuelve items vacío y un motivo breve en español; si es comida, motivo es una cadena vacía ("").`;
 
 export function validarSolicitud(body) {
   if (!body || typeof body !== "object") return { ok: false };
@@ -61,7 +61,7 @@ export function validarSolicitud(body) {
 export function construirPeticion({ imagen, tiempo, nota }) {
   return {
     model: MODELO,
-    max_tokens: 4000,
+    max_tokens: 16000,
     system: SISTEMA,
     messages: [{
       role: "user",
@@ -86,7 +86,9 @@ const texto = (v, max) =>
 
 export function interpretarRespuesta(message) {
   if (!message || message.stop_reason === "refusal" || message.stop_reason === "max_tokens") throw new Error("ia");
-  const bloque = (message.content || []).find((b) => b && b.type === "text");
+  // Con fallbacks, un bloque parcial rechazado puede preceder a la respuesta final: se usa el último texto.
+  const textos = (message.content || []).filter((b) => b && b.type === "text");
+  const bloque = textos[textos.length - 1];
   if (!bloque) throw new Error("ia");
   let data;
   try { data = JSON.parse(bloque.text); } catch { throw new Error("ia"); }
