@@ -155,3 +155,43 @@ test("escalar: multiplicador no válido se toma como 1", () => {
     assert.strictEqual(N.escalar(a, m).kcal, a.kcal, String(m));
   }
 });
+
+// ---- Correcciones de la revisión ----
+function ids(r) { return r.map(function (a) { return a.id; }); }
+
+test("alimentos.json: marcado como no revisado y nota sin presentar los valores como transcritos", () => {
+  assert.strictEqual(tabla.revisado, false);
+  assert.strictEqual(tabla.revisadoPor, null);
+  assert.strictEqual(tabla.fechaRevision, null);
+  assert.ok(/no se transcribieron/i.test(tabla.nota), tabla.nota);
+  assert.ok(/verifi/i.test(tabla.nota) && /médico|nutricionista/i.test(tabla.nota), tabla.nota);
+});
+
+test("alimentos.json: sardinas con mariscos (purinas); jugos 100 % y duro con bebida_azucarada", () => {
+  assert.ok(porId("sardinas").etiquetas.indexOf("mariscos") !== -1);
+  assert.ok(porId("jugo_naranja").etiquetas.indexOf("bebida_azucarada") !== -1);
+  assert.ok(porId("duro").etiquetas.indexOf("bebida_azucarada") !== -1);
+  assert.strictEqual(porId("chicha_sin_azucar").etiquetas.indexOf("bebida_azucarada"), -1);
+});
+
+test("alimentos.json: valores corregidos de yuca hervida, combo de pollo y sopa instantánea", () => {
+  const y = porId("yuca_hervida");
+  assert.ok(y.kcal / y.g * 100 >= 100 && y.kcal / y.g * 100 <= 125, "yuca " + (y.kcal / y.g * 100));
+  const c = porId("pollo_frito_combo");
+  assert.ok(c.kcal >= 950 && c.kcal <= 1150, "combo " + c.kcal);
+  const s = porId("sopa_instantanea");
+  assert.ok(s.g >= 300, "sopa preparada pesa " + s.g);
+});
+
+test("buscar: las palabras coinciden al inicio de palabra, no en medio", () => {
+  assert.strictEqual(ids(N.buscar(lista, "pollo")).indexOf("ensalada_repollo"), -1);
+  assert.strictEqual(ids(N.buscar(lista, "seco")).indexOf("mezcla_nueces"), -1);
+  const r = ids(N.buscar(lista, "ñame"));
+  assert.strictEqual(r[0], "name_hervido");
+  assert.strictEqual(r.indexOf("queso_blanco"), -1);
+});
+
+test("buscar('coca cola') da primero la soda regular", () => {
+  assert.strictEqual(N.buscar(lista, "coca cola")[0].id, "soda_regular");
+  assert.strictEqual(N.buscar(lista, "pepsi")[0].id, "soda_regular");
+});

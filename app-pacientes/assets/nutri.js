@@ -310,7 +310,7 @@
   function sinAcentos(s) {
     if (s === null || s === undefined) return "";
     s = String(s).toLowerCase();
-    if (s.normalize) s = s.normalize("NFD").replace(/[̀-ͯ]/g, "");
+    if (s.normalize) s = s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     return s.replace(/[áàâäéèêëíìîïóòôöúùûüñç]/g, function (c) { return ACENTOS[c]; });
   }
 
@@ -318,7 +318,7 @@
     var partes = [a.nombre];
     var sin = a.sinonimos || [];
     for (var i = 0; i < sin.length; i++) partes.push(sin[i]);
-    return sinAcentos(partes.join(" | "));
+    return " " + sinAcentos(partes.join(" ")).replace(/[^a-z0-9]+/g, " ");
   }
 
   function usoDe(frecuentes, id) {
@@ -329,7 +329,7 @@
 
   function buscar(alimentos, q, frecuentes) {
     if (!alimentos || !alimentos.length) return [];
-    var qn = sinAcentos(q).replace(/\s+/g, " ").replace(/^ | $/g, "");
+    var qn = sinAcentos(q).replace(/[^a-z0-9]+/g, " ").replace(/^ | $/g, "");
     var palabras = qn ? qn.split(" ") : [];
     var cand = [];
     for (var i = 0; i < alimentos.length; i++) {
@@ -339,7 +339,7 @@
       var inicio = 0;
       if (palabras.length) {
         var h = textoBusqueda(a), ok = true;
-        for (var p = 0; p < palabras.length; p++) if (h.indexOf(palabras[p]) === -1) { ok = false; break; }
+        for (var p = 0; p < palabras.length; p++) if (h.indexOf(" " + palabras[p]) === -1) { ok = false; break; }
         if (!ok) continue;
         if (sinAcentos(a.nombre).indexOf(qn) === 0) inicio = 2;
         else {
