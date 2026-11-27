@@ -19,7 +19,7 @@
 /* Pestañas */
 .salud-tabs {
   position: sticky; top: calc(var(--header-h) + 6px); z-index: 20;
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: .35rem;
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .3rem;
   padding: .35rem; background: #fff; border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-sm);
 }
 .salud-tabs button {
@@ -30,8 +30,15 @@
 .salud-tabs button .icon { width: 1.45em; height: 1.45em; }
 .salud-tabs button:hover { background: var(--sky); color: var(--navy); }
 .salud-tabs button[aria-selected="true"] { background: var(--navy); color: #fff; }
+@media (max-width: 480px) {
+  .salud-tabs { gap: .15rem; padding: .3rem; }
+  .salud-tabs button { padding: .4rem 0; font-size: .68rem; letter-spacing: -.01em; }
+}
 @media (min-width: 720px) {
   .salud-tabs button { flex-direction: row; gap: .5rem; font-size: .95rem; }
+}
+@media (min-width: 720px) and (max-width: 960px) {
+  .salud-tabs button { flex-direction: column; gap: .2rem; font-size: .85rem; }
 }
 
 .salud-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 1.25rem; align-items: start; }
@@ -147,3 +154,79 @@
   .solo-impresion { display: block !important; }
   .solo-impresion img { width: 100%; height: auto; }
 }
+
+/* ---------- Comidas ---------- */
+.comidas-nav { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: .5rem; margin-bottom: .4rem; }
+.salud .card .comidas-nav__titulo { margin: 0; text-align: center; font-size: 1.15rem; }
+.comidas-nav__btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: #fff; color: var(--navy); font-size: 1rem; cursor: pointer; }
+.comidas-nav__btn:hover:not(:disabled) { background: var(--sky); border-color: var(--blue); }
+.comidas-nav__btn:disabled { opacity: .35; cursor: default; }
+.comidas-fecha { display: flex; align-items: center; justify-content: center; gap: .5rem; color: var(--muted); margin-bottom: .9rem; }
+.comidas-fecha input { width: auto; padding: .3rem .5rem; font-size: .9rem; }
+.comidas-aviso-meta { margin: 0 0 .9rem; }
+.comidas-aviso-meta .btn { margin-top: .6rem; }
+.comidas-total { margin: 0 0 .4rem; font-size: 1.05rem; color: var(--ink); }
+.comidas-total strong { font: 700 1.7rem/1.1 var(--font-head); color: var(--navy); }
+.comidas-total__pct { float: right; font-weight: 700; color: var(--navy); font-size: 1.15rem; }
+.comidas-barra { -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 16px; border: 0; border-radius: 999px; background: var(--sky); overflow: hidden; color: var(--navy); }
+.comidas-barra::-webkit-progress-bar { background: var(--sky); border-radius: 999px; }
+.comidas-barra::-webkit-progress-value { background: var(--navy); border-radius: 999px; }
+.comidas-barra::-moz-progress-bar { background: var(--navy); border-radius: 999px; }
+.comidas-barra--ambar { color: #D9822B; }
+.comidas-barra--ambar::-webkit-progress-value { background: #D9822B; }
+.comidas-barra--ambar::-moz-progress-bar { background: #D9822B; }
+.comidas-barra--verde { color: #1E8449; }
+.comidas-barra--verde::-webkit-progress-value { background: #1E8449; }
+.comidas-barra--verde::-moz-progress-bar { background: #1E8449; }
+.comidas-barra--rojo { color: #C0392B; }
+.comidas-barra--rojo::-webkit-progress-value { background: #C0392B; }
+.comidas-barra--rojo::-moz-progress-bar { background: #C0392B; }
+.comidas-macros { margin: .6rem 0 1rem; color: var(--muted); }
+.comidas-acciones { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; margin-bottom: 1rem; }
+.comidas-acciones .btn { flex-direction: column; gap: .25rem; padding: .6rem .3rem; white-space: normal; text-align: center; font-size: .85rem; line-height: 1.15; min-height: 64px; }
+.comidas-acciones .btn .icon { width: 1.4em; height: 1.4em; }
+.comidas-avisos { margin: 0 0 1rem; }
+.comidas-avisos ul { margin: 0; padding-left: 1.1rem; }
+.comidas-avisos li { margin-bottom: .3rem; }
+.comidas-tiempo { margin-top: 1rem; }
+.salud .comidas-tiempo h3 { display: flex; justify-content: space-between; margin: 0 0 .45rem; }
+.comidas-tiempo h3 span { font: 600 .95rem var(--font-body); color: var(--muted); }
+.comida-item { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.comida-item__txt { flex: 1 1 7rem; min-width: 0; display: flex; flex-direction: column; overflow-wrap: anywhere; }
+.comida-item__txt strong { color: var(--navy); font-weight: 600; }
+.comida-item__txt span { font-size: .85rem; color: var(--muted); }
+.comida-item__acciones { display: flex; gap: .5rem; align-items: center; margin-left: auto; }
+.comida-item .reg__borrar { grid-row: auto; grid-column: auto; flex: none; }
+.comida-item--baja { background: #FFF7E6; border-color: #F0C36D; }
+
+/* Diálogos de alimentación */
+.nutri-dialogo { width: min(560px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); border: 0; border-radius: var(--radius-lg, 18px); padding: 1.25rem 1.1rem; box-shadow: var(--shadow-lg); color: var(--ink); overflow-y: auto; overscroll-behavior: contain; }
+.nutri-dialogo::backdrop { background: rgba(11, 33, 64, .6); }
+.nutri-dialogo:not([open]) { display: none; }
+.nutri-dialogo[open] { position: fixed; inset: 0; margin: auto; height: fit-content; z-index: 1000; }
+.nutri-dialogo--sin-modal[open] { display: block; box-shadow: var(--shadow-lg), 0 0 0 100vmax rgba(11, 33, 64, .6); }
+.nutri-dialogo h2 { margin: 0 2.6rem .75rem 0; }
+.nutri-dialogo__cerrar { position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--gray); color: var(--navy); font-size: 1.5rem; line-height: 1; cursor: pointer; }
+.nutri-dialogo__nota { margin: .5rem 0 0; }
+.nutri-dialogo__acciones { display: grid; gap: .5rem; margin-top: 1rem; }
+.nutri-dialogo .field { margin-top: .75rem; }
+.nutri-resultados { margin-top: .75rem; }
+.nutri-resultados__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
+.nutri-resultados__lista button { width: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: .1rem; text-align: left; padding: .65rem .8rem; border: 1px solid var(--line); border-radius: 12px; background: #fff; cursor: pointer; font: inherit; color: var(--ink); }
+.nutri-resultados__lista button:hover { background: var(--sky); border-color: var(--blue); }
+.nutri-resultados__lista strong { color: var(--navy); font-weight: 600; }
+.nutri-resultados__lista span { font-size: .85rem; color: var(--muted); }
+.nutri-enlace { border: 0; background: none; padding: 0; color: var(--blue); text-decoration: underline; font: inherit; cursor: pointer; }
+.nutri-conf { list-style: none; margin: 0 0 .75rem; padding: 0; display: grid; gap: .6rem; }
+.nutri-conf__item { border: 1px solid var(--line); border-radius: 12px; padding: .6rem .7rem; }
+.nutri-conf__item--baja { background: #FFF7E6; border-color: #F0C36D; }
+.nutri-conf__baja { margin: .2rem 0 .3rem; color: #6B4A05; }
+.nutri-conf__cab { display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
+.nutri-conf__cab strong { color: var(--navy); overflow-wrap: anywhere; }
+.nutri-conf__kcal { margin: .35rem 0 0; color: var(--muted); }
+.nutri-conf__total { margin: .9rem 0 0; font-size: 1.05rem; }
+.nutri-mult { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-top: .45rem; }
+.nutri-mult button { min-width: 44px; height: 40px; padding: 0 .6rem; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--navy); font: 600 1rem var(--font-body); cursor: pointer; }
+.nutri-mult button[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+.nutri-mult__libre { display: flex; align-items: center; gap: .3rem; font-weight: 600; color: var(--navy); }
+.salud .nutri-mult__libre input { width: 5.2rem; padding: .35rem .5rem; font-size: 1rem; }

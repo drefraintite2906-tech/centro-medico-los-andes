@@ -1,10 +1,17 @@
 /* Mi control de salud – permite abrir la aplicación sin internet.
    Los datos del paciente NO pasan por aquí: viven en el teléfono (localStorage / IndexedDB). */
+// No cambie CACHE en cada versión: al activarse borra las cachés anteriores. Actualice PRECACHE (los ?v= deben
+// coincidir con index.html); cambiar este archivo basta para que el teléfono instale el trabajador nuevo.
 var CACHE = "cmla-mi-salud-v1";
 var BASE = new URL(self.registration.scope).pathname; // p. ej. /centro-medico-los-andes/
+var PRECACHE = [
+  "", "assets/alimentos.json",
+  "assets/sitio.css?v=1", "assets/app.css?v=7", "assets/nutri.js?v=5", "assets/app.js?v=10",
+  "assets/logo.jpg", "iconos/favicon.svg", "iconos/icono-180.png", "iconos/icono-192.png", "manifest.webmanifest"
+];
 
 self.addEventListener("install", function (e) {
-  e.waitUntil(caches.open(CACHE).then(function (c) { return c.add(BASE); }).then(function () { return self.skipWaiting(); }));
+  e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(PRECACHE.map(function (u) { return new Request(BASE + u, { cache: "reload" }); })); }).then(function () { return self.skipWaiting(); }));
 });
 
 self.addEventListener("activate", function (e) {

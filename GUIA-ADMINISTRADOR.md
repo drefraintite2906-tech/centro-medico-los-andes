@@ -111,3 +111,29 @@ Solo pueden entrar personas autorizadas (ver INSTRUCCIONES-PUBLICACION.md, paso 
 **Avisos automáticos:** al guardar una presión de 180/120 o más, una presión baja, una glicemia menor de 70 o de 300 o más, la app muestra qué hacer y cuándo acudir a urgencias.
 
 **Limitaciones:** si el paciente cambia de teléfono sin respaldo, pierde los datos; el médico no ve nada hasta que el paciente lo envía; no hay recordatorios automáticos. **No cambie la dirección de la app**: los datos de cada paciente quedan ligados a esa dirección.
+
+### Foto del plato (Alimentación)
+La pestaña **Comidas** permite al paciente anotar lo que come. Además de buscar en la tabla o escribir a mano, puede **tomar una foto del plato** y la inteligencia artificial de Anthropic estima las calorías (el paciente siempre revisa y corrige antes de guardar). Esta función **necesita una clave** que usted crea una sola vez. Sin la clave, el resto de la app funciona igual y la foto simplemente avisa que no está disponible.
+
+**Paso a paso (sin programar):**
+1. Entre a **console.anthropic.com** y cree una cuenta con el correo de la clínica. Agregue una tarjeta y un saldo inicial pequeño.
+2. En la consola, abra **API Keys → Create Key**, póngale un nombre (por ejemplo «App pacientes») y **copie la clave** (empieza con `sk-ant-`). Solo se muestra una vez; no la envíe por WhatsApp ni la escriba en ningún archivo del repositorio.
+3. **Ponga un límite de gasto mensual** (por ejemplo **US$ 50**) en la consola, en la sección de **Limits** o **Billing**. Así el costo nunca pasa de ese monto.
+4. Entre a **Netlify → su sitio → Site configuration → Environment variables → Add a variable** y cree:
+   - `ANTHROPIC_API_KEY` = la clave copiada en el paso 2 (obligatoria).
+   - `LIMITE_MENSUAL_FOTOS` = número máximo de fotos al mes entre todos los pacientes (opcional; si no la crea, el límite es **3000**).
+   - Además, cada teléfono puede enviar como máximo **20 fotos al día**. **Cada intento cuenta** para el límite diario y el mensual, **aunque el análisis falle** (sin conexión con la IA, foto que no es comida, etc.).
+5. Haga un **nuevo despliegue**: **Deploys → Trigger deploy → Deploy site**. Las variables solo se aplican al desplegar de nuevo.
+
+**Cómo probar:** con un teléfono, abra la app, **Comidas → Foto del plato** y pruebe con **20 fotos reales** de platos típicos (arroz con pollo, sancocho, hojaldras, ensaladas, bebidas, etc.). Revise que el nombre, la porción y las calorías sean razonables. Las estimaciones por foto son **aproximadas**; por eso el paciente debe confirmarlas. Si la app muestra «No se pudo analizar la foto; búsquela en la tabla.» en todas las fotos, revise la clave y el saldo en la consola de Anthropic; ese mismo mensaje aparece si falla el almacenamiento de Netlify donde se llevan los contadores de fotos (Netlify Blobs), y en ese caso la foto no se analiza.
+
+**Revisión de la tabla de alimentos (obligatoria antes de usarla con pacientes):** los valores de `app-pacientes/assets/alimentos.json` son **estimaciones preparadas, no verificadas**. Un **médico o nutricionista** de la clínica debe revisarlos y corregir lo que haga falta (cada alimento tiene calorías, carbohidratos, proteína, grasa, grasa saturada y sodio por porción). Cuando termine, al inicio del archivo cambie:
+- `"revisado": true`
+- `"revisadoPor": "Nombre y apellido del profesional"`
+- `"fechaRevision": "2026-12-15"` (la fecha real, año-mes-día)
+
+y publique el cambio. Mientras diga `false`, la app muestra el aviso de que la tabla no ha sido revisada.
+
+**Cuando se conecte el dominio propio de la clínica:** hay que actualizar **dos cosas** en `app-pacientes/index.html`, o la foto dejará de funcionar: (1) `"urlIA"` dentro del bloque `clinica-config`, con la nueva dirección (termina en `/api/analizar-plato`); y (2) en la política de seguridad (`Content-Security-Policy`, parte `connect-src`), el nuevo dominio en lugar de `https://centromedicolosandes.netlify.app`. Luego suba el número `?v=` de `app.js` y ponga el mismo número en la lista `PRECACHE` de `app-pacientes/sw.js`.
+
+**Privacidad:** la foto se envía solo para estimar calorías, no se guarda en la clínica, y la app pide permiso aparte al paciente la primera vez. El texto general del consentimiento ya lo menciona.

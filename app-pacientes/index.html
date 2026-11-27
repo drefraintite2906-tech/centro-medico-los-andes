@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; base-uri 'self'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://centromedicolosandes.netlify.app; base-uri 'self'; object-src 'none'">
   <title>Mi control de salud | Centro Médico Los Andes</title>
   <meta name="description" content="Anote su presión arterial, glicemia y exámenes en su celular y envíe a su médico un resumen con gráficas por WhatsApp. Gratis y privado: los datos quedan en su teléfono.">
   <meta name="robots" content="noindex">
@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap">
   <link rel="stylesheet" href="assets/sitio.css?v=1">
-  <link rel="stylesheet" href="assets/app.css?v=3">
+  <link rel="stylesheet" href="assets/app.css?v=7">
 </head>
 <body class="app-salud">
   <header class="app-bar">
@@ -93,6 +93,7 @@
       <div class="salud-tabs" role="tablist" aria-label="Secciones">
         <button type="button" role="tab" id="t-presion" aria-controls="p-presion" data-tab="presion"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg><span>Presión</span></button>
         <button type="button" role="tab" id="t-glicemia" aria-controls="p-glicemia" data-tab="glicemia"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.7s-6.5 7.1-6.5 11.8a6.5 6.5 0 0 0 13 0C18.5 9.8 12 2.7 12 2.7z"/></svg><span>Glicemia</span></button>
+        <button type="button" role="tab" id="t-comidas" aria-controls="p-comidas" data-tab="comidas"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg><span>Comidas</span></button>
         <button type="button" role="tab" id="t-examenes" aria-controls="p-examenes" data-tab="examenes"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 3h6"/><path d="M10 3v6.5L4.5 19A1.5 1.5 0 0 0 5.8 21h12.4a1.5 1.5 0 0 0 1.3-2L14 9.5V3"/><path d="M7 15h10"/></svg><span>Exámenes</span></button>
         <button type="button" role="tab" id="t-enviar" aria-controls="p-enviar" data-tab="enviar"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 20.5l1.3-4.1A8.6 8.6 0 1 1 8 19.6z"/><path d="M9.2 8.3c-.3 3.3 3.2 6.8 6.5 6.5l.9-1.5-2-1.1-.9.8a4.6 4.6 0 0 1-2.4-2.4l.8-.9-1.1-2z"/></svg><span>Enviar</span></button>
         <button type="button" role="tab" id="t-datos" aria-controls="p-datos" data-tab="datos"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Mis datos</span></button>
@@ -204,6 +205,37 @@
             <div class="salud-grafica"><canvas data-grafica="glicemia" role="img" aria-label="Gráfica de glicemia de los últimos 30 días"></canvas></div>
             <h3 class="h4">Mis registros</h3>
             <ul class="salud-lista" data-lista="glicemia"></ul>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="salud-panel" role="tabpanel" id="p-comidas" aria-labelledby="t-comidas" data-panel="comidas" hidden>
+        <div class="salud-grid">
+          <div class="card card--pad comidas-dia">
+            <div class="comidas-nav">
+              <button type="button" class="comidas-nav__btn" data-comidas-mover="-1" aria-label="Día anterior">◀</button>
+              <h2 class="h3 comidas-nav__titulo" data-comidas-titulo aria-live="polite"></h2>
+              <button type="button" class="comidas-nav__btn" data-comidas-mover="1" aria-label="Día siguiente">▶</button>
+            </div>
+            <label class="comidas-fecha small" for="c-fecha">Ver otro día <input id="c-fecha" type="date" data-comidas-fecha></label>
+            <div data-comidas-meta-aviso></div>
+            <p class="comidas-total" data-comidas-total></p>
+            <progress class="comidas-barra" data-comidas-barra max="100" value="0" aria-label="Avance hacia su meta diaria"></progress>
+            <p class="small comidas-macros" data-comidas-macros></p>
+            <div class="comidas-acciones">
+              <button type="button" class="btn btn--outline" data-comidas-foto><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg><span>Foto del plato</span></button>
+              <button type="button" class="btn btn--primary" data-comidas-buscar><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span>Buscar alimento</span></button>
+              <button type="button" class="btn btn--outline" data-comidas-manual><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg><span>Anotar a mano</span></button>
+            </div>
+            <div data-comidas-avisos></div>
+            <div class="comidas-lista" data-comidas-lista></div>
+          </div>
+          <div class="card card--pad salud-resumen">
+            <h2 class="h3">Últimos 7 días</h2>
+            <div class="salud-stats" data-stats="comidas"></div>
+            <div class="salud-grafica"><canvas data-grafica="comidas" role="img" aria-label="Gráfica de calorías de los últimos 7 días comparadas con su meta"></canvas></div>
+            <p class="small muted">Las calorías y nutrientes son aproximados. Su médico o nutricionista puede ajustar su meta.</p>
           </div>
         </div>
       </div>
@@ -340,6 +372,45 @@
               <div class="field"><label for="m-aymax">Glicemia en ayunas hasta</label><input id="m-aymax" name="gluAyMax" type="number" min="90" max="250" required></div>
               <div class="field field--full"><label for="m-post">Glicemia 2 h después de comer menor de</label><input id="m-post" name="gluPostMax" type="number" min="120" max="300" required></div>
             </div>
+            <h3 class="h4 salud-sub">Perfil nutricional</h3>
+            <p class="small muted">Opcional. Sirve para calcular su meta diaria de calorías.</p>
+            <div class="form__grid">
+              <fieldset class="field field--full"><legend>Sexo</legend>
+                <label class="check"><input type="radio" name="nSexo" value="M"><span>Hombre</span></label>
+                <label class="check"><input type="radio" name="nSexo" value="F"><span>Mujer</span></label>
+              </fieldset>
+              <div class="field"><label for="n-peso">Peso (kg)</label><input id="n-peso" name="nPeso" type="number" inputmode="decimal" min="20" max="400" step="0.1"></div>
+              <div class="field"><label for="n-talla">Talla (cm)</label><input id="n-talla" name="nTalla" type="number" inputmode="decimal" min="100" max="230" step="0.1"></div>
+              <div class="field"><label for="n-cintura">Cintura (cm)</label><input id="n-cintura" name="nCintura" type="number" inputmode="decimal" min="40" max="250" step="0.1"></div>
+              <div class="field"><label for="n-act">Actividad física</label><select id="n-act" name="nActividad">
+                <option value="">Seleccione</option><option value="sedentario">Sedentaria (casi no se mueve)</option><option value="ligera">Ligera (camina o se mueve 1 a 3 días)</option><option value="moderada">Moderada (ejercicio 3 a 5 días)</option><option value="intensa">Intensa (ejercicio casi todos los días)</option></select></div>
+              <div class="field"><label for="n-obj">Objetivo</label><select id="n-obj" name="nObjetivo">
+                <option value="">Seleccione</option><option value="bajar">Bajar de peso</option><option value="mantener">Mantener mi peso</option><option value="subir">Subir de peso</option></select></div>
+              <div class="field"><label for="n-meta">Meta de calorías indicada por mi médico</label><input id="n-meta" name="nMetaMedico" type="number" inputmode="numeric" min="1000" max="5000" step="10"><small class="hint">Si su médico le indicó una meta, escríbala aquí</small></div>
+            </div>
+            <fieldset class="field"><legend>Condiciones de salud</legend>
+              <label class="check"><input type="checkbox" name="nCond" value="dm2"><span>Diabetes tipo 2</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="prediabetes"><span>Prediabetes</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="hta"><span>Hipertensión arterial</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="dislipidemia"><span>Colesterol o triglicéridos altos</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="erc"><span>Enfermedad de los riñones</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="higado_graso"><span>Hígado graso</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="gota"><span>Gota o ácido úrico alto</span></label>
+              <label class="check"><input type="checkbox" name="nCond" value="embarazo"><span>Embarazo o lactancia</span></label>
+            </fieldset>
+            <h4 class="h4 salud-sub">Mis últimos laboratorios</h4>
+            <p class="small muted">Solo llene los que tenga. Si no pone fecha, se usa la de hoy.</p>
+            <div class="form__grid">
+              <div class="field"><label for="n-lab-glucosa">Glucosa en ayunas (mg/dL)</label><input id="n-lab-glucosa" name="lab_glucosa" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_glucosa" type="date" aria-label="Fecha de Glucosa en ayunas"></div>
+              <div class="field"><label for="n-lab-hba1c">Hemoglobina glicosilada (HbA1c) (%)</label><input id="n-lab-hba1c" name="lab_hba1c" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_hba1c" type="date" aria-label="Fecha de Hemoglobina glicosilada (HbA1c)"></div>
+              <div class="field"><label for="n-lab-colesterol">Colesterol total (mg/dL)</label><input id="n-lab-colesterol" name="lab_colesterol" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_colesterol" type="date" aria-label="Fecha de Colesterol total"></div>
+              <div class="field"><label for="n-lab-ldl">Colesterol LDL (mg/dL)</label><input id="n-lab-ldl" name="lab_ldl" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_ldl" type="date" aria-label="Fecha de Colesterol LDL"></div>
+              <div class="field"><label for="n-lab-hdl">Colesterol HDL (mg/dL)</label><input id="n-lab-hdl" name="lab_hdl" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_hdl" type="date" aria-label="Fecha de Colesterol HDL"></div>
+              <div class="field"><label for="n-lab-trigliceridos">Triglicéridos (mg/dL)</label><input id="n-lab-trigliceridos" name="lab_trigliceridos" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_trigliceridos" type="date" aria-label="Fecha de Triglicéridos"></div>
+              <div class="field"><label for="n-lab-creatinina">Creatinina (mg/dL)</label><input id="n-lab-creatinina" name="lab_creatinina" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_creatinina" type="date" aria-label="Fecha de Creatinina"></div>
+              <div class="field"><label for="n-lab-acidoUrico">Ácido úrico (mg/dL)</label><input id="n-lab-acidoUrico" name="lab_acidoUrico" type="number" inputmode="decimal" min="0" max="100000" step="any"><input name="labf_acidoUrico" type="date" aria-label="Fecha de Ácido úrico"></div>
+            </div>
+            <div class="note" data-meta-explicacion aria-live="polite"></div>
             <p class="form__error" role="alert" data-form-error></p>
             <button class="btn btn--primary btn--block" type="submit">Guardar cambios</button>
           </form>
@@ -362,6 +433,7 @@
               <summary>Ver el consentimiento</summary>
               <div data-consentimiento-texto></div>
             </details>
+            <button class="btn btn--outline btn--block" type="button" data-retirar-foto hidden>Retirar permiso de Foto del plato</button>
             <button class="btn btn--outline btn--block salud-peligro" type="button" data-retirar>Retirar mi consentimiento</button>
             <h3 class="h4 salud-sub">Borrar todo</h3>
             <p class="small muted">Elimina de este teléfono todos sus registros, fotos y datos personales.</p>
@@ -377,7 +449,7 @@
         <p><strong>Consentimiento informado para el registro y envío de datos de salud – «Mi control de salud»</strong><br>Versión 1.0 · noviembre de 2026</p>
         <p><strong>Responsable:</strong> Centro Médico Los Andes, Centro Comercial Los Andes, local B15, frente a Doit Center, Panamá. Teléfonos 237-9094 / 237-6615 · WhatsApp +507 6056-8129 · cmlosande2003@gmail.com.</p>
         <p><strong>1. Datos que se registran.</strong> Su nombre, fecha de nacimiento, el nombre y WhatsApp de su médico, sus tomas de presión arterial y pulso, sus glicemias, los resultados de exámenes (incluidas fotos o PDF) y las notas que usted escriba. Son <strong>datos sensibles de salud</strong> protegidos por la Ley 81 de 2019 sobre Protección de Datos Personales y su reglamento, y por la Ley 68 de 2003 sobre los derechos y deberes de los pacientes.</p>
-        <p><strong>2. Dónde se guardan.</strong> Únicamente en la memoria de este dispositivo (teléfono, tableta o computadora). <strong>No se envían a ningún servidor</strong> y la clínica no tiene acceso a ellos mientras usted no los envíe.</p>
+        <p><strong>2. Dónde se guardan.</strong> Únicamente en la memoria de este dispositivo (teléfono, tableta o computadora). <strong>No se envían a ningún servidor</strong> y la clínica no tiene acceso a ellos mientras usted no los envíe. La función opcional <em>Foto del plato</em> envía la imagen solo para estimar calorías y le pide su propio permiso.</p>
         <p><strong>3. Para qué se usan.</strong> Para que usted lleve el control de su salud en casa y, cuando usted lo decida, comparta un resumen con su médico tratante.</p>
         <p><strong>4. Envío y autorización.</strong> El envío es <strong>voluntario</strong> y lo hace usted mediante WhatsApp, un servicio de terceros sujeto a sus propias condiciones de privacidad. Verifique siempre que el número de destino sea el de su médico o el de la clínica. Al enviar, usted autoriza a Centro Médico Los Andes y a su médico tratante a recibir esa información, revisarla con fines de atención médica, incorporarla a su expediente clínico y comunicarse con usted sobre ella.</p>
         <p><strong>5. Confidencialidad.</strong> La información que la clínica reciba se trata con <strong>confidencialidad y secreto profesional</strong>: se usa exclusivamente para su atención médica, solo la consulta el personal de salud autorizado y no se comparte con terceros (incluido su empleador) sin su autorización escrita, salvo obligación legal o mandato de autoridad competente. Se conserva como parte de su expediente clínico durante el tiempo que exige la normativa.</p>
@@ -387,6 +459,124 @@
         <p><strong>9. Menores de edad y personas que no pueden decidir.</strong> El padre, la madre, el tutor o el representante legal otorga este consentimiento en su nombre.</p>
       </div>
     </template>
+    <input type="file" accept="image/*" capture="environment" hidden data-foto-plato>
+    <dialog class="nutri-dialogo" data-consent-foto aria-labelledby="cf-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="cf-titulo">Antes de usar la foto</h2>
+      <p>Si usa la función <em>Foto del plato</em>, la imagen se envía de forma segura a un servicio de inteligencia artificial (Anthropic) solo para estimar las calorías. La clínica no la guarda. El proveedor puede conservarla temporalmente por motivos de seguridad y no la usa para entrenar sus modelos. Las estimaciones son aproximadas y no sustituyen la orientación de su médico o nutricionista.</p>
+      <div class="nutri-dialogo__acciones">
+        <button type="button" class="btn btn--primary btn--block" data-consent-foto-acepto>Acepto</button>
+        <button type="button" class="btn btn--outline btn--block" data-consent-foto-no>Ahora no</button>
+      </div>
+    </dialog>
+    <dialog class="nutri-dialogo" data-dialogo-foto aria-labelledby="df-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="df-titulo">Foto del plato</h2>
+      <p class="small muted">Tome la foto con el plato completo y buena luz. Podrá revisar y corregir el resultado antes de agregarlo.</p>
+      <div class="field">
+        <label for="df-tiempo">Tiempo de comida</label>
+        <select id="df-tiempo" data-foto-tiempo>
+          <option value="desayuno">Desayuno</option>
+          <option value="almuerzo">Almuerzo</option>
+          <option value="merienda">Merienda</option>
+          <option value="cena">Cena</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="df-nota">Nota (opcional)</label>
+        <input id="df-nota" type="text" maxlength="120" data-foto-nota autocomplete="off" placeholder="Ej.: el arroz es integral">
+      </div>
+      <p class="small" role="status" aria-live="polite" data-foto-estado></p>
+      <div class="nutri-dialogo__acciones">
+        <button type="button" class="btn btn--primary btn--block" data-foto-elegir>Tomar o elegir foto</button>
+        <button type="button" class="btn btn--outline btn--block" data-cerrar-dialogo>Cancelar</button>
+      </div>
+    </dialog>
+    <dialog class="nutri-dialogo" data-dialogo-alimento aria-labelledby="da-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="da-titulo">Buscar alimento</h2>
+      <div class="field">
+        <label for="da-q">Escriba el alimento</label>
+        <input id="da-q" type="search" data-buscar-q autocomplete="off" maxlength="60" placeholder="Ej.: arroz, patacón, chicheme">
+      </div>
+      <p class="small muted nutri-dialogo__nota" data-tabla-nota hidden>Valores aproximados, pendientes de revisión clínica.</p>
+      <p class="small nutri-conf__baja" role="status" data-buscar-aviso hidden></p>
+      <div class="nutri-resultados" data-buscar-res aria-live="polite"></div>
+    </dialog>
+    <dialog class="nutri-dialogo" data-dialogo-confirmar aria-labelledby="dc-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="dc-titulo">Revise su comida</h2>
+      <p class="small muted" data-conf-dia></p>
+      <p class="small muted nutri-dialogo__nota" data-conf-nota hidden></p>
+      <ul class="nutri-conf" data-conf-items></ul>
+      <button type="button" class="btn btn--outline btn--sm" data-conf-otro>Agregar otro de la tabla</button>
+      <div class="field nutri-conf__tiempo">
+        <label for="dc-tiempo">Tiempo de comida</label>
+        <select id="dc-tiempo" data-conf-tiempo>
+          <option value="desayuno">Desayuno</option>
+          <option value="almuerzo">Almuerzo</option>
+          <option value="merienda">Merienda</option>
+          <option value="cena">Cena</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+      <p class="nutri-conf__total" data-conf-total></p>
+      <div class="nutri-dialogo__acciones">
+        <button type="button" class="btn btn--primary btn--block" data-conf-agregar>Agregar a mi día</button>
+        <button type="button" class="btn btn--outline btn--block" data-cerrar-dialogo>Cancelar</button>
+      </div>
+    </dialog>
+    <dialog class="nutri-dialogo" data-dialogo-manual aria-labelledby="dm-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="dm-titulo">Anotar a mano</h2>
+      <form class="form" data-form="manual" novalidate>
+        <div class="form__grid">
+          <div class="field field--full"><label for="dm-nombre">¿Qué comió? *</label><input id="dm-nombre" name="nombre" type="text" required maxlength="60" placeholder="Ej.: sancocho de la abuela"></div>
+          <div class="field field--full"><label for="dm-kcal">Calorías (kcal) *</label><input id="dm-kcal" name="kcal" type="number" inputmode="decimal" required min="1" max="5000" step="any"></div>
+          <div class="field"><label for="dm-carb">Carbohidratos (g)</label><input id="dm-carb" name="carb" type="number" inputmode="decimal" min="0" max="1000" step="any"></div>
+          <div class="field"><label for="dm-prot">Proteína (g)</label><input id="dm-prot" name="prot" type="number" inputmode="decimal" min="0" max="500" step="any"></div>
+          <div class="field"><label for="dm-grasa">Grasa (g)</label><input id="dm-grasa" name="grasa" type="number" inputmode="decimal" min="0" max="500" step="any"></div>
+          <div class="field"><label for="dm-sodio">Sodio (mg)</label><input id="dm-sodio" name="sodio" type="number" inputmode="decimal" min="0" max="20000" step="any"></div>
+        </div>
+        <p class="form__error" role="alert" data-form-error></p>
+        <div class="nutri-dialogo__acciones">
+          <button type="submit" class="btn btn--primary btn--block">Continuar</button>
+          <button type="button" class="btn btn--outline btn--block" data-cerrar-dialogo>Cancelar</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog class="nutri-dialogo" data-dialogo-editar aria-labelledby="de-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="de-titulo">Editar alimento</h2>
+      <form class="form" data-form="editar" novalidate>
+        <div class="form__grid">
+          <div class="field field--full"><label for="de-nombre">Alimento *</label><input id="de-nombre" name="nombre" type="text" required maxlength="80"></div>
+          <div class="field field--full"><label for="de-kcal">Calorías (kcal) *</label><input id="de-kcal" name="kcal" type="number" inputmode="decimal" required min="1" max="5000" step="any"></div>
+          <div class="field"><label for="de-carb">Carbohidratos (g)</label><input id="de-carb" name="carb" type="number" inputmode="decimal" min="0" max="1000" step="any"></div>
+          <div class="field"><label for="de-prot">Proteína (g)</label><input id="de-prot" name="prot" type="number" inputmode="decimal" min="0" max="500" step="any"></div>
+          <div class="field"><label for="de-grasa">Grasa (g)</label><input id="de-grasa" name="grasa" type="number" inputmode="decimal" min="0" max="500" step="any"></div>
+          <div class="field"><label for="de-gsat">Grasa saturada (g)</label><input id="de-gsat" name="grasaSat" type="number" inputmode="decimal" min="0" max="500" step="any"></div>
+          <div class="field"><label for="de-sodio">Sodio (mg)</label><input id="de-sodio" name="sodio" type="number" inputmode="decimal" min="0" max="20000" step="any"></div>
+        </div>
+        <p class="form__error" role="alert" data-form-error></p>
+        <div class="nutri-dialogo__acciones">
+          <button type="submit" class="btn btn--primary btn--block">Guardar</button>
+          <button type="button" class="btn btn--outline btn--block" data-cerrar-dialogo>Cancelar</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog class="nutri-dialogo" data-dialogo-porcion aria-labelledby="dp-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="dp-titulo">Cambiar porción</h2>
+      <p data-porcion-nombre></p>
+      <div data-porcion-control></div>
+      <p class="nutri-conf__total" data-porcion-kcal></p>
+      <div class="nutri-dialogo__acciones">
+        <button type="button" class="btn btn--primary btn--block" data-porcion-guardar>Guardar</button>
+        <button type="button" class="btn btn--outline btn--block" data-cerrar-dialogo>Cancelar</button>
+      </div>
+    </dialog>
     <div class="note note--warn salud-emergencia">
       <svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
       <p><strong>Esta herramienta no es un servicio de emergencias ni reemplaza la consulta.</strong> Acuda de inmediato a urgencias si tiene dolor de pecho, falta de aire, debilidad o adormecimiento de un lado del cuerpo, dificultad para hablar, confusión o desmayo, o si su presión está en 180/120 o más con síntomas.</p>
@@ -402,7 +592,8 @@
     </div>
   </footer>
   <div class="solo-impresion" aria-hidden="true"><img data-imprimir-img alt=""></div>
-  <script type="application/json" id="clinica-config">{"whatsapp": "50760568129", "whatsappVisible": "+507 6056-8129", "telefono": "237-9094", "prefijo": "+507", "nombre": "Centro Médico Los Andes", "logo": "assets/logo.jpg"}</script>
-  <script src="assets/app.js?v=3" defer></script>
+  <script type="application/json" id="clinica-config">{"whatsapp": "50760568129", "whatsappVisible": "+507 6056-8129", "telefono": "237-9094", "prefijo": "+507", "nombre": "Centro Médico Los Andes", "logo": "assets/logo.jpg", "urlIA": "https://centromedicolosandes.netlify.app/api/analizar-plato"}</script>
+  <script src="assets/nutri.js?v=5" defer></script>
+  <script src="assets/app.js?v=10" defer></script>
 </body>
 </html>
