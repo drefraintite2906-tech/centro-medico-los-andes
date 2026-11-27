@@ -178,7 +178,7 @@ datos.nutri = {
 
 ### 7.7 Consentimiento
 
-`CONSENT_VERSION` se queda en `"1.0"`, para que nadie tenga que volver a la bienvenida. Se agrega un consentimiento aparte, `perfil.consentimientoFoto = { version: "1.0", fecha }`, que se pide la primera vez que el paciente pulsa «Foto del plato». Su texto: «Si usa la función *Foto del plato*, la imagen se envía de forma segura a un servicio de inteligencia artificial (Anthropic) solo para estimar las calorías. La clínica no la guarda. Las estimaciones son aproximadas y no sustituyen la orientación de su médico o nutricionista».
+`CONSENT_VERSION` se queda en `"1.0"`, para que nadie tenga que volver a la bienvenida. Se agrega un consentimiento aparte, `perfil.consentimientoFoto = { version: "1.0", fecha }`, que se pide la primera vez que el paciente pulsa «Foto del plato». Su texto: «Si usa la función *Foto del plato*, la imagen se envía de forma segura a un servicio de inteligencia artificial (Anthropic) solo para estimar las calorías. La clínica no la guarda. El proveedor puede conservarla temporalmente por motivos de seguridad y no la usa para entrenar sus modelos. Las estimaciones son aproximadas y no sustituyen la orientación de su médico o nutricionista».
 
 La tabla y el registro manual funcionan sin aceptarlo.
 
@@ -196,6 +196,7 @@ Se agrega una sección «Alimentación» al PNG/PDF y al texto de WhatsApp que y
 - Cada paciente registra lo suyo; los datos se quedan en el teléfono; no hay nada en la web (decisión del director médico).
 - Enfoque mixto: foto con IA + tabla + manual (decisión del director médico).
 - Meta personal del director médico: 2500 kcal, como «meta indicada por el médico».
+- Retención en el proveedor de IA: se informa claramente en el consentimiento de la foto, sin acuerdo de cero retención por ahora (decisión del director médico, opción 2a). Se puede pedir ese acuerdo más adelante.
 
 ## 9. Decisiones que tomé yo (revíselas)
 
