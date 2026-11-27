@@ -159,3 +159,10 @@ test("normalizarNutri ignora claves de prototipo", () => {
   assert.strictEqual(Object.getPrototypeOf(r.alertasDia), Object.prototype);
   assert.strictEqual(Object.keys(r.frecuentes).length, 0);
 });
+
+test("normalizarNutri conserva dispositivo solo si es válido", () => {
+  assert.strictEqual(N.normalizarNutri({ dispositivo: "abc123def456ghi789jk" }).dispositivo, "abc123def456ghi789jk");
+  assert.strictEqual(N.normalizarNutri({ dispositivo: "ABC" }).dispositivo, undefined);
+  assert.strictEqual(N.normalizarNutri({ dispositivo: "a b c d e f g h" }).dispositivo, undefined);
+  assert.strictEqual(N.normalizarNutri({ dispositivo: 5 }).dispositivo, undefined);
+});

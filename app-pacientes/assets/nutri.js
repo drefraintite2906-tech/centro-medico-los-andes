@@ -115,6 +115,7 @@
     var r = nuevoNutri();
     try {
       if (!isObj(obj)) return r;
+      if (typeof obj.dispositivo === "string" && /^[a-z0-9]{8,40}$/.test(obj.dispositivo)) r.dispositivo = obj.dispositivo;
       r.perfil = normPerfil(obj.perfil);
       if (Array.isArray(obj.pesos)) r.pesos = obj.pesos.slice();
       if (Array.isArray(obj.comidas)) {

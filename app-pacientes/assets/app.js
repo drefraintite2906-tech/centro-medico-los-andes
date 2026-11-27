@@ -18,6 +18,8 @@
   var POSICIONES = { sentado: "sentado(a)", pie: "de pie", acostado: "acostado(a)" };
   var DIA = 86400000;
   var CONSENT_VERSION = "1.0";
+  // Función de IA (Netlify). Cambia cuando se conecte el dominio propio de la clínica: se edita "urlIA" en #clinica-config de index.html.
+  var URL_IA = CFG.urlIA || "https://centromedicolosandes.netlify.app/api/analizar-plato";
 
   function $(s, el) { return (el || raiz).querySelector(s); }
   function $$(s, el) { return Array.prototype.slice.call((el || raiz).querySelectorAll(s)); }
@@ -124,17 +126,17 @@
       fr.readAsDataURL(file);
     });
   }
-  function comprimirImagen(file) {
+  function comprimirImagen(file, maxLado, calidad) {
     return leerComoDataURL(file).then(function (url) {
       return new Promise(function (ok, mal) {
         var img = new Image();
         img.onload = function () {
-          var max = 1800, s = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+          var max = maxLado || 1800, s = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
           var c = document.createElement("canvas");
           c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
           var x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height);
           x.drawImage(img, 0, 0, c.width, c.height);
-          ok(c.toDataURL("image/jpeg", 0.85));
+          ok(c.toDataURL("image/jpeg", calidad || 0.85));
         };
         img.onerror = function () { mal(new Error("No se pudo leer la imagen")); };
         img.src = url;
@@ -1145,7 +1147,7 @@
 
   /* Buscar en la tabla */
   var dlgBuscar = $("[data-dialogo-alimento]"), buscarQ = $("[data-buscar-q]", dlgBuscar), buscarRes = $("[data-buscar-res]", dlgBuscar);
-  var buscarParaConf = false, ultimos = [];
+  var buscarParaConf = false, ultimos = [], buscarAviso = $("[data-buscar-aviso]", dlgBuscar);
   function pintarBusqueda() {
     if (!ALIM) { buscarRes.innerHTML = '<p class="salud-vacio">Cargando la tabla de alimentos…</p>'; return; }
     $("[data-tabla-nota]", dlgBuscar).hidden = alimRevisado;
@@ -1163,6 +1165,7 @@
   function abrirBusqueda(paraConf) {
     buscarParaConf = !!paraConf;
     buscarQ.value = "";
+    buscarAviso.hidden = true; buscarAviso.textContent = "";
     pintarBusqueda();
     abrirDialogo(dlgBuscar);
     if (!ALIM) cargarAlimentos().then(pintarBusqueda).catch(function () {
@@ -1178,8 +1181,9 @@
     if (!b) return;
     var a = ultimos[Number(b.getAttribute("data-res"))]; if (!a) return;
     var it = itemDesde(a, 1);
+    var paraConf = buscarParaConf;
     cerrarDialogo(dlgBuscar);
-    if (buscarParaConf && conf) agregarFilaConf(it); else abrirConfirmacion([it], "tabla");
+    if (paraConf && conf) agregarFilaConf(it); else abrirConfirmacion([it], "tabla");
   });
 
   /* Anotar a mano */
@@ -1198,8 +1202,87 @@
 
   $("[data-comidas-buscar]").addEventListener("click", function () { abrirBusqueda(false); });
   $("[data-comidas-manual]").addEventListener("click", abrirManual);
+
+  /* Foto del plato: consentimiento aparte, imagen reducida en memoria (no se guarda), confirmación y respaldo a la tabla */
+  var dlgConsFoto = $("[data-consent-foto]"), dlgFoto = $("[data-dialogo-foto]"), inpFoto = $("[data-foto-plato]");
+  var fotoTiempo = $("[data-foto-tiempo]", dlgFoto), fotoNota = $("[data-foto-nota]", dlgFoto), fotoEstado = $("[data-foto-estado]", dlgFoto), fotoElegir = $("[data-foto-elegir]", dlgFoto);
+  var fotoCtl = null, fotoOcupada = false;
+  function dispositivoId() {
+    var d = datos.nutri.dispositivo;
+    if (typeof d === "string" && /^[a-z0-9]{8,40}$/.test(d)) return d;
+    var abc = "abcdefghijklmnopqrstuvwxyz0123456789", s = "", i, a = null;
+    try { if (window.crypto && crypto.getRandomValues) a = crypto.getRandomValues(new Uint8Array(20)); } catch (e) {}
+    for (i = 0; i < 20; i++) s += abc.charAt((a ? a[i] : Math.floor(Math.random() * 256)) % 36);
+    datos.nutri.dispositivo = s; guardar();
+    return s;
+  }
+  function fotoOcupar(si) {
+    fotoOcupada = si; fotoElegir.disabled = si; fotoTiempo.disabled = si; fotoNota.disabled = si;
+    fotoEstado.textContent = si ? "Analizando la foto…" : "";
+  }
+  function fotoARespaldo(msg) {
+    fotoOcupar(false);
+    cerrarDialogo(dlgFoto);
+    abrirBusqueda(false);
+    buscarAviso.textContent = msg; buscarAviso.hidden = false;
+  }
+  function abrirFoto() {
+    fotoOcupar(false); fotoNota.value = "";
+    fotoTiempo.value = Nutri.tiempoPorHora(new Date());
+    abrirDialogo(dlgFoto);
+  }
   $("[data-comidas-foto]").addEventListener("click", function () {
-    mostrarAlerta("aviso", ["El análisis de la foto del plato estará disponible pronto. Mientras tanto, use «Buscar alimento» o «Anotar a mano»."]);
+    var c = datos.perfil.consentimientoFoto;
+    if (c && c.version === CONSENT_VERSION) abrirFoto(); else abrirDialogo(dlgConsFoto);
+  });
+  dlgConsFoto.addEventListener("click", function (e) {
+    if (e.target.closest("[data-consent-foto-acepto]")) {
+      datos.perfil.consentimientoFoto = { version: CONSENT_VERSION, fecha: new Date().toISOString() };
+      if (!guardar()) { delete datos.perfil.consentimientoFoto; return; }
+      cerrarDialogo(dlgConsFoto); abrirFoto();
+    } else if (e.target.closest("[data-consent-foto-no]")) {
+      cerrarDialogo(dlgConsFoto); abrirBusqueda(false);
+    }
+  });
+  fotoElegir.addEventListener("click", function () { if (!fotoOcupada) inpFoto.click(); });
+  dlgFoto.addEventListener("close", function () { if (fotoCtl) { try { fotoCtl.abort(); } catch (e) {} } fotoOcupar(false); });
+  inpFoto.addEventListener("change", function () {
+    var file = inpFoto.files && inpFoto.files[0];
+    inpFoto.value = "";
+    if (!file || fotoOcupada) return;
+    var MSG_ERR = "No se pudo analizar la foto; búsquela en la tabla.";
+    if (navigator.onLine === false) { fotoARespaldo(MSG_ERR); return; }
+    fotoOcupar(true);
+    var ctl = typeof AbortController === "function" ? new AbortController() : null;
+    fotoCtl = ctl;
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 45000);
+    function fin() { clearTimeout(timer); if (fotoCtl === ctl) fotoCtl = null; }
+    comprimirImagen(file, 1024, 0.7).then(function (url) {
+      var cuerpo = { imagen: url.split(",")[1], tiempo: fotoTiempo.value, dispositivo: dispositivoId() };
+      var nota = limpiar(fotoNota.value, 120); if (nota) cuerpo.nota = nota;
+      return fetch(URL_IA, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(cuerpo), signal: ctl ? ctl.signal : undefined });
+    }).then(function (r) {
+      return r.json().catch(function () { return null; }).then(function (j) { return { ok: r.ok, status: r.status, json: j }; });
+    }).then(function (r) {
+      fin();
+      if (!dlgFoto.hasAttribute("open")) return;
+      if (!r.ok) {
+        fotoARespaldo(r.status === 429 && r.json && r.json.error === "limite_dia" ? "Llegó al límite de fotos de hoy; búsquela en la tabla." : MSG_ERR);
+        return;
+      }
+      var items = r.json && Array.isArray(r.json.items) ? r.json.items.filter(function (x) { return x && typeof x === "object"; }) : [];
+      if (!items.length) {
+        fotoARespaldo(r.json && typeof r.json.motivo === "string" && r.json.motivo ? r.json.motivo : MSG_ERR);
+        return;
+      }
+      var tiempo = fotoTiempo.value;
+      fotoOcupar(false); cerrarDialogo(dlgFoto);
+      abrirConfirmacion(items, "foto");
+      confTiempo.value = tiempo;
+    }).catch(function () {
+      fin();
+      if (dlgFoto.hasAttribute("open")) fotoARespaldo(MSG_ERR);
+    });
   });
 
   /* ---------- Resumen para el médico ---------- */

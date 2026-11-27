@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; base-uri 'self'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://centromedicolosandes.netlify.app; base-uri 'self'; object-src 'none'">
   <title>Mi control de salud | Centro Médico Los Andes</title>
   <meta name="description" content="Anote su presión arterial, glicemia y exámenes en su celular y envíe a su médico un resumen con gráficas por WhatsApp. Gratis y privado: los datos quedan en su teléfono.">
   <meta name="robots" content="noindex">
@@ -458,6 +458,40 @@
         <p><strong>9. Menores de edad y personas que no pueden decidir.</strong> El padre, la madre, el tutor o el representante legal otorga este consentimiento en su nombre.</p>
       </div>
     </template>
+    <input type="file" accept="image/*" capture="environment" hidden data-foto-plato>
+    <dialog class="nutri-dialogo" data-consent-foto aria-labelledby="cf-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="cf-titulo">Antes de usar la foto</h2>
+      <p>Si usa la función <em>Foto del plato</em>, la imagen se envía de forma segura a un servicio de inteligencia artificial (Anthropic) solo para estimar las calorías. La clínica no la guarda. El proveedor puede conservarla temporalmente por motivos de seguridad y no la usa para entrenar sus modelos. Las estimaciones son aproximadas y no sustituyen la orientación de su médico o nutricionista.</p>
+      <div class="nutri-dialogo__acciones">
+        <button type="button" class="btn btn--primary btn--block" data-consent-foto-acepto>Acepto</button>
+        <button type="button" class="btn btn--outline btn--block" data-consent-foto-no>Ahora no</button>
+      </div>
+    </dialog>
+    <dialog class="nutri-dialogo" data-dialogo-foto aria-labelledby="df-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="df-titulo">Foto del plato</h2>
+      <p class="small muted">Tome la foto con el plato completo y buena luz. Podrá revisar y corregir el resultado antes de agregarlo.</p>
+      <div class="field">
+        <label for="df-tiempo">Tiempo de comida</label>
+        <select id="df-tiempo" data-foto-tiempo>
+          <option value="desayuno">Desayuno</option>
+          <option value="almuerzo">Almuerzo</option>
+          <option value="merienda">Merienda</option>
+          <option value="cena">Cena</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="df-nota">Nota (opcional)</label>
+        <input id="df-nota" type="text" maxlength="120" data-foto-nota autocomplete="off" placeholder="Ej.: el arroz es integral">
+      </div>
+      <p class="small" role="status" aria-live="polite" data-foto-estado></p>
+      <div class="nutri-dialogo__acciones">
+        <button type="button" class="btn btn--primary btn--block" data-foto-elegir>Tomar o elegir foto</button>
+        <button type="button" class="btn btn--outline btn--block" data-cerrar-dialogo>Cancelar</button>
+      </div>
+    </dialog>
     <dialog class="nutri-dialogo" data-dialogo-alimento aria-labelledby="da-titulo">
       <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
       <h2 class="h3" id="da-titulo">Buscar alimento</h2>
@@ -466,6 +500,7 @@
         <input id="da-q" type="search" data-buscar-q autocomplete="off" maxlength="60" placeholder="Ej.: arroz, patacón, chicheme">
       </div>
       <p class="small muted nutri-dialogo__nota" data-tabla-nota hidden>Valores aproximados, pendientes de revisión clínica.</p>
+      <p class="small nutri-conf__baja" role="status" data-buscar-aviso hidden></p>
       <div class="nutri-resultados" data-buscar-res aria-live="polite"></div>
     </dialog>
     <dialog class="nutri-dialogo" data-dialogo-confirmar aria-labelledby="dc-titulo">
@@ -535,8 +570,8 @@
     </div>
   </footer>
   <div class="solo-impresion" aria-hidden="true"><img data-imprimir-img alt=""></div>
-  <script type="application/json" id="clinica-config">{"whatsapp": "50760568129", "whatsappVisible": "+507 6056-8129", "telefono": "237-9094", "prefijo": "+507", "nombre": "Centro Médico Los Andes", "logo": "assets/logo.jpg"}</script>
-  <script src="assets/nutri.js?v=1" defer></script>
-  <script src="assets/app.js?v=6" defer></script>
+  <script type="application/json" id="clinica-config">{"whatsapp": "50760568129", "whatsappVisible": "+507 6056-8129", "telefono": "237-9094", "prefijo": "+507", "nombre": "Centro Médico Los Andes", "logo": "assets/logo.jpg", "urlIA": "https://centromedicolosandes.netlify.app/api/analizar-plato"}</script>
+  <script src="assets/nutri.js?v=2" defer></script>
+  <script src="assets/app.js?v=7" defer></script>
 </body>
 </html>
