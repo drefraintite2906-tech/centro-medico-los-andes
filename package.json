@@ -18,5 +18,9 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.14.0",
+    "@netlify/blobs": "^11.1.12"
   }
 }
