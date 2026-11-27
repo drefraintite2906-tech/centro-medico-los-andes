@@ -201,6 +201,9 @@
 /* Diálogos de alimentación */
 .nutri-dialogo { width: min(560px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); border: 0; border-radius: var(--radius-lg, 18px); padding: 1.25rem 1.1rem; box-shadow: var(--shadow-lg); color: var(--ink); overflow-y: auto; overscroll-behavior: contain; }
 .nutri-dialogo::backdrop { background: rgba(11, 33, 64, .6); }
+.nutri-dialogo:not([open]) { display: none; }
+.nutri-dialogo[open] { position: fixed; inset: 0; margin: auto; height: fit-content; z-index: 1000; }
+.nutri-dialogo--sin-modal[open] { display: block; box-shadow: var(--shadow-lg), 0 0 0 100vmax rgba(11, 33, 64, .6); }
 .nutri-dialogo h2 { margin: 0 2.6rem .75rem 0; }
 .nutri-dialogo__cerrar { position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--gray); color: var(--navy); font-size: 1.5rem; line-height: 1; cursor: pointer; }
 .nutri-dialogo__nota { margin: .5rem 0 0; }

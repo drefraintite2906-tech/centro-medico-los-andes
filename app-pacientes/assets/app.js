@@ -398,7 +398,11 @@
     datos.perfil.correo = normalizarCorreo(correo);
     Object.keys(METAS_DEF).forEach(function (k) { datos.metas[k] = Number(f.elements[k].value); });
     guardarNutri(f);
-    if (guardar()) { llenarPerfil(); pintarTodo(); mostrarApp(); irA("datos"); mostrarAlerta("ok", ["Cambios guardados."]); }
+    if (guardar()) {
+      llenarPerfil(); pintarTodo(); mostrarApp(); irA("datos");
+      // Si la meta cambió y cruza un umbral hoy, se avisa ya (nunca se repite un umbral mostrado)
+      if (!revisarAlertas(isoDia(new Date()), ["Cambios guardados."])) mostrarAlerta("ok", ["Cambios guardados."]);
+    }
   });
 
   /* ---------- Presión ---------- */
@@ -819,29 +823,48 @@
     Array.prototype.forEach.call(caja.querySelectorAll("[data-mult]"), function (b) { b.setAttribute("aria-pressed", Number(b.getAttribute("data-mult")) === m ? "true" : "false"); });
   }
 
-  function abrirDialogo(d) { if (d.showModal) { if (!d.open) d.showModal(); } else d.setAttribute("open", ""); }
-  function cerrarDialogo(d) { if (d.close) { if (d.open) d.close(); } else d.removeAttribute("open"); }
+  // Sin soporte de <dialog> (iOS < 15.4, WebView antiguos): se abre como capa fija con fondo y se emite «close» a mano
+  var capaDialogo = 1000;
+  function abrirDialogo(d) {
+    if (typeof d.showModal === "function") { if (!d.open) d.showModal(); return; }
+    if (d.hasAttribute("open")) return;
+    d.classList.add("nutri-dialogo--sin-modal"); d.style.zIndex = String(++capaDialogo);
+    d.setAttribute("open", "");
+  }
+  function cerrarDialogo(d) {
+    if (typeof d.close === "function" && typeof d.showModal === "function") { if (d.open) d.close(); return; }
+    if (!d.hasAttribute("open")) return;
+    d.removeAttribute("open"); capaDialogo = Math.max(1000, capaDialogo - 1);
+    var ev; try { ev = new Event("close"); } catch (e) { ev = document.createEvent("Event"); ev.initEvent("close", false, false); }
+    d.dispatchEvent(ev);
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    var abiertos = $$(".nutri-dialogo--sin-modal[open]");
+    if (abiertos.length) cerrarDialogo(abiertos.reduce(function (a, b) { return Number(b.style.zIndex) > Number(a.style.zIndex) ? b : a; }));
+  });
   $$(".nutri-dialogo").forEach(function (d) {
     d.addEventListener("click", function (e) { if (e.target.closest("[data-cerrar-dialogo]")) cerrarDialogo(d); });
   });
 
   /* Alertas de 80/100/110 %: solo para el día de hoy, una vez por umbral */
-  function revisarAlertas(dia) {
+  function revisarAlertas(dia, previos) {
     var hoy = hoyISO();
-    if (dia !== hoy) return;
+    if (dia !== hoy) return false;
     var meta = metaKcal(metaActual());
-    if (!meta) return;
+    if (!meta) return false;
     var kcal = Nutri.totalesDia(datos.nutri.comidas, hoy).kcal;
     var ad = datos.nutri.alertasDia, ya = Array.isArray(ad[hoy]) ? ad[hoy] : [];
     var nuevos = Nutri.alertasPorMostrar(Nutri.nivelAlerta(kcal, meta), ya);
-    if (!nuevos.length) return;
+    if (!nuevos.length) return false;
     var nivel = nuevos[nuevos.length - 1];
     ad[hoy] = ya.concat(nuevos);
     var limite = sumarDias(hoy, -30);
     Object.keys(ad).forEach(function (k) { if (k < limite) delete ad[k]; });
     guardar();
-    mostrarAlerta(TIPO_ALERTA[nivel] || "aviso", ["<strong>" + esc(Nutri.textoAlerta(nivel, kcal, meta)) + "</strong>"]);
+    mostrarAlerta(TIPO_ALERTA[nivel] || "aviso", (previos || []).concat(["<strong>" + esc(Nutri.textoAlerta(nivel, kcal, meta)) + "</strong>"]));
     try { if (navigator.vibrate) navigator.vibrate(200); } catch (e) {}
+    return true;
   }
 
   function limpiarItem(it) {
@@ -913,7 +936,8 @@
     }
     pc.macros.innerHTML = "Carbohidratos " + miles(tot.carb) + " g · Proteína " + miles(tot.prot) + " g · Grasa " + miles(tot.grasa) + " g · Sodio ~" + miles(tot.sodio) + " mg";
 
-    var av = Nutri.avisosCondicion(datos.nutri.perfil, tot, cs, hoy);
+    // Los avisos hablan de «hoy»: solo se muestran al ver el día de hoy
+    var av = dia === hoy ? Nutri.avisosCondicion(datos.nutri.perfil, tot, cs, hoy) : [];
     pc.avisos.innerHTML = av.length ? '<div class="note note--warn comidas-avisos"><ul>' + av.map(function (a) { return "<li>" + esc(a.texto) + "</li>"; }).join("") + "</ul></div>" : "";
 
     if (!cs.length) pc.lista.innerHTML = '<p class="salud-vacio">Aún no hay comidas anotadas ' + (dia === hoy ? "hoy" : "este día") + ".</p>";
@@ -1147,6 +1171,7 @@
     setTimeout(function () { try { buscarQ.focus(); } catch (e) {} }, 30);
   }
   buscarQ.addEventListener("input", pintarBusqueda);
+  dlgBuscar.addEventListener("close", function () { buscarParaConf = false; });
   dlgBuscar.addEventListener("click", function (e) {
     if (e.target.closest("[data-ir-manual]")) { cerrarDialogo(dlgBuscar); abrirManual(); return; }
     var b = e.target.closest("[data-res]");
