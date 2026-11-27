@@ -9,6 +9,7 @@
     "build": "eleventy",
     "cms": "npx decap-server",
     "clean": "rm -rf _site",
+    "test": "node --test \"tests/*.test.*\"",
     "video:tv": "node herramientas/grabar-video-tv.cjs"
   },
   "devDependencies": {
