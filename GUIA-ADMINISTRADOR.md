@@ -122,9 +122,10 @@ La pestaña **Comidas** permite al paciente anotar lo que come. Además de busca
 4. Entre a **Netlify → su sitio → Site configuration → Environment variables → Add a variable** y cree:
    - `ANTHROPIC_API_KEY` = la clave copiada en el paso 2 (obligatoria).
    - `LIMITE_MENSUAL_FOTOS` = número máximo de fotos al mes entre todos los pacientes (opcional; si no la crea, el límite es **3000**).
+   - Además, cada teléfono puede enviar como máximo **20 fotos al día**. **Cada intento cuenta** para el límite diario y el mensual, **aunque el análisis falle** (sin conexión con la IA, foto que no es comida, etc.).
 5. Haga un **nuevo despliegue**: **Deploys → Trigger deploy → Deploy site**. Las variables solo se aplican al desplegar de nuevo.
 
-**Cómo probar:** con un teléfono, abra la app, **Comidas → Foto del plato** y pruebe con **20 fotos reales** de platos típicos (arroz con pollo, sancocho, hojaldras, ensaladas, bebidas, etc.). Revise que el nombre, la porción y las calorías sean razonables. Las estimaciones por foto son **aproximadas**; por eso el paciente debe confirmarlas.
+**Cómo probar:** con un teléfono, abra la app, **Comidas → Foto del plato** y pruebe con **20 fotos reales** de platos típicos (arroz con pollo, sancocho, hojaldras, ensaladas, bebidas, etc.). Revise que el nombre, la porción y las calorías sean razonables. Las estimaciones por foto son **aproximadas**; por eso el paciente debe confirmarlas. Si la app muestra «No se pudo analizar la foto; búsquela en la tabla.» en todas las fotos, revise la clave y el saldo en la consola de Anthropic; ese mismo mensaje aparece si falla el almacenamiento de Netlify donde se llevan los contadores de fotos (Netlify Blobs), y en ese caso la foto no se analiza.
 
 **Revisión de la tabla de alimentos (obligatoria antes de usarla con pacientes):** los valores de `app-pacientes/assets/alimentos.json` son **estimaciones preparadas, no verificadas**. Un **médico o nutricionista** de la clínica debe revisarlos y corregir lo que haga falta (cada alimento tiene calorías, carbohidratos, proteína, grasa, grasa saturada y sodio por porción). Cuando termine, al inicio del archivo cambie:
 - `"revisado": true`
@@ -133,6 +134,6 @@ La pestaña **Comidas** permite al paciente anotar lo que come. Además de busca
 
 y publique el cambio. Mientras diga `false`, la app muestra el aviso de que la tabla no ha sido revisada.
 
-**Cuando se conecte el dominio propio de la clínica:** hay que actualizar **dos cosas** en `app-pacientes/index.html`, o la foto dejará de funcionar: (1) `"urlIA"` dentro del bloque `clinica-config`, con la nueva dirección (termina en `/api/analizar-plato`); y (2) en la política de seguridad (`Content-Security-Policy`, parte `connect-src`), el nuevo dominio en lugar de `https://centromedicolosandes.netlify.app`. Luego suba el número `?v=` de `app.js`.
+**Cuando se conecte el dominio propio de la clínica:** hay que actualizar **dos cosas** en `app-pacientes/index.html`, o la foto dejará de funcionar: (1) `"urlIA"` dentro del bloque `clinica-config`, con la nueva dirección (termina en `/api/analizar-plato`); y (2) en la política de seguridad (`Content-Security-Policy`, parte `connect-src`), el nuevo dominio en lugar de `https://centromedicolosandes.netlify.app`. Luego suba el número `?v=` de `app.js` y ponga el mismo número en la lista `PRECACHE` de `app-pacientes/sw.js`.
 
 **Privacidad:** la foto se envía solo para estimar calorías, no se guarda en la clínica, y la app pide permiso aparte al paciente la primera vez. El texto general del consentimiento ya lo menciona.

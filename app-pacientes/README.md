@@ -11,6 +11,6 @@ https://drefraintite2906-tech.github.io/centro-medico-los-andes/
 - `assets/sitio.css`: copia de los estilos del sitio web · `assets/app.css`: estilos propios.
 - `manifest.webmanifest` y `sw.js`: instalable y funciona sin internet.
 
-Después de cambiar `app.js`, `nutri.js` o los CSS, suba el número `?v=` en `index.html` para que los teléfonos descarguen la versión nueva.
+Después de cambiar `app.js`, `nutri.js` o los CSS, suba el número `?v=` en `index.html` **y actualice la misma dirección en la lista `PRECACHE` de `sw.js`** (deben coincidir). Al cambiar `sw.js`, los teléfonos instalan el trabajador nuevo y guardan de una vez los archivos de esa lista, así la aplicación sigue abriendo sin internet.
 
-Si cambia `assets/alimentos.json` u otros archivos que deban llegar sin internet, suba también `CACHE` en `sw.js` (hoy `cmla-mi-salud-v2`).
+Si cambia `assets/alimentos.json` u otro archivo que deba llegar sin internet, agréguelo a `PRECACHE` (si ya está, cambie cualquier cosa de `sw.js`, por ejemplo la lista, para que se reinstale). **No cambie el nombre `CACHE`** (`cmla-mi-salud-v1`) en cada versión: al activarse, el trabajador borra las cachés con otro nombre y los teléfonos podrían quedar sin copia para uso sin internet. Renómbrelo solo si de verdad necesita vaciar toda la caché.

@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap">
   <link rel="stylesheet" href="assets/sitio.css?v=1">
-  <link rel="stylesheet" href="assets/app.css?v=6">
+  <link rel="stylesheet" href="assets/app.css?v=7">
 </head>
 <body class="app-salud">
   <header class="app-bar">
@@ -433,6 +433,7 @@
               <summary>Ver el consentimiento</summary>
               <div data-consentimiento-texto></div>
             </details>
+            <button class="btn btn--outline btn--block" type="button" data-retirar-foto hidden>Retirar permiso de Foto del plato</button>
             <button class="btn btn--outline btn--block salud-peligro" type="button" data-retirar>Retirar mi consentimiento</button>
             <h3 class="h4 salud-sub">Borrar todo</h3>
             <p class="small muted">Elimina de este teléfono todos sus registros, fotos y datos personales.</p>
@@ -507,6 +508,7 @@
       <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
       <h2 class="h3" id="dc-titulo">Revise su comida</h2>
       <p class="small muted" data-conf-dia></p>
+      <p class="small muted nutri-dialogo__nota" data-conf-nota hidden></p>
       <ul class="nutri-conf" data-conf-items></ul>
       <button type="button" class="btn btn--outline btn--sm" data-conf-otro>Agregar otro de la tabla</button>
       <div class="field nutri-conf__tiempo">
@@ -544,6 +546,25 @@
         </div>
       </form>
     </dialog>
+    <dialog class="nutri-dialogo" data-dialogo-editar aria-labelledby="de-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="de-titulo">Editar alimento</h2>
+      <form class="form" data-form="editar" novalidate>
+        <div class="form__grid">
+          <div class="field field--full"><label for="de-nombre">Alimento *</label><input id="de-nombre" name="nombre" type="text" required maxlength="60"></div>
+          <div class="field field--full"><label for="de-kcal">Calorías (kcal) *</label><input id="de-kcal" name="kcal" type="number" inputmode="decimal" required min="1" max="5000" step="any"></div>
+          <div class="field"><label for="de-carb">Carbohidratos (g)</label><input id="de-carb" name="carb" type="number" inputmode="decimal" min="0" max="1000" step="any"></div>
+          <div class="field"><label for="de-prot">Proteína (g)</label><input id="de-prot" name="prot" type="number" inputmode="decimal" min="0" max="500" step="any"></div>
+          <div class="field"><label for="de-grasa">Grasa (g)</label><input id="de-grasa" name="grasa" type="number" inputmode="decimal" min="0" max="500" step="any"></div>
+          <div class="field"><label for="de-sodio">Sodio (mg)</label><input id="de-sodio" name="sodio" type="number" inputmode="decimal" min="0" max="20000" step="any"></div>
+        </div>
+        <p class="form__error" role="alert" data-form-error></p>
+        <div class="nutri-dialogo__acciones">
+          <button type="submit" class="btn btn--primary btn--block">Guardar</button>
+          <button type="button" class="btn btn--outline btn--block" data-cerrar-dialogo>Cancelar</button>
+        </div>
+      </form>
+    </dialog>
     <dialog class="nutri-dialogo" data-dialogo-porcion aria-labelledby="dp-titulo">
       <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
       <h2 class="h3" id="dp-titulo">Cambiar porción</h2>
@@ -571,7 +592,7 @@
   </footer>
   <div class="solo-impresion" aria-hidden="true"><img data-imprimir-img alt=""></div>
   <script type="application/json" id="clinica-config">{"whatsapp": "50760568129", "whatsappVisible": "+507 6056-8129", "telefono": "237-9094", "prefijo": "+507", "nombre": "Centro Médico Los Andes", "logo": "assets/logo.jpg", "urlIA": "https://centromedicolosandes.netlify.app/api/analizar-plato"}</script>
-  <script src="assets/nutri.js?v=3" defer></script>
-  <script src="assets/app.js?v=8" defer></script>
+  <script src="assets/nutri.js?v=4" defer></script>
+  <script src="assets/app.js?v=9" defer></script>
 </body>
 </html>

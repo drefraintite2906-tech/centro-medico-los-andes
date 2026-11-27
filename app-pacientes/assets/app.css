@@ -191,11 +191,12 @@
 .comidas-tiempo { margin-top: 1rem; }
 .salud .comidas-tiempo h3 { display: flex; justify-content: space-between; margin: 0 0 .45rem; }
 .comidas-tiempo h3 span { font: 600 .95rem var(--font-body); color: var(--muted); }
-.comida-item { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: .5rem; align-items: center; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
-.comida-item__txt { min-width: 0; display: flex; flex-direction: column; overflow-wrap: anywhere; }
+.comida-item { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.comida-item__txt { flex: 1 1 7rem; min-width: 0; display: flex; flex-direction: column; overflow-wrap: anywhere; }
 .comida-item__txt strong { color: var(--navy); font-weight: 600; }
 .comida-item__txt span { font-size: .85rem; color: var(--muted); }
-.comida-item .reg__borrar { grid-row: auto; grid-column: auto; }
+.comida-item__acciones { display: flex; gap: .5rem; align-items: center; margin-left: auto; }
+.comida-item .reg__borrar { grid-row: auto; grid-column: auto; flex: none; }
 .comida-item--baja { background: #FFF7E6; border-color: #F0C36D; }
 
 /* Diálogos de alimentación */

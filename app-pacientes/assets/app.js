@@ -328,6 +328,7 @@
     f.elements.nacimiento.max = isoDia(new Date());
     llenarNutri();
     $("[data-consentimiento-estado]").textContent = consentOK() ? textoConsentimiento() + ". Puede retirarlo cuando quiera." : "";
+    $("[data-retirar-foto]").hidden = !p.consentimientoFoto;
     $("[data-destino]").textContent = "Destino: " + (p.medico ? p.medico + " · " : "") + "WhatsApp +" + (p.whatsapp || WA_CLINICA) + (p.whatsapp ? "" : " (clínica)") +
       (p.correo ? " · correo " + p.correo : "") + ". Puede cambiarlo en «Mis datos».";
   }
@@ -746,7 +747,7 @@
   var CAMPOS_N = ["g", "kcal", "carb", "prot", "grasa", "grasaSat", "sodio"];
   var DIAS_SEM = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
   var MESES_C = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
-  var TIPO_ALERTA = { 80: "aviso", 100: "ok", 110: "critico" };
+  var TIPO_ALERTA = { 80: "aviso", 100: "ok", 110: "aviso" }; // 110 % en ámbar: el rojo «critico» queda para crisis
   var RE_ISO = /^\d{4}-\d{2}-\d{2}$/;
   var diaVista = null; // null = hoy (se recalcula siempre, por si cambia la fecha con la app abierta)
   var dibujarSemana = null;
@@ -954,8 +955,9 @@
           var baja = it.confianza === "baja";
           filas.push('<li class="comida-item' + (baja ? " comida-item--baja" : "") + '"><div class="comida-item__txt"><strong>' + esc(it.nombre) + "</strong>" +
             "<span>" + (it.porcion ? esc(it.porcion) + " · " : "") + miles(it.kcal) + " kcal" + (baja ? " · revise la porción" : "") + "</span></div>" +
+            '<div class="comida-item__acciones">' + (it.alimentoId ? "" : '<button type="button" class="btn btn--outline btn--sm" data-comida-editar data-cid="' + esc(c.id) + '" data-idx="' + i + '" aria-label="Editar ' + esc(it.nombre) + '">Editar</button>') +
             '<button type="button" class="btn btn--outline btn--sm" data-comida-porcion data-cid="' + esc(c.id) + '" data-idx="' + i + '" aria-label="Cambiar porción de ' + esc(it.nombre) + '">Porción</button>' +
-            '<button type="button" class="reg__borrar" data-comida-borrar data-cid="' + esc(c.id) + '" data-idx="' + i + '" aria-label="Eliminar ' + esc(it.nombre) + '">×</button></li>');
+            '<button type="button" class="reg__borrar" data-comida-borrar data-cid="' + esc(c.id) + '" data-idx="' + i + '" aria-label="Eliminar ' + esc(it.nombre) + '">×</button></div></li>');
         });
       });
       if (!filas.length) return "";
@@ -1028,6 +1030,8 @@
     if (e.target.closest("[data-ir-datos]")) { irA("datos"); return; }
     var b = e.target.closest("[data-comida-borrar]");
     if (b) { borrarItem(b.getAttribute("data-cid"), Number(b.getAttribute("data-idx"))); return; }
+    var eb = e.target.closest("[data-comida-editar]");
+    if (eb) { abrirEditar(eb.getAttribute("data-cid"), Number(eb.getAttribute("data-idx"))); return; }
     var pb = e.target.closest("[data-comida-porcion]");
     if (pb) abrirPorcion(pb.getAttribute("data-cid"), Number(pb.getAttribute("data-idx")));
   });
@@ -1085,7 +1089,37 @@
   });
   dlgPorcion.addEventListener("close", function () { edPorcion = null; });
 
-  /* Diálogo de confirmación (tabla, a mano y, en la Task 7, foto) */
+  /* Editar nombre y valores de un alimento anotado a mano o por foto (los de la tabla solo cambian de porción) */
+  var dlgEditar = $("[data-dialogo-editar]"), formEditar = $('[data-form="editar"]', dlgEditar), edItem = null;
+  var CAMPOS_EDIT = ["kcal", "carb", "prot", "grasa", "sodio"];
+  function abrirEditar(cid, idx) {
+    var c = buscarComida(cid); if (!c || !c.items[idx] || c.items[idx].alimentoId) return;
+    var it = c.items[idx], f = formEditar;
+    edItem = { cid: cid, idx: idx };
+    f.reset(); error(f, "");
+    f.elements.nombre.value = it.nombre || "";
+    CAMPOS_EDIT.forEach(function (k) { var v = nFin(it[k]); f.elements[k].value = v ? Math.round(v * 10) / 10 : ""; });
+    abrirDialogo(dlgEditar);
+  }
+  formEditar.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = formEditar; if (!edItem || !validar(f)) return;
+    var nombre = limpiar(f.elements.nombre.value, 60);
+    if (!nombre) { error(f, "Escriba el nombre del alimento."); f.elements.nombre.focus(); return; }
+    var c = buscarComida(edItem.cid); if (!c || !c.items[edItem.idx]) { cerrarDialogo(dlgEditar); return; }
+    var snap = JSON.stringify(datos.nutri.comidas), it = {};
+    Object.keys(c.items[edItem.idx]).forEach(function (k) { it[k] = c.items[edItem.idx][k]; });
+    it.nombre = nombre;
+    CAMPOS_EDIT.forEach(function (k) { it[k] = nFin(numONull(f.elements[k].value)); });
+    if (it.kcal) it.kcal = Math.round(it.kcal);
+    c.items[edItem.idx] = limpiarItem(it);
+    cerrarDialogo(dlgEditar);
+    if (!guardar()) { datos.nutri.comidas = JSON.parse(snap); pintarComidas(c.dia); return; }
+    pintarComidas(c.dia); revisarAlertas(c.dia);
+  });
+  dlgEditar.addEventListener("close", function () { edItem = null; });
+
+  /* Diálogo de confirmación (tabla, a mano y foto) */
   var dlgConf = $("[data-dialogo-confirmar]"), conf = null;
   var confLista = $("[data-conf-items]", dlgConf), confTiempo = $("[data-conf-tiempo]", dlgConf), confAgregar = $("[data-conf-agregar]", dlgConf);
   function filaConf(r, i) {
@@ -1102,8 +1136,15 @@
     $("[data-conf-total]", dlgConf).innerHTML = conf.filas.length ? "Total: <strong>" + miles(t) + " kcal</strong>" : "Agregue al menos un alimento.";
     confAgregar.disabled = !conf.filas.length;
   }
+  var confNota = $("[data-conf-nota]", dlgConf);
   function pintarConf() {
     confLista.innerHTML = conf.filas.map(filaConf).join("");
+    // Recordatorio de que los valores son aproximados (foto: estimación de la IA; tabla sin revisión clínica)
+    var notas = [];
+    if (conf.fuente === "foto") notas.push("Estimación aproximada por IA; revise las porciones.");
+    if (!alimRevisado && conf.filas.some(function (r) { return r.item && r.item.alimentoId; })) notas.push("Valores aproximados, pendientes de revisión clínica.");
+    confNota.textContent = notas.join(" ");
+    confNota.hidden = !notas.length;
     totalConf();
   }
   function abrirConfirmacion(items, fuente) {
@@ -1241,6 +1282,7 @@
     if (e.target.closest("[data-consent-foto-acepto]")) {
       datos.perfil.consentimientoFoto = { version: CONSENT_FOTO_VERSION, fecha: new Date().toISOString() };
       if (!guardar()) { delete datos.perfil.consentimientoFoto; return; }
+      $("[data-retirar-foto]").hidden = false;
       cerrarDialogo(dlgConsFoto); abrirFoto();
     } else if (e.target.closest("[data-consent-foto-no]")) {
       cerrarDialogo(dlgConsFoto); abrirBusqueda(false);
@@ -1668,7 +1710,7 @@
       var j = JSON.parse(t);
       if (!j || j.app !== "cmla-mi-salud" || !j.datos) throw new Error("formato");
       var nuevoDatos = normalizar(j.datos);
-      var resumen = nuevoDatos.presiones.length + " tomas de presión, " + nuevoDatos.glicemias.length + " de glicemia y " + nuevoDatos.examenes.length + " exámenes";
+      var resumen = nuevoDatos.presiones.length + " tomas de presión, " + nuevoDatos.glicemias.length + " de glicemia, " + nuevoDatos.examenes.length + " exámenes y " + nuevoDatos.nutri.comidas.length + " comidas";
       if (!window.confirm("¿Restaurar el respaldo de " + (nuevoDatos.perfil.nombre || "paciente") + " (" + resumen + ")? Reemplazará los datos actuales de este teléfono.")) return;
       return archivosBorrarTodo().catch(function () {}).then(function () {
         return Promise.all(Object.keys(j.archivos || {}).map(function (k) {
@@ -1688,6 +1730,15 @@
   $("[data-retirar]").addEventListener("click", function () {
     if (!window.confirm("Al retirar su consentimiento se borrarán de este teléfono todos sus registros, fotos y datos, y dejará de usar la aplicación.\n\nLa información que ya envió a su médico forma parte de su expediente clínico; para consultarla, corregirla u oponerse a su uso, comuníquese con la clínica.\n\n¿Desea retirar su consentimiento?")) return;
     borrarTodoYRecargar();
+  });
+  $("[data-retirar-foto]").addEventListener("click", function () {
+    var c = datos.perfil.consentimientoFoto;
+    if (!c) return;
+    if (!window.confirm("¿Retirar el permiso de «Foto del plato»? Ya no se enviarán fotos para estimar calorías. Sus comidas anotadas no se borran; si quiere volver a usar la foto, se le pedirá el permiso otra vez.")) return;
+    delete datos.perfil.consentimientoFoto;
+    if (!guardar()) { datos.perfil.consentimientoFoto = c; return; }
+    llenarPerfil();
+    mostrarAlerta("ok", ["Permiso de «Foto del plato» retirado."]);
   });
   $("[data-borrar-todo]").addEventListener("click", function () {
     if (!window.confirm("¿Borrar TODOS sus datos de este teléfono? Se perderán sus registros y fotos. Esta acción no se puede deshacer.")) return;
@@ -1716,7 +1767,7 @@
 
   // Recordatorio de respaldo: si hay datos y pasó más de un mes
   var ult = datos.perfil.ultimoRespaldo ? new Date(datos.perfil.ultimoRespaldo).getTime() : 0;
-  var total = datos.presiones.length + datos.glicemias.length + datos.examenes.length;
+  var total = datos.presiones.length + datos.glicemias.length + datos.examenes.length + datos.nutri.comidas.length;
   if (consentOK() && total >= 10 && Date.now() - ult > 30 * DIA) {
     mostrarAlerta("aviso", ["Le recomendamos <strong>crear un respaldo</strong> de sus datos (pestaña «Mis datos»). Si cambia o pierde el teléfono, podrá recuperarlos."]);
   }
