@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap">
   <link rel="stylesheet" href="assets/sitio.css?v=1">
-  <link rel="stylesheet" href="assets/app.css?v=3">
+  <link rel="stylesheet" href="assets/app.css?v=4">
 </head>
 <body class="app-salud">
   <header class="app-bar">
@@ -93,6 +93,7 @@
       <div class="salud-tabs" role="tablist" aria-label="Secciones">
         <button type="button" role="tab" id="t-presion" aria-controls="p-presion" data-tab="presion"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg><span>Presión</span></button>
         <button type="button" role="tab" id="t-glicemia" aria-controls="p-glicemia" data-tab="glicemia"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.7s-6.5 7.1-6.5 11.8a6.5 6.5 0 0 0 13 0C18.5 9.8 12 2.7 12 2.7z"/></svg><span>Glicemia</span></button>
+        <button type="button" role="tab" id="t-comidas" aria-controls="p-comidas" data-tab="comidas"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg><span>Comidas</span></button>
         <button type="button" role="tab" id="t-examenes" aria-controls="p-examenes" data-tab="examenes"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 3h6"/><path d="M10 3v6.5L4.5 19A1.5 1.5 0 0 0 5.8 21h12.4a1.5 1.5 0 0 0 1.3-2L14 9.5V3"/><path d="M7 15h10"/></svg><span>Exámenes</span></button>
         <button type="button" role="tab" id="t-enviar" aria-controls="p-enviar" data-tab="enviar"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 20.5l1.3-4.1A8.6 8.6 0 1 1 8 19.6z"/><path d="M9.2 8.3c-.3 3.3 3.2 6.8 6.5 6.5l.9-1.5-2-1.1-.9.8a4.6 4.6 0 0 1-2.4-2.4l.8-.9-1.1-2z"/></svg><span>Enviar</span></button>
         <button type="button" role="tab" id="t-datos" aria-controls="p-datos" data-tab="datos"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Mis datos</span></button>
@@ -204,6 +205,37 @@
             <div class="salud-grafica"><canvas data-grafica="glicemia" role="img" aria-label="Gráfica de glicemia de los últimos 30 días"></canvas></div>
             <h3 class="h4">Mis registros</h3>
             <ul class="salud-lista" data-lista="glicemia"></ul>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="salud-panel" role="tabpanel" id="p-comidas" aria-labelledby="t-comidas" data-panel="comidas" hidden>
+        <div class="salud-grid">
+          <div class="card card--pad comidas-dia">
+            <div class="comidas-nav">
+              <button type="button" class="comidas-nav__btn" data-comidas-mover="-1" aria-label="Día anterior">◀</button>
+              <h2 class="h3 comidas-nav__titulo" data-comidas-titulo aria-live="polite"></h2>
+              <button type="button" class="comidas-nav__btn" data-comidas-mover="1" aria-label="Día siguiente">▶</button>
+            </div>
+            <label class="comidas-fecha small" for="c-fecha">Ver otro día <input id="c-fecha" type="date" data-comidas-fecha></label>
+            <div data-comidas-meta-aviso></div>
+            <p class="comidas-total" data-comidas-total></p>
+            <progress class="comidas-barra" data-comidas-barra max="100" value="0" aria-label="Avance hacia su meta diaria"></progress>
+            <p class="small comidas-macros" data-comidas-macros></p>
+            <div class="comidas-acciones">
+              <button type="button" class="btn btn--outline" data-comidas-foto><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg><span>Foto del plato</span></button>
+              <button type="button" class="btn btn--primary" data-comidas-buscar><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span>Buscar alimento</span></button>
+              <button type="button" class="btn btn--outline" data-comidas-manual><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg><span>Anotar a mano</span></button>
+            </div>
+            <div data-comidas-avisos></div>
+            <div class="comidas-lista" data-comidas-lista></div>
+          </div>
+          <div class="card card--pad salud-resumen">
+            <h2 class="h3">Últimos 7 días</h2>
+            <div class="salud-stats" data-stats="comidas"></div>
+            <div class="salud-grafica"><canvas data-grafica="comidas" role="img" aria-label="Gráfica de calorías de los últimos 7 días comparadas con su meta"></canvas></div>
+            <p class="small muted">Las calorías y nutrientes son aproximados. Su médico o nutricionista puede ajustar su meta.</p>
           </div>
         </div>
       </div>
@@ -426,6 +458,68 @@
         <p><strong>9. Menores de edad y personas que no pueden decidir.</strong> El padre, la madre, el tutor o el representante legal otorga este consentimiento en su nombre.</p>
       </div>
     </template>
+    <dialog class="nutri-dialogo" data-dialogo-alimento aria-labelledby="da-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="da-titulo">Buscar alimento</h2>
+      <div class="field">
+        <label for="da-q">Escriba el alimento</label>
+        <input id="da-q" type="search" data-buscar-q autocomplete="off" maxlength="60" placeholder="Ej.: arroz, patacón, chicheme">
+      </div>
+      <p class="small muted nutri-dialogo__nota" data-tabla-nota hidden>Valores aproximados, pendientes de revisión clínica.</p>
+      <div class="nutri-resultados" data-buscar-res aria-live="polite"></div>
+    </dialog>
+    <dialog class="nutri-dialogo" data-dialogo-confirmar aria-labelledby="dc-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="dc-titulo">Revise su comida</h2>
+      <p class="small muted" data-conf-dia></p>
+      <ul class="nutri-conf" data-conf-items></ul>
+      <button type="button" class="btn btn--outline btn--sm" data-conf-otro>Agregar otro de la tabla</button>
+      <div class="field nutri-conf__tiempo">
+        <label for="dc-tiempo">Tiempo de comida</label>
+        <select id="dc-tiempo" data-conf-tiempo>
+          <option value="desayuno">Desayuno</option>
+          <option value="almuerzo">Almuerzo</option>
+          <option value="merienda">Merienda</option>
+          <option value="cena">Cena</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+      <p class="nutri-conf__total" data-conf-total></p>
+      <div class="nutri-dialogo__acciones">
+        <button type="button" class="btn btn--primary btn--block" data-conf-agregar>Agregar a mi día</button>
+        <button type="button" class="btn btn--outline btn--block" data-cerrar-dialogo>Cancelar</button>
+      </div>
+    </dialog>
+    <dialog class="nutri-dialogo" data-dialogo-manual aria-labelledby="dm-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="dm-titulo">Anotar a mano</h2>
+      <form class="form" data-form="manual" novalidate>
+        <div class="form__grid">
+          <div class="field field--full"><label for="dm-nombre">¿Qué comió? *</label><input id="dm-nombre" name="nombre" type="text" required maxlength="60" placeholder="Ej.: sancocho de la abuela"></div>
+          <div class="field field--full"><label for="dm-kcal">Calorías (kcal) *</label><input id="dm-kcal" name="kcal" type="number" inputmode="decimal" required min="1" max="5000" step="any"></div>
+          <div class="field"><label for="dm-carb">Carbohidratos (g)</label><input id="dm-carb" name="carb" type="number" inputmode="decimal" min="0" max="1000" step="any"></div>
+          <div class="field"><label for="dm-prot">Proteína (g)</label><input id="dm-prot" name="prot" type="number" inputmode="decimal" min="0" max="500" step="any"></div>
+          <div class="field"><label for="dm-grasa">Grasa (g)</label><input id="dm-grasa" name="grasa" type="number" inputmode="decimal" min="0" max="500" step="any"></div>
+          <div class="field"><label for="dm-sodio">Sodio (mg)</label><input id="dm-sodio" name="sodio" type="number" inputmode="decimal" min="0" max="20000" step="any"></div>
+        </div>
+        <p class="form__error" role="alert" data-form-error></p>
+        <div class="nutri-dialogo__acciones">
+          <button type="submit" class="btn btn--primary btn--block">Continuar</button>
+          <button type="button" class="btn btn--outline btn--block" data-cerrar-dialogo>Cancelar</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog class="nutri-dialogo" data-dialogo-porcion aria-labelledby="dp-titulo">
+      <button type="button" class="nutri-dialogo__cerrar" data-cerrar-dialogo aria-label="Cerrar">×</button>
+      <h2 class="h3" id="dp-titulo">Cambiar porción</h2>
+      <p data-porcion-nombre></p>
+      <div data-porcion-control></div>
+      <p class="nutri-conf__total" data-porcion-kcal></p>
+      <div class="nutri-dialogo__acciones">
+        <button type="button" class="btn btn--primary btn--block" data-porcion-guardar>Guardar</button>
+        <button type="button" class="btn btn--outline btn--block" data-cerrar-dialogo>Cancelar</button>
+      </div>
+    </dialog>
     <div class="note note--warn salud-emergencia">
       <svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
       <p><strong>Esta herramienta no es un servicio de emergencias ni reemplaza la consulta.</strong> Acuda de inmediato a urgencias si tiene dolor de pecho, falta de aire, debilidad o adormecimiento de un lado del cuerpo, dificultad para hablar, confusión o desmayo, o si su presión está en 180/120 o más con síntomas.</p>
@@ -443,6 +537,6 @@
   <div class="solo-impresion" aria-hidden="true"><img data-imprimir-img alt=""></div>
   <script type="application/json" id="clinica-config">{"whatsapp": "50760568129", "whatsappVisible": "+507 6056-8129", "telefono": "237-9094", "prefijo": "+507", "nombre": "Centro Médico Los Andes", "logo": "assets/logo.jpg"}</script>
   <script src="assets/nutri.js?v=1" defer></script>
-  <script src="assets/app.js?v=4" defer></script>
+  <script src="assets/app.js?v=5" defer></script>
 </body>
 </html>
