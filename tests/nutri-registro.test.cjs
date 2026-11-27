@@ -138,3 +138,24 @@ test("statsPeriodo", () => {
   assert.strictEqual(s.encima, 1);
   assert.strictEqual(typeof s.pct.carb, "number");
 });
+
+test("gota: cualquiera de las cuatro etiquetas", () => {
+  ["carne_roja", "visceras", "mariscos", "bebida_azucarada"].forEach(function (e) {
+    var cs = [{ id: "a", dia: "2026-11-27", items: [it({ etiquetas: [e] })] }];
+    assert.ok(claves(N.avisosCondicion(perfil({ condiciones: ["gota"] }), { kcal: 500 }, cs, "2026-11-27")).indexOf("gota") !== -1, e);
+  });
+});
+
+test("grasa_sat por trigliceridos o dislipidemia", () => {
+  var t = { kcal: 2000, grasaSat: 25 }, h = "2026-11-27";
+  var p = perfil(); p.labs.trigliceridos = { v: 160, fecha: "2026-11-01" }; p.labs.ldl = { v: 90, fecha: "2026-11-01" };
+  assert.ok(claves(N.avisosCondicion(p, t, [], h)).indexOf("grasa_sat") !== -1);
+  assert.ok(claves(N.avisosCondicion(perfil({ condiciones: ["dislipidemia"] }), t, [], h)).indexOf("grasa_sat") !== -1);
+});
+
+test("normalizarNutri ignora claves de prototipo", () => {
+  var r = N.normalizarNutri(JSON.parse('{"frecuentes":{"__proto__":{"x":1}},"alertasDia":{"__proto__":[80]}}'));
+  assert.strictEqual(Object.getPrototypeOf(r.frecuentes), Object.prototype);
+  assert.strictEqual(Object.getPrototypeOf(r.alertasDia), Object.prototype);
+  assert.strictEqual(Object.keys(r.frecuentes).length, 0);
+});

@@ -62,6 +62,7 @@
   var RE_DIA = /^\d{4}-\d{2}-\d{2}$/;
 
   function n0(x) { return typeof x === "number" && isFinite(x) && x >= 0 ? x : 0; }
+  function badKey(k) { return k === "__proto__" || k === "constructor" || k === "prototype"; }
   function isObj(x) { return x !== null && typeof x === "object" && !Array.isArray(x); }
   function validDia(d) { return typeof d === "string" && RE_DIA.test(d); }
 
@@ -80,7 +81,7 @@
     var r = perfilVacio();
     if (!isObj(p)) return r;
     var k;
-    for (k in p) if (has(p, k) && k !== "labs" && k !== "condiciones") r[k] = p[k];
+    for (k in p) if (has(p, k) && !badKey(k) && k !== "labs" && k !== "condiciones") r[k] = p[k];
     if (Array.isArray(p.condiciones)) {
       for (var i = 0; i < p.condiciones.length; i++) if (typeof p.condiciones[i] === "string") r.condiciones.push(p.condiciones[i]);
     }
@@ -98,7 +99,7 @@
     var o = {};
     var src = isObj(it) ? it : {};
     var k;
-    for (k in src) if (has(src, k)) o[k] = src[k];
+    for (k in src) if (has(src, k) && !badKey(k)) o[k] = src[k];
     o.nombre = typeof src.nombre === "string" ? src.nombre : "";
     o.porcion = typeof src.porcion === "string" ? src.porcion : "";
     o.g = n0(src.g);
@@ -121,7 +122,7 @@
           var c = obj.comidas[i];
           if (!isObj(c) || !c.id || !validDia(c.dia)) continue;
           var nc = {};
-          for (var k in c) if (has(c, k)) nc[k] = c[k];
+          for (var k in c) if (has(c, k) && !badKey(k)) nc[k] = c[k];
           nc.items = [];
           if (Array.isArray(c.items)) for (var j = 0; j < c.items.length; j++) nc.items.push(normItem(c.items[j]));
           r.comidas.push(nc);
@@ -129,7 +130,7 @@
       }
       if (isObj(obj.alertasDia)) {
         for (var d in obj.alertasDia) {
-          if (!has(obj.alertasDia, d) || !Array.isArray(obj.alertasDia[d])) continue;
+          if (!has(obj.alertasDia, d) || badKey(d) || !Array.isArray(obj.alertasDia[d])) continue;
           var arr = [];
           for (var a = 0; a < obj.alertasDia[d].length; a++) {
             var v = obj.alertasDia[d][a];
@@ -139,7 +140,7 @@
         }
       }
       if (isObj(obj.frecuentes)) {
-        for (var f in obj.frecuentes) if (has(obj.frecuentes, f)) r.frecuentes[f] = n0(obj.frecuentes[f]);
+        for (var f in obj.frecuentes) if (has(obj.frecuentes, f) && !badKey(f)) r.frecuentes[f] = n0(obj.frecuentes[f]);
       }
     } catch (e) { return nuevoNutri(); }
     return r;
@@ -196,6 +197,12 @@
     return (Date.UTC(+pb[1], +pb[2] - 1, +pb[3]) - Date.UTC(+pa[1], +pa[2] - 1, +pa[3])) / 86400000;
   }
 
+  function hayGota(et) {
+    var g = ["carne_roja", "visceras", "mariscos", "bebida_azucarada"];
+    for (var i = 0; i < g.length; i++) if (et.indexOf(g[i]) !== -1) return true;
+    return false;
+  }
+
   function labV(p, k) {
     var l = p.labs && p.labs[k];
     return l && typeof l.v === "number" ? l.v : null;
@@ -238,7 +245,10 @@
       out.push({ clave: "sodio", texto: "Hoy lleva " + Math.round(totales.sodio) +
         " mg de sodio; para cuidar su presión, procure no pasar de " + R.sodioMax + " mg." });
     }
-    if (ldl !== null && ldl >= (tiene("dm2") ? R.ldlDm : R.ldl) && kcal > 0) {
+    var tg = labV(perfil, "trigliceridos");
+    var lipidos = tiene("dislipidemia") || (ldl !== null && ldl >= (tiene("dm2") ? R.ldlDm : R.ldl)) ||
+      (tg !== null && tg >= R.tg);
+    if (lipidos && kcal > 0) {
       pct = n0(totales.grasaSat) * 9 / kcal;
       if (pct >= R.grasaSatPctMax) out.push({ clave: "grasa_sat", texto: "Las grasas saturadas son el " +
         Math.round(pct * 100) + " % de sus calorías de hoy; para cuidar su colesterol, procure que sean menos del " +
@@ -250,10 +260,10 @@
       for (var a = 0; a < cg.length && !hay; a++) {
         var its = (cg[a] && cg[a].items) || [];
         for (var b = 0; b < its.length; b++) {
-          if (its[b] && its[b].etiquetas && its[b].etiquetas.indexOf("visceras") !== -1) { hay = true; break; }
+          if (its[b] && its[b].etiquetas && hayGota(its[b].etiquetas)) { hay = true; break; }
         }
       }
-      if (hay) out.push({ clave: "gota", texto: "Hoy registró vísceras, que aportan mucho ácido úrico; para cuidar sus articulaciones, conviene elegir otras proteínas." });
+      if (hay) out.push({ clave: "gota", texto: "Hoy registró carnes rojas, vísceras, mariscos o bebidas azucaradas, que pueden subir el ácido úrico; para cuidar sus articulaciones, conviene moderarlos." });
     }
     for (var j = 0; j < LABS.length; j++) {
       var l = perfil.labs && perfil.labs[LABS[j]];
