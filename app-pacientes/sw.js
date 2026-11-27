@@ -1,10 +1,10 @@
 /* Mi control de salud – permite abrir la aplicación sin internet.
    Los datos del paciente NO pasan por aquí: viven en el teléfono (localStorage / IndexedDB). */
-var CACHE = "cmla-mi-salud-v1";
+var CACHE = "cmla-mi-salud-v2";
 var BASE = new URL(self.registration.scope).pathname; // p. ej. /centro-medico-los-andes/
 
 self.addEventListener("install", function (e) {
-  e.waitUntil(caches.open(CACHE).then(function (c) { return c.add(BASE); }).then(function () { return self.skipWaiting(); }));
+  e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll([BASE, BASE + "assets/alimentos.json"]); }).then(function () { return self.skipWaiting(); }));
 });
 
 self.addEventListener("activate", function (e) {

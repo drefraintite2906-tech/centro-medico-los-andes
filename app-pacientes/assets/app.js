@@ -18,7 +18,9 @@
   var POSICIONES = { sentado: "sentado(a)", pie: "de pie", acostado: "acostado(a)" };
   var DIA = 86400000;
   var CONSENT_VERSION = "1.0";
-  // Función de IA (Netlify). Cambia cuando se conecte el dominio propio de la clínica: se edita "urlIA" en #clinica-config de index.html.
+  var CONSENT_FOTO_VERSION = "1.0";
+  // Función de IA (Netlify). Cuando se conecte el dominio propio de la clínica hay que cambiar DOS cosas en index.html:
+  // "urlIA" en #clinica-config y el origen permitido en "connect-src" de la política de seguridad (CSP); si no, la foto dejará de funcionar.
   var URL_IA = CFG.urlIA || "https://centromedicolosandes.netlify.app/api/analizar-plato";
 
   function $(s, el) { return (el || raiz).querySelector(s); }
@@ -1233,17 +1235,26 @@
   }
   $("[data-comidas-foto]").addEventListener("click", function () {
     var c = datos.perfil.consentimientoFoto;
-    if (c && c.version === CONSENT_VERSION) abrirFoto(); else abrirDialogo(dlgConsFoto);
+    if (c && c.version === CONSENT_FOTO_VERSION) abrirFoto(); else abrirDialogo(dlgConsFoto);
   });
   dlgConsFoto.addEventListener("click", function (e) {
     if (e.target.closest("[data-consent-foto-acepto]")) {
-      datos.perfil.consentimientoFoto = { version: CONSENT_VERSION, fecha: new Date().toISOString() };
+      datos.perfil.consentimientoFoto = { version: CONSENT_FOTO_VERSION, fecha: new Date().toISOString() };
       if (!guardar()) { delete datos.perfil.consentimientoFoto; return; }
       cerrarDialogo(dlgConsFoto); abrirFoto();
     } else if (e.target.closest("[data-consent-foto-no]")) {
       cerrarDialogo(dlgConsFoto); abrirBusqueda(false);
     }
   });
+  var ETIQ_OK = ["carne_roja", "visceras", "mariscos", "bebida_azucarada", "fritura", "alcohol"];
+  function itemFoto(x) {
+    function nu(v) { return typeof v === "number" && isFinite(v) && v >= 0 ? v : 0; }
+    function st(v, n) { return typeof v === "string" ? v.slice(0, n) : ""; }
+    return { nombre: st(x.nombre, 80), porcion: st(x.porcion, 80), g: nu(x.g), kcal: nu(x.kcal), carb: nu(x.carb), prot: nu(x.prot),
+      grasa: nu(x.grasa), grasaSat: nu(x.grasaSat), sodio: nu(x.sodio),
+      etiquetas: Array.isArray(x.etiquetas) ? x.etiquetas.filter(function (e, i, a) { return ETIQ_OK.indexOf(e) >= 0 && a.indexOf(e) === i; }) : [],
+      confianza: x.confianza === "alta" || x.confianza === "media" ? x.confianza : "baja" };
+  }
   fotoElegir.addEventListener("click", function () { if (!fotoOcupada) inpFoto.click(); });
   dlgFoto.addEventListener("close", function () { if (fotoCtl) { try { fotoCtl.abort(); } catch (e) {} } fotoOcupar(false); });
   inpFoto.addEventListener("change", function () {
@@ -1270,9 +1281,9 @@
         fotoARespaldo(r.status === 429 && r.json && r.json.error === "limite_dia" ? "Llegó al límite de fotos de hoy; búsquela en la tabla." : MSG_ERR);
         return;
       }
-      var items = r.json && Array.isArray(r.json.items) ? r.json.items.filter(function (x) { return x && typeof x === "object"; }) : [];
+      var items = r.json && Array.isArray(r.json.items) ? r.json.items.filter(function (x) { return x && typeof x === "object"; }).map(itemFoto) : [];
       if (!items.length) {
-        fotoARespaldo(r.json && typeof r.json.motivo === "string" && r.json.motivo ? r.json.motivo : MSG_ERR);
+        fotoARespaldo(r.json && typeof r.json.motivo === "string" && r.json.motivo ? r.json.motivo.slice(0, 200) : MSG_ERR);
         return;
       }
       var tiempo = fotoTiempo.value;
@@ -1289,10 +1300,43 @@
   function textoPeriodo(dias) {
     var hoy = Date.now();
     if (!dias) {
-      var todos = datos.presiones.concat(datos.glicemias, datos.examenes).map(function (r) { return r.t; });
+      var todos = datos.presiones.concat(datos.glicemias, datos.examenes, datos.nutri.comidas).map(function (r) { return r.t; });
       return todos.length ? fecha(Math.min.apply(null, todos)) + " al " + fecha(hoy) : "Todo";
     }
     return fecha(hoy - dias * DIA) + " al " + fecha(hoy);
+  }
+  var AVISO_TXT = { carb_dia: "Carbohidratos altos en el día", carb_comida: "Comida con muchos carbohidratos", proteina: "Proteína alta", sodio: "Sodio alto", grasa_sat: "Grasa saturada alta", gota: "Alimentos que suben el ácido úrico" };
+  // Datos de la sección «Alimentación» (la usan el texto y la imagen); null si no hay registros en el período
+  function datosAlimentacion(dias) {
+    var cs = filtrar(datos.nutri.comidas, dias);
+    if (!cs.length) return null;
+    var np = datos.nutri.perfil, hoy = hoyISO(), meta = metaActual();
+    var ini = dias ? isoDia(new Date(Date.now() - dias * DIA)) : cs.reduce(function (m, c) { return c.dia < m ? c.dia : m; }, hoy);
+    var lista = [], d = ini;
+    while (d <= hoy && lista.length < 4000) { lista.push(d); d = sumarDias(d, 1); }
+    var st = Nutri.statsPeriodo(datos.nutri.comidas, meta.kcal, lista);
+    var cuenta = {}, labs = false;
+    lista.forEach(function (dia) {
+      var delDia = datos.nutri.comidas.filter(function (c) { return c.dia === dia; });
+      if (!delDia.length) return;
+      Nutri.avisosCondicion(np, Nutri.totalesDia(datos.nutri.comidas, dia), delDia, dia).forEach(function (a) {
+        if (a.clave === "labs_viejos") labs = true; else cuenta[a.clave] = (cuenta[a.clave] || 0) + 1;
+      });
+    });
+    var top = Object.keys(cuenta).sort(function (a, b) { return cuenta[b] - cuenta[a]; }).slice(0, 3).map(function (k) {
+      return (AVISO_TXT[k] || k) + ": " + cuenta[k] + (cuenta[k] === 1 ? " día" : " días");
+    });
+    var metaTxt = meta.fuente === "medico" ? "Meta indicada por el médico: " + meta.kcal + " kcal" :
+      meta.fuente === "calculo" ? "Meta calculada: " + meta.kcal + " kcal" + (meta.detalle ? " (" + meta.detalle + ")" : "") : "Meta: sin definir";
+    var im = Nutri.imc(np.pesoKg, np.tallaCm);
+    var imTxt = im && isFinite(im.valor) ? "IMC actual: " + String(Math.round(im.valor * 10) / 10).replace(".", ",") + " (" + (CLASE_IMC[im.clase] || "") + ")" : "";
+    var ps = filtrar(datos.nutri.pesos, dias).sort(function (a, b) { return a.t - b.t; });
+    var pesoTxt = ps.length ? "Peso: " + ps[0].kg + (ps.length > 1 ? " → " + ps[ps.length - 1].kg : "") + " kg" : "";
+    var dm = st.n === 1 ? "día" : "días";
+    return { st: st, meta: meta, metaTxt: metaTxt, imTxt: imTxt, pesoTxt: pesoTxt, top: top, labs: labs,
+      promTxt: "Promedio: " + miles(st.prom) + " kcal por día (" + st.n + " " + dm + " con registros)",
+      metaDias: meta.kcal ? "Días debajo / dentro / encima de la meta: " + st.debajo + " / " + st.dentro + " / " + st.encima : "",
+      macros: "Carbohidratos " + st.pct.carb + " % · Proteína " + st.pct.prot + " % · Grasa " + st.pct.grasa + " %" };
   }
   function resumenTexto(dias) {
     var p = datos.perfil, m = datos.metas, L = [];
@@ -1324,6 +1368,19 @@
     L.push("*Exámenes*");
     if (ex.length) ex.slice().reverse().forEach(function (x) { L.push("• " + fecha(x.t) + " – " + x.nombre + (x.resultado ? ": " + x.resultado + (x.unidad ? " " + x.unidad : "") : "") + (x.archivos && x.archivos.length ? " 📎" : "")); });
     else L.push("• Sin exámenes en el período.");
+    L.push("");
+    L.push("*Alimentación*");
+    var al = datosAlimentacion(dias);
+    if (al) {
+      L.push("• " + al.metaTxt);
+      if (al.imTxt) L.push("• " + al.imTxt);
+      if (al.pesoTxt) L.push("• " + al.pesoTxt);
+      L.push("• " + al.promTxt);
+      if (al.metaDias) L.push("• " + al.metaDias);
+      L.push("• " + al.macros);
+      al.top.forEach(function (t) { L.push("• Aviso: " + t); });
+      if (al.labs) L.push("• Laboratorios con más de 6 meses: actualice sus exámenes.");
+    } else L.push("• Sin registros en el período.");
     L.push("");
     L.push("_Datos anotados por el paciente en «Mi control de salud» de " + CLINICA + ". No han sido verificados por la clínica._");
     if (consentOK()) L.push("_" + textoConsentimiento() + ": autoriza a la clínica y a su médico tratante a recibir esta información, usarla para su atención e incorporarla a su expediente, bajo confidencialidad._");
@@ -1395,7 +1452,7 @@
     ctx.fillStyle = COL.blue; ctx.fillRect(0, top + 150, W, 8);
     if (!logoImg) txt(CLINICA.toUpperCase(), M, top + 40, "600 22px " + F, "#A9CBEA");
     txt("Resumen de control en casa", M, top + (logoImg ? 78 : 92), "800 48px " + H, "#FFFFFF");
-    txt("Presión arterial · Glicemia · Exámenes", M, top + (logoImg ? 122 : 132), "24px " + F, "rgba(255,255,255,.85)");
+    txt("Presión arterial · Glicemia · Exámenes · Alimentación", M, top + (logoImg ? 122 : 132), "24px " + F, "rgba(255,255,255,.85)");
     y = top + 200;
     txt(p.nombre + (e !== "" ? "  ·  " + e + " años" : ""), M, y, "700 34px " + H, COL.navy); y += 44;
     linea("Período: " + textoPeriodo(dias) + "   ·   Generado: " + fechaHora(Date.now()), COL.texto);
@@ -1433,6 +1490,22 @@
       tabla([{ t: "Fecha", w: 0.17 }, { t: "Examen", w: 0.43 }, { t: "Resultado", w: 0.25 }, { t: "Adjunto", w: 0.15 }],
         ex.slice().reverse().map(function (x) { return [fecha(x.t), { t: x.nombre, b: true }, (x.resultado || "—") + (x.unidad ? " " + x.unidad : ""), x.archivos && x.archivos.length ? x.archivos.length + " archivo(s)" : "—"]; }));
     } else linea("Sin exámenes en este período.", COL.texto);
+
+    // Alimentación
+    titulo("Alimentación");
+    var al = datosAlimentacion(dias);
+    if (al) {
+      var tl = [{ valor: miles(al.st.prom), etiqueta: "kcal por día (" + al.st.n + ")" }];
+      if (al.meta.kcal) tl.push({ valor: miles(al.meta.kcal), etiqueta: "Meta (kcal)" }, { valor: al.st.dentro + " de " + al.st.n, etiqueta: "Días en meta", color: COL.ok });
+      tl.push({ valor: al.st.pct.carb + "/" + al.st.pct.prot + "/" + al.st.pct.grasa, etiqueta: "% Carb / Prot / Grasa" });
+      tarjetas(tl);
+      linea(al.metaTxt);
+      if (al.metaDias) linea(al.metaDias);
+      if (al.imTxt) linea(al.imTxt);
+      if (al.pesoTxt) linea(al.pesoTxt);
+      al.top.forEach(function (t) { linea("Aviso: " + t, COL.naranja, true); });
+      if (al.labs) linea("Laboratorios con más de 6 meses: actualice sus exámenes.", COL.texto);
+    } else linea("Sin registros de alimentación en este período.", COL.texto);
 
     // Detalle
     var LIM = 30;
@@ -1490,7 +1563,7 @@
 
   $("[data-preparar]").addEventListener("click", function () {
     var btn = this, dias = Number($("[data-periodo]").value), conFotos = $("[data-incluir-fotos]").checked;
-    var hay = filtrar(datos.presiones, dias).length + filtrar(datos.glicemias, dias).length + filtrar(datos.examenes, dias).length;
+    var hay = filtrar(datos.presiones, dias).length + filtrar(datos.glicemias, dias).length + filtrar(datos.examenes, dias).length + filtrar(datos.nutri.comidas, dias).length;
     if (!hay) { mostrarAlerta("aviso", ["No hay registros en el período elegido. Elija un período más largo o anote sus tomas primero."]); return; }
     btn.disabled = true; btn.textContent = "Preparando…";
     var listo = Promise.all([document.fonts && document.fonts.ready ? document.fonts.ready : null, cargarLogo()]);
