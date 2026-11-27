@@ -551,11 +551,12 @@
       <h2 class="h3" id="de-titulo">Editar alimento</h2>
       <form class="form" data-form="editar" novalidate>
         <div class="form__grid">
-          <div class="field field--full"><label for="de-nombre">Alimento *</label><input id="de-nombre" name="nombre" type="text" required maxlength="60"></div>
+          <div class="field field--full"><label for="de-nombre">Alimento *</label><input id="de-nombre" name="nombre" type="text" required maxlength="80"></div>
           <div class="field field--full"><label for="de-kcal">Calorías (kcal) *</label><input id="de-kcal" name="kcal" type="number" inputmode="decimal" required min="1" max="5000" step="any"></div>
           <div class="field"><label for="de-carb">Carbohidratos (g)</label><input id="de-carb" name="carb" type="number" inputmode="decimal" min="0" max="1000" step="any"></div>
           <div class="field"><label for="de-prot">Proteína (g)</label><input id="de-prot" name="prot" type="number" inputmode="decimal" min="0" max="500" step="any"></div>
           <div class="field"><label for="de-grasa">Grasa (g)</label><input id="de-grasa" name="grasa" type="number" inputmode="decimal" min="0" max="500" step="any"></div>
+          <div class="field"><label for="de-gsat">Grasa saturada (g)</label><input id="de-gsat" name="grasaSat" type="number" inputmode="decimal" min="0" max="500" step="any"></div>
           <div class="field"><label for="de-sodio">Sodio (mg)</label><input id="de-sodio" name="sodio" type="number" inputmode="decimal" min="0" max="20000" step="any"></div>
         </div>
         <p class="form__error" role="alert" data-form-error></p>
@@ -592,7 +593,7 @@
   </footer>
   <div class="solo-impresion" aria-hidden="true"><img data-imprimir-img alt=""></div>
   <script type="application/json" id="clinica-config">{"whatsapp": "50760568129", "whatsappVisible": "+507 6056-8129", "telefono": "237-9094", "prefijo": "+507", "nombre": "Centro Médico Los Andes", "logo": "assets/logo.jpg", "urlIA": "https://centromedicolosandes.netlify.app/api/analizar-plato"}</script>
-  <script src="assets/nutri.js?v=4" defer></script>
-  <script src="assets/app.js?v=9" defer></script>
+  <script src="assets/nutri.js?v=5" defer></script>
+  <script src="assets/app.js?v=10" defer></script>
 </body>
 </html>

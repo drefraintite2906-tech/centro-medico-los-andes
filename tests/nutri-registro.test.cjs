@@ -139,8 +139,8 @@ test("statsPeriodo", () => {
   assert.strictEqual(typeof s.pct.carb, "number");
 });
 
-test("gota: cualquiera de las cuatro etiquetas", () => {
-  ["carne_roja", "visceras", "mariscos", "bebida_azucarada"].forEach(function (e) {
+test("gota: cualquiera de las etiquetas (incluido alcohol)", () => {
+  ["carne_roja", "visceras", "mariscos", "bebida_azucarada", "alcohol"].forEach(function (e) {
     var cs = [{ id: "a", dia: "2026-11-27", items: [it({ etiquetas: [e] })] }];
     assert.ok(claves(N.avisosCondicion(perfil({ condiciones: ["gota"] }), { kcal: 500 }, cs, "2026-11-27")).indexOf("gota") !== -1, e);
   });

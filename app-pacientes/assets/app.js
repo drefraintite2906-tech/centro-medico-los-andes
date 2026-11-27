@@ -1091,7 +1091,7 @@
 
   /* Editar nombre y valores de un alimento anotado a mano o por foto (los de la tabla solo cambian de porción) */
   var dlgEditar = $("[data-dialogo-editar]"), formEditar = $('[data-form="editar"]', dlgEditar), edItem = null;
-  var CAMPOS_EDIT = ["kcal", "carb", "prot", "grasa", "sodio"];
+  var CAMPOS_EDIT = ["kcal", "carb", "prot", "grasa", "grasaSat", "sodio"];
   function abrirEditar(cid, idx) {
     var c = buscarComida(cid); if (!c || !c.items[idx] || c.items[idx].alimentoId) return;
     var it = c.items[idx], f = formEditar;
@@ -1104,7 +1104,7 @@
   formEditar.addEventListener("submit", function (e) {
     e.preventDefault();
     var f = formEditar; if (!edItem || !validar(f)) return;
-    var nombre = limpiar(f.elements.nombre.value, 60);
+    var nombre = limpiar(f.elements.nombre.value, 80);
     if (!nombre) { error(f, "Escriba el nombre del alimento."); f.elements.nombre.focus(); return; }
     var c = buscarComida(edItem.cid); if (!c || !c.items[edItem.idx]) { cerrarDialogo(dlgEditar); return; }
     var snap = JSON.stringify(datos.nutri.comidas), it = {};
@@ -1112,6 +1112,7 @@
     it.nombre = nombre;
     CAMPOS_EDIT.forEach(function (k) { it[k] = nFin(numONull(f.elements[k].value)); });
     if (it.kcal) it.kcal = Math.round(it.kcal);
+    if (it.grasaSat > it.grasa) it.grasaSat = it.grasa;
     c.items[edItem.idx] = limpiarItem(it);
     cerrarDialogo(dlgEditar);
     if (!guardar()) { datos.nutri.comidas = JSON.parse(snap); pintarComidas(c.dia); return; }

@@ -206,7 +206,7 @@
   }
 
   function hayGota(et) {
-    var g = ["carne_roja", "visceras", "mariscos", "bebida_azucarada"];
+    var g = ["carne_roja", "visceras", "mariscos", "bebida_azucarada", "alcohol"];
     for (var i = 0; i < g.length; i++) if (et.indexOf(g[i]) !== -1) return true;
     return false;
   }
@@ -271,7 +271,7 @@
           if (its[b] && its[b].etiquetas && hayGota(its[b].etiquetas)) { hay = true; break; }
         }
       }
-      if (hay) out.push({ clave: "gota", texto: "Hoy registró carnes rojas, vísceras, mariscos o bebidas azucaradas, que pueden subir el ácido úrico; para cuidar sus articulaciones, conviene moderarlos." });
+      if (hay) out.push({ clave: "gota", texto: "Hoy registró carnes rojas, vísceras, mariscos, bebidas azucaradas o alcohol, que pueden subir el ácido úrico; para cuidar sus articulaciones, conviene moderarlos." });
     }
     for (var j = 0; j < LABS.length; j++) {
       var l = perfil.labs && perfil.labs[LABS[j]];
