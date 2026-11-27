@@ -147,6 +147,7 @@ Los laboratorios **solo activan avisos**; no cambian las kcal. Si un laboratorio
   - Imagen de máximo 1,5 MB.
   - Límite por dispositivo: 20 fotos al día. La app manda un identificador anónimo aleatorio.
   - **Tope mensual global** configurable (`LIMITE_MENSUAL_FOTOS`, por ejemplo 3000), con un contador en Netlify Blobs. Cuando se llega al tope, la función responde 429 y la app ofrece la tabla.
+  - **Límite de gasto mensual en la consola de Anthropic** (por ejemplo, US$ 50). Es el freno final aunque alguien se salte las demás protecciones.
 - No se guardan registros de la imagen ni del contenido. Solo se cuentan las fotos.
 - Dirección: `https://<sitio>.netlify.app/.netlify/functions/analizar-plato`. Se guarda en una constante `URL_IA` de `app.js` y se cambia cuando se conecte el dominio propio.
 - El plan gratuito de Netlify alcanza para miles de llamadas al mes. Cada foto usa una llamada a la función y una escritura en Blobs. Antes del lanzamiento se revisa el consumo en el panel de Netlify.
@@ -196,6 +197,7 @@ Se agrega una sección «Alimentación» al PNG/PDF y al texto de WhatsApp que y
 - Cada paciente registra lo suyo; los datos se quedan en el teléfono; no hay nada en la web (decisión del director médico).
 - Enfoque mixto: foto con IA + tabla + manual (decisión del director médico).
 - Meta personal del director médico: 2500 kcal, como «meta indicada por el médico».
+- Acceso a «Foto del plato» **sin código** (decisión del director médico, opción 1c). Se acepta el riesgo de abuso. Lo limitan el tope diario por dispositivo, el tope mensual global y el límite de gasto en Anthropic. Si hay abuso, se puede agregar un código de clínica más adelante sin rehacer el módulo.
 - Retención en el proveedor de IA: se informa claramente en el consentimiento de la foto, sin acuerdo de cero retención por ahora (decisión del director médico, opción 2a). Se puede pedir ese acuerdo más adelante.
 
 ## 9. Decisiones que tomé yo (revíselas)
