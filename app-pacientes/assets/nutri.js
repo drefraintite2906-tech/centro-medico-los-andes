@@ -302,9 +302,102 @@
     return r;
   }
 
+  /* ---- Tabla de alimentos: búsqueda y porciones ---- */
+  var ACENTOS = { "á": "a", "à": "a", "â": "a", "ä": "a", "é": "e", "è": "e", "ê": "e", "ë": "e",
+    "í": "i", "ì": "i", "î": "i", "ï": "i", "ó": "o", "ò": "o", "ô": "o", "ö": "o",
+    "ú": "u", "ù": "u", "û": "u", "ü": "u", "ñ": "n", "ç": "c" };
+
+  function sinAcentos(s) {
+    if (s === null || s === undefined) return "";
+    s = String(s).toLowerCase();
+    if (s.normalize) s = s.normalize("NFD").replace(/[̀-ͯ]/g, "");
+    return s.replace(/[áàâäéèêëíìîïóòôöúùûüñç]/g, function (c) { return ACENTOS[c]; });
+  }
+
+  function textoBusqueda(a) {
+    var partes = [a.nombre];
+    var sin = a.sinonimos || [];
+    for (var i = 0; i < sin.length; i++) partes.push(sin[i]);
+    return sinAcentos(partes.join(" | "));
+  }
+
+  function usoDe(frecuentes, id) {
+    if (!frecuentes || typeof frecuentes !== "object" || typeof id !== "string" || !has(frecuentes, id)) return 0;
+    var n = frecuentes[id];
+    return typeof n === "number" && isFinite(n) && n > 0 ? n : 0;
+  }
+
+  function buscar(alimentos, q, frecuentes) {
+    if (!alimentos || !alimentos.length) return [];
+    var qn = sinAcentos(q).replace(/\s+/g, " ").replace(/^ | $/g, "");
+    var palabras = qn ? qn.split(" ") : [];
+    var cand = [];
+    for (var i = 0; i < alimentos.length; i++) {
+      var a = alimentos[i];
+      if (!a || typeof a.nombre !== "string") continue;
+      var uso = usoDe(frecuentes, a.id);
+      var inicio = 0;
+      if (palabras.length) {
+        var h = textoBusqueda(a), ok = true;
+        for (var p = 0; p < palabras.length; p++) if (h.indexOf(palabras[p]) === -1) { ok = false; break; }
+        if (!ok) continue;
+        if (sinAcentos(a.nombre).indexOf(qn) === 0) inicio = 2;
+        else {
+          var sin = a.sinonimos || [];
+          for (var k = 0; k < sin.length; k++) if (sinAcentos(sin[k]).indexOf(qn) === 0) { inicio = 1; break; }
+        }
+      } else if (!uso) continue;
+      cand.push({ a: a, uso: uso, inicio: inicio, n: sinAcentos(a.nombre), i: i });
+    }
+    cand.sort(function (x, y) {
+      if (x.uso !== y.uso) return y.uso - x.uso;
+      if (x.inicio !== y.inicio) return y.inicio - x.inicio;
+      if (x.n !== y.n) return x.n < y.n ? -1 : 1;
+      return x.i - y.i;
+    });
+    var out = [];
+    for (var j = 0; j < cand.length && j < 20; j++) out.push(cand[j].a);
+    return out;
+  }
+
+  var FRACCIONES = [[0.25, "¼"], [1 / 3, "⅓"], [0.5, "½"], [2 / 3, "⅔"], [0.75, "¾"]];
+  var GLIFOS = { "¼": 0.25, "⅓": 1 / 3, "½": 0.5, "⅔": 2 / 3, "¾": 0.75 };
+
+  function cantidadTexto(x) {
+    var ent = Math.floor(x + 0.01), fr = x - ent;
+    if (Math.abs(fr) < 0.01) return String(ent);
+    for (var i = 0; i < FRACCIONES.length; i++) {
+      if (Math.abs(fr - FRACCIONES[i][0]) < 0.01) return (ent ? String(ent) : "") + FRACCIONES[i][1];
+    }
+    return coma(Math.round(x * 10) / 10);
+  }
+
+  function porcionTexto(porcion, mult) {
+    porcion = typeof porcion === "string" ? porcion : "";
+    var m = /^(\d+(?:[.,]\d+)?)?\s*([¼⅓½⅔¾])?\s*/.exec(porcion);
+    if (!m[1] && !m[2]) return mult === 1 ? porcion : cantidadTexto(mult) + " × " + porcion;
+    if (mult === 1) return porcion;
+    var q = (m[1] ? parseFloat(m[1].replace(",", ".")) : 0) + (m[2] ? GLIFOS[m[2]] : 0);
+    return cantidadTexto(q * mult) + " " + porcion.slice(m[0].length);
+  }
+
+  function r1(x) { return Math.round(x * 10) / 10; }
+  function n0(x) { return typeof x === "number" && isFinite(x) && x > 0 ? x : 0; }
+
+  function escalar(a, mult) {
+    a = a || {};
+    if (!num(mult) || mult === Infinity) mult = 1;
+    return {
+      nombre: a.nombre, porcion: porcionTexto(a.porcion, mult), g: Math.round(n0(a.g) * mult),
+      kcal: Math.round(n0(a.kcal) * mult), carb: r1(n0(a.carb) * mult), prot: r1(n0(a.prot) * mult),
+      grasa: r1(n0(a.grasa) * mult), grasaSat: r1(n0(a.grasaSat) * mult), sodio: Math.round(n0(a.sodio) * mult),
+      etiquetas: (a.etiquetas || []).slice(), alimentoId: a.id
+    };
+  }
+
   return { imc: imc, tmb: tmb, metaDiaria: metaDiaria, ACTIVIDAD: ACTIVIDAD, OBJETIVO: OBJETIVO,
     REGLAS_NUTRI: REGLAS_NUTRI, nuevoNutri: nuevoNutri, normalizarNutri: normalizarNutri,
     totalesDia: totalesDia, nivelAlerta: nivelAlerta, alertasPorMostrar: alertasPorMostrar,
     textoAlerta: textoAlerta, avisosCondicion: avisosCondicion, tiempoPorHora: tiempoPorHora,
-    statsPeriodo: statsPeriodo };
+    statsPeriodo: statsPeriodo, sinAcentos: sinAcentos, buscar: buscar, escalar: escalar };
 });
