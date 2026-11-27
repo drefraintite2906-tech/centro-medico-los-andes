@@ -13,10 +13,10 @@
   function imc(kg, cm) {
     if (!num(kg) || !num(cm)) return null;
     var m = cm / 100;
-    var v = kg / (m * m);
+    var v = Math.round(kg / (m * m) * 10) / 10;
     var clase = v < 18.5 ? "bajo" : v < 25 ? "normal" : v < 30 ? "sobrepeso" :
       v < 35 ? "obesidad1" : v < 40 ? "obesidad2" : "obesidad3";
-    return { valor: Math.round(v * 10) / 10, clase: clase };
+    return { valor: v, clase: clase };
   }
 
   function tmb(sexo, kg, cm, edad) {
@@ -48,7 +48,7 @@
     var minimo = p.sexo === "F" ? 1200 : 1500;
     var minimoAplicado = false;
     if (kcal < minimo) { kcal = minimo; minimoAplicado = true; }
-    var detalle = "TMB " + Math.round(t) + " × " + coma(factor) + " " +
+    var detalle = "TMB " + Math.round(t) + " × " + coma(factor) + " = " + Math.round(t * factor) + " " +
       (ajuste < 0 ? "− " : "+ ") + Math.abs(ajuste) + " = " + kcal + " kcal";
     if (minimoAplicado) detalle += " (mínimo seguro aplicado)";
     return { kcal: kcal, fuente: "calculo", tmb: t, factor: factor, ajuste: ajuste,
@@ -117,7 +117,14 @@
       if (!isObj(obj)) return r;
       if (typeof obj.dispositivo === "string" && /^[a-z0-9]{8,40}$/.test(obj.dispositivo)) r.dispositivo = obj.dispositivo;
       r.perfil = normPerfil(obj.perfil);
-      if (Array.isArray(obj.pesos)) r.pesos = obj.pesos.slice();
+      if (Array.isArray(obj.pesos)) {
+        for (var q = 0; q < obj.pesos.length; q++) {
+          var pe = obj.pesos[q];
+          if (isObj(pe) && typeof pe.id === "string" && typeof pe.t === "number" && isFinite(pe.t) && num(pe.kg)) {
+            r.pesos.push({ id: pe.id, t: pe.t, kg: pe.kg });
+          }
+        }
+      }
       if (Array.isArray(obj.comidas)) {
         for (var i = 0; i < obj.comidas.length; i++) {
           var c = obj.comidas[i];
@@ -383,7 +390,6 @@
   }
 
   function r1(x) { return Math.round(x * 10) / 10; }
-  function n0(x) { return typeof x === "number" && isFinite(x) && x > 0 ? x : 0; }
 
   function escalar(a, mult) {
     a = a || {};

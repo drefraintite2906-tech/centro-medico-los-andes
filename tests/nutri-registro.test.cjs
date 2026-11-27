@@ -166,3 +166,8 @@ test("normalizarNutri conserva dispositivo solo si es válido", () => {
   assert.strictEqual(N.normalizarNutri({ dispositivo: "a b c d e f g h" }).dispositivo, undefined);
   assert.strictEqual(N.normalizarNutri({ dispositivo: 5 }).dispositivo, undefined);
 });
+
+test("normalizarNutri sanea pesos", () => {
+  var r = N.normalizarNutri({ pesos: [null, { kg: "x" }, { id: "a", t: 1, kg: 80 }, { id: "b", t: 2, kg: 0 }, { id: 3, t: 1, kg: 70 }] });
+  assert.deepStrictEqual(r.pesos, [{ id: "a", t: 1, kg: 80 }]);
+});
