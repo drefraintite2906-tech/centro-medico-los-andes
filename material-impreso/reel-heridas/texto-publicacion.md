@@ -1,6 +1,6 @@
 # Reel: Manejo de heridas en casa y cuándo acudir al médico
 
-**Archivo:** `reel-heridas-cmla-4k.mp4` · **2160×3840 (4K vertical 9:16)** · 82,5 s · 30 fps · H.264 + AAC 256 kbps.
+**Archivo:** `reel-heridas-cmla.mp4` · **1080×1920 (HD vertical 9:16)** · 82,5 s · 30 fps · H.264 + AAC 256 kbps.
 Estilo: animación cartoon original (contornos negros gruesos, colores planos, fondos de rayos), con la mascota original "Curi", una curita con cara. No usa personajes ni marcas de terceros.
 Voz en off femenina (síntesis Kokoro TTS, voz `ef_dora`, Apache 2.0) y música instrumental original.
 Contenido basado en recomendaciones generales de primeros auxilios (Cruz Roja / OMS). Información educativa; no sustituye la valoración médica.
