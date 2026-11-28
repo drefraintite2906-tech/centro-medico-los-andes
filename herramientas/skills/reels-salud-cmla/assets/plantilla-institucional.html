@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Reel Dengue CMLA</title>
+<link rel="stylesheet" href="node_modules/@fontsource/montserrat/700.css">
+<link rel="stylesheet" href="node_modules/@fontsource/montserrat/800.css">
+<link rel="stylesheet" href="node_modules/@fontsource/poppins/500.css">
+<link rel="stylesheet" href="node_modules/@fontsource/poppins/600.css">
+<link rel="stylesheet" href="node_modules/@fontsource/open-sans/400.css">
+<link rel="stylesheet" href="node_modules/@fontsource/open-sans/600.css">
+<style>
+:root{
+  --azul:#0A4496; --azul2:#0d5bc4; --azulOsc:#062a5f; --cielo:#e8f1ff;
+  --rojo:#d62839; --rojoOsc:#8e0f1d; --ambar:#ffb703; --blanco:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--azulOsc)}
+body{font-family:"Open Sans",sans-serif;color:#fff;position:relative}
+.h{font-family:"Montserrat",sans-serif;font-weight:800;letter-spacing:-.01em;line-height:1.05}
+.p{font-family:"Poppins",sans-serif;font-weight:500}
+
+/* ---------- Fondo continuo ---------- */
+#bg{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 0%,#1565d8 0%,var(--azul) 45%,var(--azulOsc) 100%)}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.45}
+.b1{width:700px;height:700px;background:#3d8bff;left:-250px;top:200px;animation:flota 14s ease-in-out infinite alternate}
+.b2{width:600px;height:600px;background:#7fb6ff;right:-220px;top:1100px;opacity:.3;animation:flota 17s ease-in-out infinite alternate-reverse}
+@keyframes flota{to{transform:translate(160px,-220px) scale(1.15)}}
+#bgRojo{position:absolute;inset:0;opacity:0;background:radial-gradient(120% 80% at 50% 0%,#ef3b4c 0%,var(--rojo) 40%,var(--rojoOsc) 100%)}
+#bgBlanco{position:absolute;inset:0;opacity:0;background:#fff}
+.pulso{position:absolute;left:0;width:1080px;height:160px;opacity:.18}
+.pulso path{fill:none;stroke:#fff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:2600;stroke-dashoffset:2600;animation:traza 3.2s linear infinite}
+@keyframes traza{to{stroke-dashoffset:0}}
+
+/* ---------- Escenas ---------- */
+.esc{position:absolute;inset:0;opacity:0;animation:entra .6s ease var(--s) both}
+.esc>.in{position:absolute;inset:0;animation:sale .5s ease calc(var(--s) + var(--d) - .5s) forwards;padding:300px 80px 320px;display:flex;flex-direction:column;justify-content:center}
+@keyframes entra{from{opacity:0}to{opacity:1}}
+@keyframes sale{to{opacity:0;transform:scale(1.04)}}
+.rv{animation:sube .8s cubic-bezier(.2,.85,.25,1) calc(var(--s) + .35s + var(--i,0) * .42s) both}
+.pop{animation:pop .7s cubic-bezier(.3,1.5,.5,1) calc(var(--s) + .35s + var(--i,0) * .42s) both}
+@keyframes sube{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
+
+[style*="align-items:center"]>.etq,.cierre .etq{align-self:center}
+.etq{align-self:flex-start;display:inline-block;font-family:"Poppins";font-weight:600;font-size:34px;letter-spacing:.14em;text-transform:uppercase;padding:14px 30px;border-radius:60px;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.35)}
+.tit{font-size:96px;margin:34px 0 0}
+.sub{font-size:44px;line-height:1.35;margin-top:28px;opacity:.95}
+.amar{color:var(--ambar)}
+
+.lista{margin-top:46px;display:flex;flex-direction:column;gap:22px}
+.item{display:flex;align-items:center;gap:30px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.22);border-radius:30px;padding:22px 30px}
+.ico{flex:0 0 104px;height:104px;border-radius:50%;background:#fff;display:grid;place-items:center}
+.ico svg{width:62px;height:62px;fill:none;stroke:var(--azul);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.item .tx{font-family:"Poppins";font-weight:600;font-size:43px;line-height:1.18}
+.item .tx small{display:block;font-family:"Open Sans";font-weight:400;font-size:31px;opacity:.85;margin-top:4px}
+.rojo .ico svg{stroke:var(--rojo)}
+.rojo .item{background:rgba(255,255,255,.14)}
+
+/* Escena 1 */
+.mosq{position:absolute;left:50%;top:1230px;width:560px;margin-left:-280px;animation:revolo 2.4s ease-in-out infinite alternate}
+@keyframes revolo{0%{transform:translate(-60px,20px) rotate(-6deg)}100%{transform:translate(60px,-30px) rotate(5deg)}}
+.ala{transform-origin:270px 150px;animation:aleteo .09s linear infinite alternate}
+@keyframes aleteo{to{transform:scaleY(.35)}}
+.grande{font-size:200px;letter-spacing:.02em;color:#fff;text-shadow:0 18px 50px rgba(0,0,0,.35)}
+
+/* Tarjeta grande */
+.tarjeta{margin-top:56px;background:#fff;color:var(--azulOsc);border-radius:44px;padding:56px 54px;box-shadow:0 30px 80px rgba(0,0,0,.3)}
+.tarjeta .h{font-size:64px;color:var(--azul)}
+.tarjeta p{font-size:42px;line-height:1.4;margin-top:22px}
+.prohib{display:flex;flex-wrap:wrap;gap:18px;margin-top:34px}
+.prohib span{font-family:"Poppins";font-weight:600;font-size:40px;padding:14px 30px;border-radius:20px;background:#ffe3e6;color:var(--rojo);text-decoration:line-through;text-decoration-thickness:4px}
+
+.urg{margin-top:40px;background:#fff;color:var(--rojo);border-radius:34px;padding:34px 40px;text-align:center;font-size:56px;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:sube .8s cubic-bezier(.2,.85,.25,1) calc(var(--s) + .35s + var(--i,0) * .42s) both,late 1s ease-in-out calc(var(--s) + 4s) infinite alternate}
+@keyframes late{to{transform:scale(1.04)}}
+
+.cal{display:flex;gap:16px;margin-top:56px;justify-content:center}
+.dia{width:130px;height:150px;border-radius:24px;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Montserrat";font-weight:800;font-size:58px}
+.dia small{font-family:"Poppins";font-weight:500;font-size:24px;opacity:.85}
+.dia.ojo{background:var(--ambar);color:var(--azulOsc);border-color:var(--ambar)}
+.termo{display:flex;align-items:flex-end;gap:16px;justify-content:center;margin-top:24px;height:240px}
+.barra{width:130px;border-radius:18px 18px 6px 6px;background:linear-gradient(#ff8a5c,#ff5d5d);transform-origin:bottom;animation:crece .7s ease calc(var(--s) + .6s + var(--i) * .2s) both}
+@keyframes crece{from{transform:scaleY(0)}}
+
+/* Cierre */
+.cierre .in{text-align:center;color:var(--azulOsc);align-items:center}
+.logo{width:880px;border-radius:12px}
+.lema{font-size:62px;color:var(--azul);margin-top:30px}
+.datos{margin:48px auto 0;width:860px;display:flex;flex-direction:column;gap:18px;text-align:left}
+.dato{display:flex;align-items:center;gap:24px;font-family:"Poppins";font-weight:600;font-size:42px;color:var(--azulOsc)}
+.dato .ico{flex-basis:86px;height:86px;background:var(--azul)}
+.dato .ico svg{stroke:#fff;width:48px;height:48px}
+.aviso{margin-top:60px;font-size:26px;opacity:.75;text-align:center;line-height:1.35}
+.marca{position:absolute;left:0;right:0;top:1640px;text-align:center;font-family:"Poppins";font-weight:600;font-size:30px;letter-spacing:.08em;opacity:.8}
+#cab{position:absolute;left:50%;top:70px;width:380px;margin-left:-190px;background:#fff;border-radius:28px;padding:10px 22px;box-shadow:0 14px 40px rgba(0,0,0,.28)}
+#cab img{display:block;width:100%}
+</style>
+</head>
+<body>
+<div id="bg"><div class="blob b1"></div><div class="blob b2"></div></div>
+<div id="bgRojo"></div>
+<div id="bgBlanco"></div>
+<svg class="pulso" style="top:75px" viewBox="0 0 1080 160"><path d="M0 80 H380 L420 80 L445 20 L475 140 L505 50 L525 80 H1080"/></svg>
+
+<div id="cab"><img src="logo.jpg" alt="Centro Médico Los Andes"></div>
+
+<!-- 1. Gancho -->
+<section class="esc" data-d="5.5"><div class="in" style="text-align:center;align-items:center">
+  <div class="etq rv" style="--i:0">Alerta de salud</div>
+  <div class="h tit rv" style="--i:1;font-size:84px">¿Fiebre alta<br>de repente?</div>
+  <div class="p sub rv" style="--i:2">Podría ser</div>
+  <div class="h grande pop" style="--i:3">DENGUE</div>
+  <svg class="mosq pop" style="--i:4" viewBox="0 0 540 320">
+    <g class="ala"><ellipse cx="200" cy="90" rx="120" ry="42" transform="rotate(-25 200 90)" fill="rgba(255,255,255,.35)" stroke="#fff" stroke-width="3"/><ellipse cx="320" cy="95" rx="115" ry="40" transform="rotate(22 320 95)" fill="rgba(255,255,255,.3)" stroke="#fff" stroke-width="3"/></g>
+    <g stroke="#0b1a33" stroke-width="5" fill="none" stroke-linecap="round"><path d="M230 175 L150 240 L120 300"/><path d="M260 180 L230 260 L215 315"/><path d="M290 180 L330 260 L350 315"/><path d="M310 172 L400 230 L440 290"/><path d="M215 165 L120 190 L70 230"/><path d="M325 165 L430 180 L490 215"/></g>
+    <ellipse cx="270" cy="160" rx="62" ry="40" fill="#13213d"/>
+    <path d="M320 165 Q420 175 470 215 Q420 205 320 185 Z" fill="#13213d"/>
+    <g stroke="#fff" stroke-width="5"><path d="M370 172 L366 192"/><path d="M405 182 L398 200"/><path d="M438 196 L430 210"/><path d="M262 132 Q272 160 262 188"/></g>
+    <circle cx="200" cy="150" r="30" fill="#13213d"/><circle cx="190" cy="143" r="9" fill="#d62839"/>
+    <path d="M172 158 L95 200" stroke="#13213d" stroke-width="6" stroke-linecap="round"/>
+  </svg>
+</div></section>
+
+<!-- 2. Qué es -->
+<section class="esc" data-d="7"><div class="in">
+  <div class="etq rv" style="--i:0">¿Qué es?</div>
+  <div class="h tit rv" style="--i:1">Una infección por <span class="amar">virus</span></div>
+  <div class="p sub rv" style="--i:2">Se transmite por la picadura del mosquito <b>Aedes aegypti</b>, que se cría en agua acumulada.</div>
+  <div class="tarjeta rv" style="--i:3">
+    <div class="h">Cualquiera puede enfermar</div>
+    <p>Y se puede tener dengue <b>más de una vez</b>. Las siguientes infecciones pueden ser más graves.</p>
+  </div>
+</div></section>
+
+<!-- 3. Síntomas -->
+<section class="esc" data-d="10.5"><div class="in" style="padding-top:300px">
+  <div class="etq rv" style="--i:0">Síntomas</div>
+  <div class="h tit rv" style="--i:1;font-size:80px;margin-top:24px">¿Cómo se manifiesta?</div>
+  <div class="lista" style="gap:18px;margin-top:36px">
+    <div class="item rv" style="--i:2"><div class="ico"><svg viewBox="0 0 24 24"><path d="M14 14.8V4a2 2 0 1 0-4 0v10.8a4 4 0 1 0 4 0z"/><path d="M12 9v7"/></svg></div><div class="tx">Fiebre alta y repentina<small>Usualmente de 39 a 40 °C</small></div></div>
+    <div class="item rv" style="--i:3"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3a7 7 0 0 0-7 7c0 2.5 1.2 3.6 2 5v4h8v-2h2v-3l2-1-2-3a7 7 0 0 0-5-7z"/><path d="M9 8l2 2-2 2"/></svg></div><div class="tx">Dolor de cabeza intenso</div></div>
+    <div class="item rv" style="--i:4"><div class="ico"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="tx">Dolor detrás de los ojos</div></div>
+    <div class="item rv" style="--i:5"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"/><path d="M12 7v7M8 10l4-2 4 2M9 21l3-7 3 7"/><path d="M4 9l1.5 1.5M20 9l-1.5 1.5"/></svg></div><div class="tx">Dolor de músculos y articulaciones</div></div>
+    <div class="item rv" style="--i:6"><div class="ico"><svg viewBox="0 0 24 24"><path d="M7 4h7a5 5 0 0 1 5 5v2a8 8 0 0 1-8 8H8a3 3 0 0 1 0-6h3a2 2 0 0 0 0-4H7z"/></svg></div><div class="tx">Náuseas, vómitos y cansancio</div></div>
+    <div class="item rv" style="--i:7"><div class="ico"><svg viewBox="0 0 24 24"><path d="M7 11V5a1.5 1.5 0 0 1 3 0v5V4a1.5 1.5 0 0 1 3 0v6V5a1.5 1.5 0 0 1 3 0v8c0 4-2.5 7-6 7s-6-3-6-6l-1-3a1.5 1.5 0 0 1 3-1z"/><circle cx="11" cy="15" r=".6"/><circle cx="14" cy="13" r=".6"/><circle cx="13" cy="17" r=".6"/></svg></div><div class="tx">Manchas o sarpullido en la piel</div></div>
+  </div>
+</div></section>
+
+<!-- 4. Por qué acudir al médico -->
+<section class="esc" data-d="10.5"><div class="in">
+  <div class="etq rv" style="--i:0">Importante</div>
+  <div class="h tit rv" style="--i:1;font-size:82px">¿Por qué debo acudir al médico?</div>
+  <div class="lista">
+    <div class="item rv" style="--i:2"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg></div><div class="tx">Puede complicarse<small>aunque al principio parezca leve</small></div></div>
+    <div class="item rv" style="--i:3"><div class="ico"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L5 18a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/><path d="M7.5 14h9"/></svg></div><div class="tx">Vigilamos tus plaquetas<small>con un hemograma, y tu hidratación</small></div></div>
+    <div class="item rv" style="--i:4"><div class="ico"><svg viewBox="0 0 24 24"><path d="M6 3v5a4 4 0 0 0 8 0V3"/><path d="M10 12v3a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/></svg></div><div class="tx">Te indicamos un tratamiento seguro<small>y cuándo volver a control</small></div></div>
+  </div>
+</div></section>
+
+<!-- 5. No te automediques -->
+<section class="esc" data-d="7.5"><div class="in">
+  <div class="etq rv" style="--i:0">Cuidado</div>
+  <div class="h tit rv" style="--i:1">No te <span class="amar">automediques</span></div>
+  <div class="tarjeta rv" style="--i:2">
+    <div class="h">Evita estos medicamentos</div>
+    <div class="prohib"><span>Aspirina</span><span>Ibuprofeno</span><span>Diclofenaco</span><span>Naproxeno</span></div>
+    <p>Pueden <b>aumentar el riesgo de sangrado</b>. Toma solo lo que te indique tu médico.</p>
+  </div>
+</div></section>
+
+<!-- 6. Cuando baja la fiebre -->
+<section class="esc" data-d="6.5"><div class="in" style="text-align:center;align-items:center">
+  <div class="etq rv" style="--i:0">Ojo con esto</div>
+  <div class="h tit rv" style="--i:1;font-size:84px">El peligro puede llegar cuando la fiebre <span class="amar">BAJA</span></div>
+  <div class="termo">
+    <div class="barra" style="--i:0;height:230px"></div><div class="barra" style="--i:1;height:215px"></div><div class="barra" style="--i:2;height:110px;opacity:.6"></div><div class="barra" style="--i:3;height:75px;opacity:.5"></div><div class="barra" style="--i:4;height:65px;opacity:.5"></div>
+  </div>
+  <div class="cal rv" style="--i:3;margin-top:14px">
+    <div class="dia">1<small>día</small></div><div class="dia">2<small>día</small></div><div class="dia ojo">3<small>día</small></div><div class="dia ojo" style="font-size:46px">4–6<small>días</small></div><div class="dia ojo">7<small>día</small></div>
+  </div>
+  <div class="p sub rv" style="--i:4">Entre el día 3 y el 7 vigila los <b class="amar">signos de alarma</b>.</div>
+</div></section>
+
+<!-- 7. Signos de alarma (fondo rojo) -->
+<section class="esc rojo" data-d="13" id="escAlarma"><div class="in" style="padding-top:290px">
+  <div class="etq rv" style="--i:0">⚠ Signos de alarma</div>
+  <div class="lista" style="gap:16px;margin-top:34px">
+    <div class="item rv" style="--i:1"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/><path d="M4 4l3 3M20 4l-3 3"/></svg></div><div class="tx">Dolor de barriga intenso y continuo</div></div>
+    <div class="item rv" style="--i:2"><div class="ico"><svg viewBox="0 0 24 24"><path d="M7 4h7a5 5 0 0 1 5 5v2a8 8 0 0 1-8 8H8a3 3 0 0 1 0-6h3a2 2 0 0 0 0-4H7z"/></svg></div><div class="tx">Vómitos que no paran</div></div>
+    <div class="item rv" style="--i:3"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/></svg></div><div class="tx">Sangrado<small>de encías o nariz, o en el vómito o las heces</small></div></div>
+    <div class="item rv" style="--i:4"><div class="ico"><svg viewBox="0 0 24 24"><path d="M20 14A8 8 0 1 1 10 4a7 7 0 0 0 10 10z"/></svg></div><div class="tx">Mucho sueño, irritabilidad o confusión</div></div>
+    <div class="item rv" style="--i:5"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 12m-2 0a2 2 0 1 0 4 0a4 4 0 1 0-8 0a6 6 0 1 0 12 0a8 8 0 1 0-16 0"/></svg></div><div class="tx">Mareo o desmayo al ponerse de pie</div></div>
+    <div class="item rv" style="--i:6"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2v20M4 6l16 12M20 6L4 18"/></svg></div><div class="tx">Manos y pies fríos, poca orina o falta de aire</div></div>
+  </div>
+  <div class="h urg" style="--i:7">Acude a URGENCIAS de inmediato</div>
+</div></section>
+
+<!-- 8. Prevención -->
+<section class="esc" data-d="7" id="escPrev"><div class="in">
+  <div class="etq rv" style="--i:0">Prevención</div>
+  <div class="h tit rv" style="--i:1">Sin criaderos, no hay mosquitos</div>
+  <div class="lista">
+    <div class="item rv" style="--i:2"><div class="ico"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1.5 12h-11z"/><path d="M4 8h16M9 4h6"/><path d="M9 12l6 5M15 12l-6 5"/></svg></div><div class="tx">Elimina el agua acumulada<small>tanques, llantas, floreros y envases</small></div></div>
+    <div class="item rv" style="--i:3"><div class="ico"><svg viewBox="0 0 24 24"><rect x="8" y="9" width="8" height="12" rx="2"/><path d="M10 9V6h4v3M14 4h3M18 3l2-1M18 5l2 1"/></svg></div><div class="tx">Usa repelente<small>y ropa de manga larga</small></div></div>
+    <div class="item rv" style="--i:4"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9H3z"/><path d="M8 20v-6h8v6M8 17h8M12 14v6"/></svg></div><div class="tx">Mallas en ventanas y mosquiteros</div></div>
+  </div>
+</div></section>
+
+<!-- 9. CMLA te atiende -->
+<section class="esc" data-d="7.5"><div class="in">
+  <div class="etq rv" style="--i:0">Estamos para ti</div>
+  <div class="h tit rv" style="--i:1;font-size:84px">¿Tienes síntomas? <span class="amar">No esperes.</span></div>
+  <div class="tarjeta rv" style="--i:2">
+    <div class="h">Consulta médica + laboratorio en un mismo lugar</div>
+    <p>Te evaluamos y, si tu médico lo indica, realizamos tu <b>hemograma</b> sin salir de la clínica.</p>
+    <p style="font-size:38px;color:var(--azul)"><b>Abierto todos los días</b><br>Lun–Sáb 8:00 a. m.–8:00 p. m. · Dom y feriados 9:00 a. m.–5:00 p. m.</p>
+  </div>
+</div></section>
+
+<!-- 10. Cierre (fondo blanco) -->
+<section class="esc cierre" data-d="7" id="escCierre"><div class="in">
+  <img class="logo pop" style="--i:0" src="logo.jpg" alt="Centro Médico Los Andes">
+  <div class="h lema rv" style="--i:1">Tu salud es nuestra<br>razón de ser</div>
+  <div class="datos">
+    <div class="dato rv" style="--i:2"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9c0 3 3 6 6 6l1-1.5-2-1-1 1c-1 0-2.5-1.5-2.5-2.5l1-1-1-2z"/></svg></div>+507 6056-8129</div>
+    <div class="dato rv" style="--i:3"><div class="ico"><svg viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg></div>237-9094 · 237-6615</div>
+    <div class="dato rv" style="--i:4"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></div>C.C. Los Andes, local B15</div>
+  </div>
+  <div class="aviso rv" style="--i:5;color:var(--azulOsc)">Información educativa. No sustituye la valoración médica.<br>Fuente: OPS/OMS. @centromedico.losandes</div>
+</div></section>
+
+<script>
+// Línea de tiempo global: cada escena recibe su inicio (--s) y duración (--d).
+const escenas = [...document.querySelectorAll(".esc")];
+let t = 0; const tramos = [];
+escenas.forEach((e) => { const d = parseFloat(e.dataset.d); e.style.setProperty("--s", t + "s"); e.style.setProperty("--d", d + "s"); tramos.push([t, d]); t += d; });
+const TOTAL = t;
+// Fondos rojo (alarma) y blanco (cierre) con fundido
+function fondo(id, escId) {
+  const i = escenas.findIndex((e) => e.id === escId); const [s, d] = tramos[i];
+  document.getElementById(id).animate([{ opacity: 0 }, { opacity: 1, offset: 0.6 / (d + 0.6) }, { opacity: 1, offset: (d) / (d + 0.6) }, { opacity: 0 }],
+    { duration: (d + 0.6) * 1000, delay: (s - 0.3) * 1000, fill: "both" });
+}
+fondo("bgRojo", "escAlarma");
+const ic = escenas.findIndex((e) => e.id === "escCierre");
+document.getElementById("bgBlanco").animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, delay: tramos[ic][0] * 1000, fill: "both" });
+document.getElementById("cab").animate([{ opacity: 0, transform: "translateY(-30px)" }, { opacity: 1, transform: "none" }], { duration: 700, delay: 100, fill: "both", easing: "ease-out" });
+document.getElementById("cab").firstElementChild.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 500, delay: tramos[ic][0] * 1000, fill: "both" });
+document.getElementById("cab").animate([{ boxShadow: "0 14px 40px rgba(0,0,0,.28)" }, { boxShadow: "0 0 0 rgba(0,0,0,0)" }], { duration: 500, delay: tramos[ic][0] * 1000, fill: "forwards" });
+window.reel = { TOTAL };
+</script>
+</body>
+</html>

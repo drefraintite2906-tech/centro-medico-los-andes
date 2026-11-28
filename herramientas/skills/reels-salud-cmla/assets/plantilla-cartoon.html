@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Reel Heridas CMLA</title>
+<link rel="stylesheet" href="node_modules/@fontsource/montserrat/800.css">
+<link rel="stylesheet" href="node_modules/@fontsource/montserrat/900.css">
+<link rel="stylesheet" href="node_modules/@fontsource/poppins/600.css">
+<link rel="stylesheet" href="node_modules/@fontsource/open-sans/600.css">
+<style>
+:root{--azul:#0A4496;--azulOsc:#062a5f;--celeste:#29b6f6;--amar:#ffd23f;--rojo:#e63946;--verde:#43c66a;--tinta:#111;--piel:#e8a87c;--curi:#f2b27e}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--azul)}
+body{font-family:"Poppins",sans-serif;color:var(--tinta);position:relative}
+
+/* ---- Escenas con fondo cartoon propio ---- */
+.esc{position:absolute;inset:0;opacity:0;animation:entra .5s ease var(--s) both;overflow:hidden}
+.esc>.in{position:absolute;inset:0;padding:270px 70px 300px;display:flex;flex-direction:column;align-items:center;animation:sale .45s ease calc(var(--s) + var(--d) - .45s) forwards}
+@keyframes entra{from{opacity:0;transform:scale(1.08)}to{opacity:1;transform:none}}
+@keyframes sale{to{opacity:0;transform:scale(.94)}}
+.rayos{position:absolute;left:50%;top:50%;width:3000px;height:3000px;margin:-1500px 0 0 -1500px;animation:gira 40s linear infinite;
+  background:repeating-conic-gradient(from 0deg,var(--c1) 0deg 10deg,var(--c2) 10deg 20deg)}
+@keyframes gira{to{transform:rotate(360deg)}}
+.puntos{position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.13) 3px,transparent 3.5px);background-size:26px 26px;
+  -webkit-mask-image:linear-gradient(180deg,transparent 30%,#000 100%);mask-image:linear-gradient(180deg,transparent 30%,#000 100%)}
+.azul{--c1:#0d52b3;--c2:#0A4496}
+.celeste{--c1:#3fc1ff;--c2:#1fa8ee}
+.amarillo{--c1:#ffd84f;--c2:#ffc928}
+.verde{--c1:#57d27c;--c2:#3cbd66}
+.rojo{--c1:#f04b57;--c2:#d9303e}
+.blanco{--c1:#ffffff;--c2:#f1f6ff}
+
+/* ---- Tipografía cartoon ---- */
+.tit{font-family:"Montserrat";font-weight:900;font-size:86px;line-height:1.02;text-align:center;color:#fff;
+  -webkit-text-stroke:4px var(--tinta);paint-order:stroke fill;text-shadow:8px 8px 0 var(--tinta);letter-spacing:-.01em}
+.tit .am{color:var(--amar)}
+.paso{font-family:"Montserrat";font-weight:900;font-size:40px;letter-spacing:.08em;background:var(--amar);border:6px solid var(--tinta);border-radius:60px;padding:10px 34px;box-shadow:7px 7px 0 var(--tinta);margin-bottom:26px}
+.card{background:#fff;border:6px solid var(--tinta);border-radius:34px;box-shadow:12px 12px 0 var(--tinta);padding:34px 40px;width:100%;margin-top:26px}
+.card p{font-size:46px;line-height:1.28;font-weight:600;text-align:center}
+.card b{color:var(--azul)}
+.ilus{width:900px;height:760px;margin-top:20px;position:relative}
+.ilus svg{width:100%;height:100%;overflow:visible}
+
+/* Entradas y movimiento */
+.rv{animation:sube .7s cubic-bezier(.2,.9,.3,1.3) calc(var(--s) + .3s + var(--i,0) * .38s) both}
+.pop{animation:pop .75s cubic-bezier(.3,1.6,.5,1) calc(var(--s) + .25s + var(--i,0) * .38s) both}
+@keyframes sube{from{opacity:0;transform:translateY(80px) rotate(-3deg)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.2) rotate(-12deg)}100%{opacity:1;transform:none}}
+.hierve{animation:hierve .36s steps(1) infinite}
+@keyframes hierve{0%{transform:translate(0,0) rotate(0)}33%{transform:translate(1.5px,-1px) rotate(.5deg)}66%{transform:translate(-1px,1.5px) rotate(-.4deg)}}
+.rebota{transform-origin:50% 100%;animation:rebota .55s ease-in-out infinite alternate}
+@keyframes rebota{from{transform:translateY(0) scale(1.03,.97)}to{transform:translateY(-34px) scale(.97,1.04)}}
+.presiona{transform-box:fill-box;transform-origin:50% 100%;animation:presiona .8s ease-in-out infinite alternate}
+@keyframes presiona{from{transform:translateY(-14px)}to{transform:translateY(6px) scaleY(.94)}}
+.manecilla{transform-box:view-box;transform-origin:300px 300px;animation:gira 3s linear infinite}
+.chorro{stroke-dasharray:30 26;animation:chorro .5s linear infinite}
+@keyframes chorro{to{stroke-dashoffset:-56}}
+.burbuja{transform-box:fill-box;transform-origin:center;animation:burb 1.6s ease-in-out infinite alternate}
+@keyframes burb{from{transform:translateY(10px) scale(.85)}to{transform:translateY(-26px) scale(1.1)}}
+.frota{transform-box:fill-box;transform-origin:center;animation:frota .35s ease-in-out infinite alternate}
+@keyframes frota{from{transform:translateX(-18px) rotate(-4deg)}to{transform:translateX(18px) rotate(4deg)}}
+.brilla{transform-box:fill-box;transform-origin:center;animation:brilla 1s ease-in-out infinite alternate}
+@keyframes brilla{from{transform:scale(.6) rotate(0);opacity:.5}to{transform:scale(1.15) rotate(25deg);opacity:1}}
+.tiembla{transform-box:fill-box;transform-origin:50% 90%;animation:tiembla .12s linear infinite alternate}
+@keyframes tiembla{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
+.saluda{transform-box:fill-box;transform-origin:0% 100%;animation:saluda .45s ease-in-out infinite alternate}
+@keyframes saluda{from{transform:rotate(-14deg)}to{transform:rotate(18deg)}}
+
+/* Listas tipo cómic */
+.lista{display:flex;flex-direction:column;gap:18px;width:100%;margin-top:30px}
+.it{display:flex;align-items:center;gap:24px;background:#fff;border:5px solid var(--tinta);border-radius:26px;box-shadow:8px 8px 0 var(--tinta);padding:16px 26px}
+.it .n{flex:0 0 74px;height:74px;border-radius:50%;border:5px solid var(--tinta);display:grid;place-items:center;font-family:"Montserrat";font-weight:900;font-size:40px;background:var(--amar)}
+.it .t{font-size:38px;font-weight:600;line-height:1.18}
+.it .t small{display:block;font-size:28px;font-weight:600;color:#555}
+.rojo .it .n{background:var(--rojo);color:#fff}
+.urg{margin-top:26px;background:var(--amar);border:6px solid var(--tinta);border-radius:30px;box-shadow:10px 10px 0 var(--tinta);padding:24px 30px;text-align:center;font-family:"Montserrat";font-weight:900;font-size:48px;line-height:1.1;width:100%}
+
+/* Cabecera con logo */
+#cab{position:absolute;left:50%;top:60px;width:380px;margin-left:-190px;background:#fff;border:6px solid var(--tinta);border-radius:30px;padding:8px 20px;box-shadow:9px 9px 0 var(--tinta);z-index:5}
+#cab img{display:block;width:100%}
+.logoGrande{width:860px;border:6px solid var(--tinta);border-radius:34px;box-shadow:12px 12px 0 var(--tinta);background:#fff;padding:16px 26px}
+.datos{display:flex;flex-direction:column;gap:16px;margin-top:30px;width:100%}
+.dato{display:flex;align-items:center;gap:20px;font-family:"Montserrat";font-weight:800;font-size:44px;background:#fff;border:5px solid var(--tinta);border-radius:24px;box-shadow:7px 7px 0 var(--tinta);padding:12px 24px}
+.dato span{font-size:44px}
+.aviso{margin-top:22px;font-size:25px;font-weight:600;text-align:center;color:#333;line-height:1.35}
+</style>
+</head>
+<body>
+<div id="cab"><img src="logo.jpg" alt="Centro Médico Los Andes"></div>
+
+<!-- 1. Gancho -->
+<section class="esc celeste" data-d="6"><div class="rayos"></div><div class="puntos"></div><div class="in">
+  <div class="tit rv" style="--i:0;margin-top:30px">¿Te cortaste o<br>te <span class="am">raspaste?</span></div>
+  <div class="ilus pop" style="--i:1;height:780px"><svg viewBox="0 0 600 640" id="s1"></svg></div>
+  <div class="card rv" style="--i:2;margin-top:0"><p>Así se cuida una <b>herida pequeña</b> en casa</p></div>
+</div></section>
+
+<!-- 2. Paso 1 -->
+<section class="esc azul" data-d="6"><div class="rayos"></div><div class="puntos"></div><div class="in">
+  <div class="paso pop" style="--i:0">PASO 1</div>
+  <div class="tit rv" style="--i:1">Lávate las <span class="am">manos</span></div>
+  <div class="ilus pop" style="--i:2"><svg viewBox="0 0 600 600" id="s2"></svg></div>
+  <div class="card rv" style="--i:3"><p>Con <b>agua y jabón</b>, antes de tocar la herida</p></div>
+</div></section>
+
+<!-- 3. Paso 2 -->
+<section class="esc amarillo" data-d="8.5"><div class="rayos"></div><div class="puntos"></div><div class="in">
+  <div class="paso pop" style="--i:0;background:#fff">PASO 2</div>
+  <div class="tit rv" style="--i:1">Detén el <span class="am" style="color:var(--rojo)">sangrado</span></div>
+  <div class="ilus pop" style="--i:2"><svg viewBox="0 0 600 600" id="s3"></svg></div>
+  <div class="card rv" style="--i:3"><p>Presiona firme con <b>gasa o paño limpio</b> de <b>5 a 10 minutos</b>, sin levantarlo</p></div>
+</div></section>
+
+<!-- 4. Paso 3 -->
+<section class="esc celeste" data-d="7"><div class="rayos"></div><div class="puntos"></div><div class="in">
+  <div class="paso pop" style="--i:0">PASO 3</div>
+  <div class="tit rv" style="--i:1">Limpia con <span class="am">agua</span></div>
+  <div class="ilus pop" style="--i:2"><svg viewBox="0 0 600 600" id="s4"></svg></div>
+  <div class="card rv" style="--i:3"><p>Enjuaga con <b>agua limpia</b> y lava con <b>jabón alrededor</b>. Quita la suciedad.</p></div>
+</div></section>
+
+<!-- 5. Paso 4 -->
+<section class="esc verde" data-d="7.5"><div class="rayos"></div><div class="puntos"></div><div class="in">
+  <div class="paso pop" style="--i:0">PASO 4</div>
+  <div class="tit rv" style="--i:1">Cúbrela</div>
+  <div class="ilus pop" style="--i:2"><svg viewBox="0 0 600 600" id="s5"></svg></div>
+  <div class="card rv" style="--i:3"><p>Con <b>curita o venda limpia</b>. Cámbiala <b>cada día</b> o si se moja o ensucia.</p></div>
+</div></section>
+
+<!-- 6. No hagas esto -->
+<section class="esc amarillo" data-d="9"><div class="rayos"></div><div class="puntos"></div><div class="in">
+  <div class="tit rv" style="--i:0;margin-top:30px">¡No hagas <span style="color:var(--rojo)">esto!</span></div>
+  <div class="ilus pop" style="--i:1;height:560px"><svg viewBox="0 0 600 520" id="s6"></svg></div>
+  <div class="card rv" style="--i:2"><p>Nada de <b>café, pasta dental</b> ni remedios caseros. Evita el <b>alcohol</b> dentro de la herida y <b>no arranques la costra</b>.</p></div>
+</div></section>
+
+<!-- 7. Infección -->
+<section class="esc azul" data-d="8"><div class="rayos"></div><div class="puntos"></div><div class="in">
+  <div class="tit rv" style="--i:0">Señales de <span class="am">infección</span></div>
+  <div class="ilus pop" style="--i:1;height:470px;width:600px"><svg viewBox="0 0 600 520" id="s7"></svg></div>
+  <div class="lista" style="margin-top:10px">
+    <div class="it rv" style="--i:2"><div class="n">1</div><div class="t">Enrojecimiento que se extiende</div></div>
+    <div class="it rv" style="--i:3"><div class="n">2</div><div class="t">Más dolor o hinchazón</div></div>
+    <div class="it rv" style="--i:4"><div class="n">3</div><div class="t">Calor, pus o fiebre</div></div>
+  </div>
+</div></section>
+
+<!-- 8. Acude al médico (rojo) -->
+<section class="esc rojo" data-d="16.5"><div class="rayos"></div><div class="puntos"></div><div class="in" style="padding-top:250px">
+  <div class="tit rv" style="--i:0;font-size:76px">¡Acude al <span class="am">médico</span> si…</div>
+  <div class="lista" style="gap:14px;margin-top:26px">
+    <div class="it rv" style="--i:1"><div class="n">!</div><div class="t">No para de sangrar<small>después de 10 minutos de presión</small></div></div>
+    <div class="it rv" style="--i:2"><div class="n">!</div><div class="t">Es profunda, grande o abierta</div></div>
+    <div class="it rv" style="--i:3"><div class="n">!</div><div class="t">Fue una mordedura<small>de animal o de persona</small></div></div>
+    <div class="it rv" style="--i:4"><div class="n">!</div><div class="t">Tiene un objeto clavado<small>no lo saques</small></div></div>
+    <div class="it rv" style="--i:5"><div class="n">!</div><div class="t">Es sucia u oxidada<small>y tu vacuna antitetánica no está al día</small></div></div>
+  </div>
+  <div class="urg rv" style="--i:6">¿Sangra mucho? Presiona y llama al 911</div>
+</div></section>
+
+<!-- 9. CMLA -->
+<section class="esc celeste" data-d="7"><div class="rayos"></div><div class="puntos"></div><div class="in">
+  <div class="tit rv" style="--i:0">¡Te <span class="am">ayudamos!</span></div>
+  <div class="ilus pop" style="--i:1;height:560px"><svg viewBox="0 0 600 560" id="s9"></svg></div>
+  <div class="card rv" style="--i:2"><p>En <b>Centro Médico Los Andes</b>: curaciones y cirugía menor</p>
+    <p style="font-size:34px;margin-top:12px;color:var(--azul)">Abierto todos los días · Lun–Sáb 8 a. m.–8 p. m.<br>Dom y feriados 9 a. m.–5 p. m.</p></div>
+</div></section>
+
+<!-- 10. Cierre -->
+<section class="esc blanco" data-d="7" id="escCierre"><div class="rayos" style="opacity:.6"></div><div class="in" style="padding-top:150px">
+  <img class="logoGrande pop" style="--i:0" src="logo.jpg" alt="Centro Médico Los Andes">
+  <div class="tit rv" style="--i:1;font-size:64px;color:var(--azul);margin-top:30px;text-shadow:6px 6px 0 var(--tinta);-webkit-text-stroke:3px var(--tinta)">Tu salud es nuestra<br>razón de ser</div>
+  <div class="ilus pop" style="--i:2;height:380px;width:400px;margin-top:10px"><svg viewBox="0 0 600 640" id="s10"></svg></div>
+  <div class="datos">
+    <div class="dato rv" style="--i:3"><span>📲</span>WhatsApp 6056-8129</div>
+    <div class="dato rv" style="--i:4"><span>📞</span>237-9094 · 237-6615</div>
+    <div class="dato rv" style="--i:5"><span>📍</span>C.C. Los Andes, local B15</div>
+  </div>
+  <div class="aviso rv" style="--i:6">Información educativa. No sustituye la valoración médica. @centromedico.losandes</div>
+</div></section>
+
+<script>
+const K = 'stroke="#111" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"';
+// Mascota original "Curi": una curita con cara
+function curi({ x = 0, y = 0, s = 1, cara = "feliz", brazo = "", extra = "" } = {}) {
+  const ojos = cara === "preocupado"
+    ? `<ellipse cx="255" cy="285" rx="30" ry="40" fill="#fff" ${K}/><ellipse cx="345" cy="285" rx="30" ry="40" fill="#fff" ${K}/><circle cx="258" cy="298" r="13" fill="#111"/><circle cx="342" cy="298" r="13" fill="#111"/><path d="M220 232 L285 252 M380 232 L315 252" ${K} fill="none"/>`
+    : `<ellipse cx="255" cy="280" rx="30" ry="42" fill="#fff" ${K}/><ellipse cx="345" cy="280" rx="30" ry="42" fill="#fff" ${K}/><circle cx="262" cy="290" r="14" fill="#111"/><circle cx="338" cy="290" r="14" fill="#111"/><circle cx="267" cy="284" r="5" fill="#fff"/><circle cx="343" cy="284" r="5" fill="#fff"/>`;
+  const boca = cara === "preocupado"
+    ? `<path d="M265 362 Q300 338 335 362" ${K} fill="none"/>`
+    : cara === "ay" ? `<ellipse cx="300" cy="358" rx="26" ry="30" fill="#7a1f1f" ${K}/>`
+    : `<path d="M250 336 Q300 400 350 336 Z" fill="#7a1f1f" ${K}/><path d="M278 372 Q300 358 322 372 Q300 388 278 372Z" fill="#ff7b8a"/>`;
+  const bIzq = `<path d="M158 300 Q100 300 78 250" fill="none" stroke="#111" stroke-width="26" stroke-linecap="round"/><path d="M158 300 Q100 300 78 250" fill="none" stroke="#f2b27e" stroke-width="12" stroke-linecap="round"/><circle cx="74" cy="240" r="30" fill="#fff" ${K}/>`;
+  const bDer = brazo === "saluda"
+    ? `<g class="saluda"><path d="M442 300 Q500 280 515 200" fill="none" stroke="#111" stroke-width="26" stroke-linecap="round"/><path d="M442 300 Q500 280 515 200" fill="none" stroke="#f2b27e" stroke-width="12" stroke-linecap="round"/><circle cx="518" cy="188" r="30" fill="#fff" ${K}/></g>`
+    : `<path d="M442 300 Q500 300 522 250" fill="none" stroke="#111" stroke-width="26" stroke-linecap="round"/><path d="M442 300 Q500 300 522 250" fill="none" stroke="#f2b27e" stroke-width="12" stroke-linecap="round"/><circle cx="526" cy="240" r="30" fill="#fff" ${K}/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})"><g class="rebota">
+    <path d="M250 540 L240 600 M350 540 L360 600" fill="none" stroke="#111" stroke-width="26" stroke-linecap="round"/>
+    <ellipse cx="226" cy="608" rx="44" ry="22" fill="#111"/><ellipse cx="374" cy="608" rx="44" ry="22" fill="#111"/>
+    ${bIzq}${bDer}
+    <rect x="150" y="60" width="300" height="490" rx="150" fill="#f2b27e" ${K}/>
+    <g fill="#c97b4c"><circle cx="255" cy="125" r="9"/><circle cx="300" cy="105" r="9"/><circle cx="345" cy="125" r="9"/><circle cx="255" cy="485" r="9"/><circle cx="300" cy="505" r="9"/><circle cx="345" cy="485" r="9"/></g>
+    <rect x="182" y="205" width="236" height="200" rx="44" fill="#fff6e8" ${K}/>
+    <ellipse cx="225" cy="345" rx="20" ry="12" fill="#ff9aa8" opacity=".8"/><ellipse cx="375" cy="345" rx="20" ry="12" fill="#ff9aa8" opacity=".8"/>
+    ${ojos}${boca}${extra}
+  </g></g>`;
+}
+const brazoH = (y = 330) => `<rect x="-10" y="${y}" width="620" height="170" rx="85" fill="#e8a87c" ${K}/><path d="M60 ${y + 40} q20 -12 40 0 M500 ${y + 120} q20 -12 40 0" ${K} stroke-width="5" fill="none" opacity=".5"/>`;
+const corte = (cx = 300, cy = 415) => `<path d="M${cx - 60} ${cy} l20 -12 l20 12 l20 -12 l20 12 l20 -12 l20 12" fill="none" stroke="#c1121f" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>`;
+const mano = (x, y, r = 0, flip = 1) => `<g transform="translate(${x} ${y}) rotate(${r}) scale(${flip} 1)"><path d="M-60 40 Q-70 -60 -40 -90 Q-30 -100 -15 -95 L-12 -60 Q-5 -110 15 -110 Q35 -110 32 -60 Q45 -95 62 -85 Q75 -75 66 -20 Q70 50 30 80 L-30 80 Q-58 70 -60 40Z" fill="#e8a87c" ${K}/><path d="M-60 10 Q-100 -10 -95 -40 Q-88 -60 -65 -40" fill="#e8a87c" ${K}/><rect x="-38" y="78" width="70" height="60" fill="#29b6f6" ${K}/></g>`;
+const grifo = `<path d="M120 60 H330 Q380 60 380 110 V150" fill="none" stroke="#111" stroke-width="58" stroke-linecap="round"/><path d="M120 60 H330 Q380 60 380 110 V150" fill="none" stroke="#b8c4d6" stroke-width="40" stroke-linecap="round"/><rect x="200" y="0" width="70" height="40" rx="12" fill="#e63946" ${K}/>`;
+const burbujas = (pts) => pts.map(([x, y, r], i) => `<circle class="burbuja" style="animation-delay:${-i * .37}s" cx="${x}" cy="${y}" r="${r}" fill="rgba(255,255,255,.85)" ${K} stroke-width="5"/><circle cx="${x - r * .35}" cy="${y - r * .35}" r="${r * .22}" fill="#fff"/>`).join("");
+const estrella = (x, y, s = 1, c = "#ffd23f") => `<g transform="translate(${x} ${y}) scale(${s})"><path class="brilla" d="M0 -40 L11 -12 L40 -12 L17 6 L26 36 L0 18 L-26 36 L-17 6 L-40 -12 L-11 -12Z" fill="${c}" ${K} stroke-width="6"/></g>`;
+const tachado = (cx, cy) => `<g><circle cx="${cx}" cy="${cy}" r="88" fill="none" stroke="#e63946" stroke-width="18"/><path d="M${cx - 62} ${cy + 62} L${cx + 62} ${cy - 62}" stroke="#e63946" stroke-width="22" stroke-linecap="round"/></g>`;
+const $ = (id) => document.getElementById(id);
+
+// 1. Gancho: Curi con "¡AY!"
+$("s1").innerHTML = curi({ x: 40, y: 20, s: .95, cara: "ay" }) + `<g class="hierve" transform="translate(60 -90)"><path d="M470 40 l30 50 l55 -20 l-15 55 l50 30 l-55 20 l15 55 l-55 -25 l-30 50 l-20 -55 l-55 15 l25 -50 l-45 -35 l55 -10 l-5 -55z" fill="#ffd23f" ${K}/><text x="505" y="168" font-family="Montserrat" font-weight="900" font-size="58" text-anchor="middle" fill="#e63946" stroke="#111" stroke-width="3" transform="rotate(-10 505 150)">¡AY!</text></g>`;
+
+// 2. Manos con jabón
+$("s2").innerHTML = `<g class="hierve">${grifo}<path d="M380 175 V600" class="chorro" stroke="#5ec8ff" stroke-width="26" stroke-linecap="round" fill="none"/>
+  <g class="frota">${mano(300, 380, -25)}</g><g class="frota" style="animation-direction:alternate-reverse">${mano(330, 400, 25, -1)}</g>
+  ${burbujas([[180, 300, 34], [470, 290, 28], [230, 200, 22], [520, 420, 36], [150, 450, 26], [420, 190, 18]])}
+  <g transform="translate(70 500) rotate(-12)"><rect x="0" y="0" width="150" height="80" rx="30" fill="#ff9ad5" ${K}/><text x="75" y="52" font-family="Montserrat" font-weight="900" font-size="30" text-anchor="middle" fill="#fff" stroke="#111" stroke-width="2">JABÓN</text></g></g>`;
+
+// 3. Presionar con gasa + reloj
+$("s3").innerHTML = `<g class="hierve">${brazoH(360)}${corte(300, 440)}
+  <g class="presiona"><rect x="200" y="350" width="200" height="120" rx="14" fill="#fff" ${K}/><path d="M220 380 h160 M220 410 h160 M220 440 h160 M240 360 v100 M280 360 v100 M320 360 v100 M360 360 v100" stroke="#cfd8e3" stroke-width="5"/>${mano(300, 270, 180)}</g>
+  <g transform="translate(470 95) scale(.36)"><circle cx="300" cy="300" r="240" fill="#fff" stroke="#111" stroke-width="22"/><rect x="250" y="20" width="100" height="60" rx="16" fill="#e63946" stroke="#111" stroke-width="18"/><path class="manecilla" d="M300 300 V120" stroke="#e63946" stroke-width="26" stroke-linecap="round"/><circle cx="300" cy="300" r="26" fill="#111"/></g>
+  <text x="470" y="250" font-family="Montserrat" font-weight="900" font-size="46" text-anchor="middle" fill="#fff" stroke="#111" stroke-width="10" paint-order="stroke">5-10 min</text>
+  <g fill="#c1121f" ${K} stroke-width="5"><path d="M120 300 q-14 22 0 32 q14 -10 0 -32z" class="burbuja"/><path d="M480 330 q-12 20 0 28 q12 -8 0 -28z" class="burbuja" style="animation-delay:-.6s"/></g></g>`;
+
+// 4. Agua sobre la herida
+$("s4").innerHTML = `<g class="hierve">${grifo}
+  <path d="M380 175 V370" class="chorro" stroke="#5ec8ff" stroke-width="40" stroke-linecap="round" fill="none"/>
+  ${brazoH(360)}${corte(330, 440)}
+  <g fill="#5ec8ff" ${K} stroke-width="5"><path class="burbuja" d="M300 350 q-16 26 0 36 q16 -10 0 -36z"/><path class="burbuja" style="animation-delay:-.4s" d="M460 345 q-16 26 0 36 q16 -10 0 -36z"/><path class="burbuja" style="animation-delay:-.8s" d="M250 540 q-16 26 0 36 q16 -10 0 -36z"/><path class="burbuja" style="animation-delay:-1.1s" d="M510 540 q-16 26 0 36 q16 -10 0 -36z"/></g>
+  ${burbujas([[130, 330, 26], [560, 330, 22], [100, 520, 20]])}</g>`;
+
+// 5. Curita puesta + estrellas
+$("s5").innerHTML = `<g class="hierve">${brazoH(330)}
+  <g transform="rotate(-6 300 415)"><rect x="150" y="355" width="300" height="120" rx="60" fill="#f2b27e" ${K}/><rect x="235" y="362" width="130" height="106" rx="24" fill="#fff6e8" ${K} stroke-width="6"/>
+  <circle cx="275" cy="405" r="11" fill="#111"/><circle cx="325" cy="405" r="11" fill="#111"/><path d="M280 432 Q300 452 320 432" ${K} stroke-width="6" fill="none"/>
+  <g fill="#c97b4c"><circle cx="190" cy="400" r="6"/><circle cx="205" cy="430" r="6"/><circle cx="410" cy="400" r="6"/><circle cx="395" cy="430" r="6"/></g></g>
+  ${estrella(130, 210, 1.2)}${estrella(470, 180, 1.5)}${estrella(520, 590, 1)}${estrella(90, 600, .9, "#fff")}${estrella(300, 140, .9, "#fff")}
+  <text x="300" y="275" font-family="Montserrat" font-weight="900" font-size="64" text-anchor="middle" fill="#fff" stroke="#111" stroke-width="12" paint-order="stroke">¡LISTO!</text></g>`;
+
+// 6. No: café, pasta dental, alcohol
+const taza = `<g transform="translate(100 260)"><path d="M-55 -50 H55 V30 Q55 70 0 70 Q-55 70 -55 30Z" fill="#fff" ${K}/><path d="M55 -25 Q95 -25 95 10 Q95 40 55 40" fill="none" ${K}/><ellipse cx="0" cy="-50" rx="55" ry="14" fill="#6f3b1a" ${K} stroke-width="6"/><path d="M-20 -80 q-14 -20 0 -40 M15 -80 q-14 -20 0 -40" ${K} stroke-width="6" fill="none"/><text x="0" y="140" font-family="Montserrat" font-weight="900" font-size="36" text-anchor="middle" fill="#111">CAFÉ</text></g>`;
+const pasta = `<g transform="translate(300 260) rotate(-20)"><path d="M-70 -35 H50 L80 -15 V15 L50 35 H-70 Q-80 0 -70 -35Z" fill="#fff" ${K}/><rect x="80" y="-14" width="26" height="28" rx="5" fill="#29b6f6" ${K} stroke-width="6"/><rect x="-55" y="-18" width="80" height="36" rx="6" fill="#e63946"/><text x="-2" y="140" font-family="Montserrat" font-weight="900" font-size="34" text-anchor="middle" fill="#111" transform="rotate(20)">PASTA</text></g>`;
+const botella = `<g transform="translate(500 260)"><rect x="-40" y="-60" width="80" height="130" rx="16" fill="#e0f2ff" ${K}/><rect x="-18" y="-100" width="36" height="40" fill="#fff" ${K} stroke-width="6"/><rect x="-24" y="-118" width="48" height="22" rx="6" fill="#e63946" ${K} stroke-width="6"/><rect x="-30" y="-10" width="60" height="44" fill="#fff" ${K} stroke-width="5"/><path d="M0 -4 v32 M-16 12 h32" stroke="#e63946" stroke-width="7"/><text x="0" y="140" font-family="Montserrat" font-weight="900" font-size="30" text-anchor="middle" fill="#111">ALCOHOL</text></g>`;
+$("s6").innerHTML = `<g class="hierve">${taza}${tachado(100, 255)}${pasta}${tachado(300, 255)}${botella}${tachado(500, 255)}</g>`;
+
+// 7. Curi preocupado con termómetro
+$("s7").innerHTML = `<g class="hierve">${curi({ x: 80, y: -20, s: .82, cara: "preocupado" })}
+  <g transform="translate(540 300) rotate(20)"><g class="tiembla"><rect x="-22" y="-120" width="44" height="200" rx="22" fill="#fff" ${K}/><circle cx="0" cy="100" r="40" fill="#e63946" ${K}/><rect x="-9" y="-60" width="18" height="150" fill="#e63946"/></g></g>
+  <g fill="#5ec8ff" ${K} stroke-width="5"><path class="burbuja" d="M130 90 q-14 24 0 32 q14 -8 0 -32z"/><path class="burbuja" style="animation-delay:-.5s" d="M100 160 q-12 20 0 28 q12 -8 0 -28z"/></g></g>`;
+
+// 9. Curi con estetoscopio y cruz médica
+$("s9").innerHTML = `<g class="hierve"><g transform="translate(560 70)"><rect x="-70" y="-24" width="140" height="48" rx="10" fill="#fff" ${K}/><rect x="-24" y="-70" width="48" height="140" rx="10" fill="#fff" ${K}/><rect x="-62" y="-16" width="124" height="32" fill="#e63946"/><rect x="-16" y="-62" width="32" height="124" fill="#e63946"/></g>
+  ${estrella(40, 330, 1)}${curi({ x: 0, y: -40, s: .9, cara: "feliz", brazo: "saluda", extra: `<path d="M215 420 Q215 470 300 470 Q385 470 385 420" fill="none" stroke="#111" stroke-width="10"/><circle cx="300" cy="480" r="22" fill="#b8c4d6" ${K} stroke-width="7"/>` })}</g>`;
+
+// 10. Curi saludando
+$("s10").innerHTML = curi({ x: 0, y: 0, s: 1, cara: "feliz", brazo: "saluda" });
+
+// Línea de tiempo
+const escenas = [...document.querySelectorAll(".esc")];
+let t = 0;
+escenas.forEach((e) => { const d = parseFloat(e.dataset.d); e.style.setProperty("--s", t + "s"); e.style.setProperty("--d", d + "s"); t += d; });
+const ic = escenas.findIndex((e) => e.id === "escCierre"); const sC = parseFloat(escenas[ic].style.getPropertyValue("--s"));
+{ const D = sC * 1000 + 400;
+  $("cab").animate([{ opacity: 0, transform: "translateY(-40px) rotate(-6deg)", offset: 0 }, { opacity: 0, transform: "translateY(-40px) rotate(-6deg)", offset: 100 / D }, { opacity: 1, transform: "none", offset: 800 / D }, { opacity: 1, transform: "none", offset: sC * 1000 / D }, { opacity: 0, transform: "none", offset: 1 }], { duration: D, fill: "both" }); }
+window.reel = { TOTAL: t };
+</script>
+</body>
+</html>
